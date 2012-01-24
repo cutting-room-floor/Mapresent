@@ -1,0 +1,285 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DD2B334114CF75AE008DE8CB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B334014CF75AE008DE8CB /* UIKit.framework */; };
+		DD2B334314CF75AE008DE8CB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B334214CF75AE008DE8CB /* Foundation.framework */; };
+		DD2B334514CF75AE008DE8CB /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B334414CF75AE008DE8CB /* CoreGraphics.framework */; };
+		DD2B334B14CF75AE008DE8CB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DD2B334914CF75AE008DE8CB /* InfoPlist.strings */; };
+		DD2B334D14CF75AE008DE8CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B334C14CF75AE008DE8CB /* main.m */; };
+		DD2B335114CF75AE008DE8CB /* DSMRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B335014CF75AE008DE8CB /* DSMRAppDelegate.m */; };
+		DD2B335414CF75AE008DE8CB /* DSMRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B335314CF75AE008DE8CB /* DSMRViewController.m */; };
+		DD2B335714CF75AE008DE8CB /* DSMRViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		DD2B333C14CF75AE008DE8CB /* Mapresent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mapresent.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD2B334014CF75AE008DE8CB /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		DD2B334214CF75AE008DE8CB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DD2B334414CF75AE008DE8CB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		DD2B334814CF75AE008DE8CB /* Mapresent-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mapresent-Info.plist"; sourceTree = "<group>"; };
+		DD2B334A14CF75AE008DE8CB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		DD2B334C14CF75AE008DE8CB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		DD2B334E14CF75AE008DE8CB /* Mapresent-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mapresent-Prefix.pch"; sourceTree = "<group>"; };
+		DD2B334F14CF75AE008DE8CB /* DSMRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSMRAppDelegate.h; sourceTree = "<group>"; };
+		DD2B335014CF75AE008DE8CB /* DSMRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSMRAppDelegate.m; sourceTree = "<group>"; };
+		DD2B335214CF75AE008DE8CB /* DSMRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSMRViewController.h; sourceTree = "<group>"; };
+		DD2B335314CF75AE008DE8CB /* DSMRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSMRViewController.m; sourceTree = "<group>"; };
+		DD2B335614CF75AE008DE8CB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DSMRViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DD2B333914CF75AE008DE8CB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD2B334114CF75AE008DE8CB /* UIKit.framework in Frameworks */,
+				DD2B334314CF75AE008DE8CB /* Foundation.framework in Frameworks */,
+				DD2B334514CF75AE008DE8CB /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DD2B333114CF75AE008DE8CB = {
+			isa = PBXGroup;
+			children = (
+				DD2B334614CF75AE008DE8CB /* Mapresent */,
+				DD2B333F14CF75AE008DE8CB /* Frameworks */,
+				DD2B333D14CF75AE008DE8CB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DD2B333D14CF75AE008DE8CB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DD2B333C14CF75AE008DE8CB /* Mapresent.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DD2B333F14CF75AE008DE8CB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DD2B334414CF75AE008DE8CB /* CoreGraphics.framework */,
+				DD2B334214CF75AE008DE8CB /* Foundation.framework */,
+				DD2B334014CF75AE008DE8CB /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DD2B334614CF75AE008DE8CB /* Mapresent */ = {
+			isa = PBXGroup;
+			children = (
+				DD2B334F14CF75AE008DE8CB /* DSMRAppDelegate.h */,
+				DD2B335014CF75AE008DE8CB /* DSMRAppDelegate.m */,
+				DD2B335214CF75AE008DE8CB /* DSMRViewController.h */,
+				DD2B335314CF75AE008DE8CB /* DSMRViewController.m */,
+				DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */,
+				DD2B334714CF75AE008DE8CB /* Supporting Files */,
+			);
+			path = Mapresent;
+			sourceTree = "<group>";
+		};
+		DD2B334714CF75AE008DE8CB /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DD2B334814CF75AE008DE8CB /* Mapresent-Info.plist */,
+				DD2B334914CF75AE008DE8CB /* InfoPlist.strings */,
+				DD2B334C14CF75AE008DE8CB /* main.m */,
+				DD2B334E14CF75AE008DE8CB /* Mapresent-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DD2B333B14CF75AE008DE8CB /* Mapresent */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DD2B335A14CF75AE008DE8CB /* Build configuration list for PBXNativeTarget "Mapresent" */;
+			buildPhases = (
+				DD2B333814CF75AE008DE8CB /* Sources */,
+				DD2B333914CF75AE008DE8CB /* Frameworks */,
+				DD2B333A14CF75AE008DE8CB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mapresent;
+			productName = Mapresent;
+			productReference = DD2B333C14CF75AE008DE8CB /* Mapresent.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DD2B333314CF75AE008DE8CB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+				ORGANIZATIONNAME = "Development Seed";
+			};
+			buildConfigurationList = DD2B333614CF75AE008DE8CB /* Build configuration list for PBXProject "Mapresent" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DD2B333114CF75AE008DE8CB;
+			productRefGroup = DD2B333D14CF75AE008DE8CB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DD2B333B14CF75AE008DE8CB /* Mapresent */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DD2B333A14CF75AE008DE8CB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD2B334B14CF75AE008DE8CB /* InfoPlist.strings in Resources */,
+				DD2B335714CF75AE008DE8CB /* DSMRViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DD2B333814CF75AE008DE8CB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DD2B334D14CF75AE008DE8CB /* main.m in Sources */,
+				DD2B335114CF75AE008DE8CB /* DSMRAppDelegate.m in Sources */,
+				DD2B335414CF75AE008DE8CB /* DSMRViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		DD2B334914CF75AE008DE8CB /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DD2B334A14CF75AE008DE8CB /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DD2B335614CF75AE008DE8CB /* en */,
+			);
+			name = DSMRViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DD2B335814CF75AE008DE8CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		DD2B335914CF75AE008DE8CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		DD2B335B14CF75AE008DE8CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
+				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		DD2B335C14CF75AE008DE8CB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
+				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DD2B333614CF75AE008DE8CB /* Build configuration list for PBXProject "Mapresent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD2B335814CF75AE008DE8CB /* Debug */,
+				DD2B335914CF75AE008DE8CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DD2B335A14CF75AE008DE8CB /* Build configuration list for PBXNativeTarget "Mapresent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD2B335B14CF75AE008DE8CB /* Debug */,
+				DD2B335C14CF75AE008DE8CB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DD2B333314CF75AE008DE8CB /* Project object */;
+}
