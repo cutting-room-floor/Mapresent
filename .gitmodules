@@ -1,0 +1,3 @@
+[submodule "Externals/alpstein-route-me"]
+	path = Externals/alpstein-route-me
+	url = https://github.com/Alpstein/route-me.git
