@@ -19,6 +19,7 @@
 		DD2B373A14CF7AAB008DE8CB /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373914CF7AAB008DE8CB /* libsqlite3.dylib */; };
 		DD2B373C14CF7AC7008DE8CB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373B14CF7AC7008DE8CB /* QuartzCore.framework */; };
 		DD2B373E14CF7BFB008DE8CB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */; };
+		DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = DD2B375814CF822C008DE8CB /* geography-class.mbtiles */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		DD2B373914CF7AAB008DE8CB /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DD2B373B14CF7AC7008DE8CB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		DD2B375814CF822C008DE8CB /* geography-class.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class.mbtiles"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				DD2B334614CF75AE008DE8CB /* Mapresent */,
+				DD2B375714CF81F1008DE8CB /* Resources */,
 				DD2B336214CF79BF008DE8CB /* Externals */,
 				DD2B333F14CF75AE008DE8CB /* Frameworks */,
 				DD2B333D14CF75AE008DE8CB /* Products */,
@@ -162,6 +165,15 @@
 				DD2B372114CF79ED008DE8CB /* MapView.xcodeproj */,
 			);
 			name = "alpstein-route-me";
+			sourceTree = "<group>";
+		};
+		DD2B375714CF81F1008DE8CB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DD2B375814CF822C008DE8CB /* geography-class.mbtiles */,
+			);
+			name = Resources;
+			path = Mapresent;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,6 +253,7 @@
 			files = (
 				DD2B334B14CF75AE008DE8CB /* InfoPlist.strings in Resources */,
 				DD2B335714CF75AE008DE8CB /* DSMRViewController.xib in Resources */,
+				DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

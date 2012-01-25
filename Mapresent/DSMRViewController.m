@@ -9,6 +9,7 @@
 #import "DSMRViewController.h"
 
 #import "RMMapView.h"
+#import "RMMBTilesTileSource.h"
 
 #import <CoreLocation/CoreLocation.h>
 
@@ -32,9 +33,9 @@
 {
     [super viewDidLoad];
     
-    self.mapView.centerCoordinate = CLLocationCoordinate2DMake(45.52, -122.681944);
-    
+    self.mapView.tileSource = [[RMMBTilesTileSource alloc] initWithTileSetURL:[[NSBundle mainBundle] URLForResource:@"geography-class" withExtension:@"mbtiles"]];
     self.mapView.decelerationMode = RMMapDecelerationFast;
+    self.mapView.zoom = 1.396605;
     
     [RMMapView class]; // avoid code stripping
 }
