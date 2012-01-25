@@ -8,11 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class DSMRViewController;
-
 @interface DSMRAppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) DSMRViewController *viewController;
 
 @end

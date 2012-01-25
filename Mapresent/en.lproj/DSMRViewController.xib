@@ -34,13 +34,13 @@
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
-					<object class="IBUIView" id="534082632">
+					<object class="IBUIView" id="267585232">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">274</int>
 						<string key="NSFrameSize">{674, 498}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="743472192"/>
+						<reference key="NSNextKeyView" ref="972566569"/>
 						<string key="NSReuseIdentifierKey">_NS:212</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
@@ -48,13 +48,13 @@
 						</object>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 					</object>
-					<object class="IBUIView" id="743472192">
+					<object class="IBUIView" id="972566569">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">274</int>
 						<string key="NSFrame">{{674, 0}, {350, 498}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="216176980"/>
+						<reference key="NSNextKeyView" ref="555715930"/>
 						<string key="NSReuseIdentifierKey">_NS:212</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
@@ -62,7 +62,7 @@
 						</object>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 					</object>
-					<object class="IBUIView" id="216176980">
+					<object class="IBUIView" id="555715930">
 						<reference key="NSNextResponder" ref="766721923"/>
 						<int key="NSvFlags">274</int>
 						<string key="NSFrame">{{0, 498}, {1024, 250}}</string>
@@ -80,7 +80,7 @@
 				<string key="NSFrame">{{0, 20}, {1024, 748}}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView" ref="534082632"/>
+				<reference key="NSNextKeyView" ref="267585232"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">3</int>
 					<bytes key="NSWhite">MQA</bytes>
@@ -108,6 +108,30 @@
 					</object>
 					<int key="connectionID">3</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">mapView</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="267585232"/>
+					</object>
+					<int key="connectionID">7</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">timelineView</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="555715930"/>
+					</object>
+					<int key="connectionID">8</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">inspectorView</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="972566569"/>
+					</object>
+					<int key="connectionID">9</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -132,26 +156,26 @@
 						<int key="objectID">2</int>
 						<reference key="object" ref="766721923"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="743472192"/>
-							<reference ref="216176980"/>
-							<reference ref="534082632"/>
+							<reference ref="972566569"/>
+							<reference ref="555715930"/>
+							<reference ref="267585232"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">5</int>
-						<reference key="object" ref="743472192"/>
+						<reference key="object" ref="972566569"/>
 						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="766721923"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">6</int>
-						<reference key="object" ref="534082632"/>
+						<reference key="object" ref="267585232"/>
 						<reference key="parent" ref="766721923"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">4</int>
-						<reference key="object" ref="216176980"/>
+						<reference key="object" ref="555715930"/>
 						<reference key="parent" ref="766721923"/>
 					</object>
 				</array>
@@ -162,9 +186,7 @@
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="2.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="4.CustomClassName">DSMRTimelineView</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="5.CustomClassName">DSMRInspectorView</string>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="6.CustomClassName">RMMapView</string>
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -173,16 +195,43 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">6</int>
+			<int key="maxID">9</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<object class="IBPartialClassDescription">
 					<string key="className">DSMRViewController</string>
 					<string key="superclassName">UIViewController</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="inspectorView">UIView</string>
+						<string key="mapView">RMMapView</string>
+						<string key="timelineView">UIView</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="inspectorView">
+							<string key="name">inspectorView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="mapView">
+							<string key="name">mapView</string>
+							<string key="candidateClassName">RMMapView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="timelineView">
+							<string key="name">timelineView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/DSMRViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">RMMapView</string>
+					<string key="superclassName">UIView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/RMMapView.h</string>
 					</object>
 				</object>
 			</array>

@@ -8,43 +8,35 @@
 
 #import "DSMRViewController.h"
 
+#import "RMMapView.h"
+
+#import <CoreLocation/CoreLocation.h>
+
+@interface DSMRViewController () 
+
+@property (nonatomic, strong) IBOutlet RMMapView *mapView;
+@property (nonatomic, strong) IBOutlet UIView *inspectorView;
+@property (nonatomic, strong) IBOutlet UIView *timelineView;
+
+@end
+
+#pragma mark -
+
 @implementation DSMRViewController
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
-#pragma mark - View lifecycle
+@synthesize mapView;
+@synthesize inspectorView;
+@synthesize timelineView;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-	[super viewWillDisappear:animated];
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-	[super viewDidDisappear:animated];
+    
+    self.mapView.centerCoordinate = CLLocationCoordinate2DMake(45.52, -122.681944);
+    
+    self.mapView.decelerationMode = RMMapDecelerationFast;
+    
+    [RMMapView class]; // avoid code stripping
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
