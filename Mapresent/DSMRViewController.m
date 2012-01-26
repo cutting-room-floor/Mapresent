@@ -37,8 +37,6 @@
     self.mapView.decelerationMode = RMMapDecelerationFast;
     self.mapView.zoom = 1.396605;
     
-    ((UIScrollView *)self.timelineView.superview).contentSize = self.timelineView.frame.size;
-    
     [RMMapView class]; // avoid code stripping
 }
 

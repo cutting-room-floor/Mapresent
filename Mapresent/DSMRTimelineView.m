@@ -8,17 +8,53 @@
 
 #import "DSMRTimelineView.h"
 
+@interface DSMRTileLineViewTimeline : UIView
+
+@end
+
+#pragma mark -
+
+@interface DSMRTimelineView ()
+
+@property (nonatomic, strong) UIScrollView *scroller;
+@property (nonatomic, strong) DSMRTileLineViewTimeline *timeline;
+
+@end
+
+#pragma mark -
+
 @implementation DSMRTimelineView
+
+@synthesize scroller;
+@synthesize timeline;
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
     self = [super initWithCoder:decoder];
 
     if (self)
-        [self setFrame:CGRectMake([self frame].origin.x, [self frame].origin.y, 3072, [self frame].size.height)];
+    {
+        [self setBackgroundColor:[UIColor darkGrayColor]];
+        
+        scroller = [[UIScrollView alloc] initWithFrame:[self bounds]];
+        
+        [self addSubview:scroller];
+        
+        timeline = [[DSMRTileLineViewTimeline alloc] initWithFrame:CGRectMake(0, 0, [self bounds].size.width * 3, [self bounds].size.height)];
+        
+        [scroller addSubview:timeline];
+
+        scroller.contentSize = timeline.frame.size;
+    }
     
     return self;
 }
+
+@end
+
+#pragma mark -
+
+@implementation DSMRTileLineViewTimeline
 
 - (void)drawRect:(CGRect)rect
 {
