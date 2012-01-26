@@ -20,6 +20,8 @@
 		DD2B373C14CF7AC7008DE8CB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373B14CF7AC7008DE8CB /* QuartzCore.framework */; };
 		DD2B373E14CF7BFB008DE8CB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */; };
 		DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = DD2B375814CF822C008DE8CB /* geography-class.mbtiles */; };
+		DD2B375C14CF9003008DE8CB /* DSMRTimelineManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375B14CF9003008DE8CB /* DSMRTimelineManager.m */; };
+		DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,10 @@
 		DD2B373B14CF7AC7008DE8CB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		DD2B375814CF822C008DE8CB /* geography-class.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class.mbtiles"; sourceTree = "<group>"; };
+		DD2B375A14CF9003008DE8CB /* DSMRTimelineManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineManager.h; sourceTree = "<group>"; };
+		DD2B375B14CF9003008DE8CB /* DSMRTimelineManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineManager.m; sourceTree = "<group>"; };
+		DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineView.h; sourceTree = "<group>"; };
+		DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +131,10 @@
 				DD2B335214CF75AE008DE8CB /* DSMRViewController.h */,
 				DD2B335314CF75AE008DE8CB /* DSMRViewController.m */,
 				DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */,
+				DD2B375A14CF9003008DE8CB /* DSMRTimelineManager.h */,
+				DD2B375B14CF9003008DE8CB /* DSMRTimelineManager.m */,
+				DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */,
+				DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */,
 				DD2B334714CF75AE008DE8CB /* Supporting Files */,
 			);
 			path = Mapresent;
@@ -267,6 +277,8 @@
 				DD2B334D14CF75AE008DE8CB /* main.m in Sources */,
 				DD2B335114CF75AE008DE8CB /* DSMRAppDelegate.m in Sources */,
 				DD2B335414CF75AE008DE8CB /* DSMRViewController.m in Sources */,
+				DD2B375C14CF9003008DE8CB /* DSMRTimelineManager.m in Sources */,
+				DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
