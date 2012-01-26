@@ -30,23 +30,17 @@
     CGContextSetStrokeColorWithColor(c, [[UIColor colorWithWhite:1.0 alpha:0.25] CGColor]);
     CGContextSetFillColorWithColor(c, [[UIColor colorWithWhite:1.0 alpha:0.25] CGColor]);
 
-    CGContextSetLineWidth(c, 1);
-    CGContextBeginPath(c);    
-    CGContextMoveToPoint(c, 1.0, 0.0);
-    CGContextAddLineToPoint(c, 1.0, 75.0);
-    CGContextStrokePath(c);
-    
     CGContextSetLineWidth(c, 2);
     
-    for (float i = 0.0; i < self.bounds.size.width; i = i + 10.0)
+    for (float i = 512.0; i < self.bounds.size.width - 512.0; i = i + 8.0)
     {
         CGContextBeginPath(c);
         
         float y;
         
-        if (fmodf(i, 50.0) == 0.0)
+        if (fmodf(i, 64.0) == 0.0)
         {
-            [[NSString stringWithFormat:@"%i", (int)i] drawAtPoint:CGPointMake(i + 5.0, 65.0) withFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
+            [[NSString stringWithFormat:@"%i", (int)(i - 512.0) / 64] drawAtPoint:CGPointMake(i + 4.0, 65.0) withFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
 
             y = 75.0;
         }
@@ -60,6 +54,12 @@
         
         CGContextStrokePath(c);
     }
+    
+    CGContextSetLineWidth(c, 2.0);
+    CGContextBeginPath(c);    
+    CGContextMoveToPoint(c, self.bounds.size.width - 512.0, 0.0);
+    CGContextAddLineToPoint(c, self.bounds.size.width - 512.0, 75.0);
+    CGContextStrokePath(c);
 }
 
 @end

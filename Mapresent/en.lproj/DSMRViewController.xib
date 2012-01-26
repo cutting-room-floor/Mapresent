@@ -142,7 +142,7 @@
 								<string key="NSFrame">{{20, 65}, {72, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="101332526"/>
+								<reference key="NSNextKeyView" ref="747030102"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -181,7 +181,7 @@
 								<string key="NSFrameSize">{1024, 250}</string>
 								<reference key="NSSuperview" ref="747030102"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="747030102"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:212</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">1</int>
@@ -193,7 +193,7 @@
 						<string key="NSFrame">{{0, 498}, {1024, 250}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="105869720"/>
+						<reference key="NSNextKeyView" ref="101332526"/>
 						<string key="NSReuseIdentifierKey">_NS:206</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
@@ -201,19 +201,6 @@
 						</object>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
-						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-					</object>
-					<object class="IBUIView" id="105869720">
-						<reference key="NSNextResponder" ref="766721923"/>
-						<int key="NSvFlags">301</int>
-						<string key="NSFrame">{{510, 498}, {4, 250}}</string>
-						<reference key="NSSuperview" ref="766721923"/>
-						<reference key="NSWindow"/>
-						<string key="NSReuseIdentifierKey">_NS:212</string>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MCAwIDAgMC41AA</bytes>
-						</object>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 					</object>
 				</array>
@@ -299,7 +286,6 @@
 							<reference ref="850126027"/>
 							<reference ref="178641545"/>
 							<reference ref="747030102"/>
-							<reference ref="105869720"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -353,11 +339,6 @@
 						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="747030102"/>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">11</int>
-						<reference key="object" ref="105869720"/>
-						<reference key="parent" ref="766721923"/>
-					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -366,7 +347,6 @@
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="10.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<string key="11.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="12.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="13.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="14.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
