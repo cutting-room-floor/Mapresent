@@ -98,12 +98,14 @@
     CLLocationCoordinate2D ne = self.mapView.latitudeLongitudeBoundingBox.northEast;
     
     NSDictionary *marker = [NSDictionary dictionaryWithObjectsAndKeys:
-                               [NSNumber numberWithFloat:sw.latitude],  @"swLat",
-                               [NSNumber numberWithFloat:sw.longitude], @"swLon",
-                               [NSNumber numberWithFloat:ne.latitude],  @"neLat",
-                               [NSNumber numberWithFloat:ne.longitude], @"neLon",
-                               self.timeLabel.text,                     @"timeOffset", 
-                               [self.mapView.tileSource shortName],     @"sourceName",
+                               [NSNumber numberWithFloat:sw.latitude],                             @"swLat",
+                               [NSNumber numberWithFloat:sw.longitude],                            @"swLon",
+                               [NSNumber numberWithFloat:ne.latitude],                             @"neLat",
+                               [NSNumber numberWithFloat:ne.longitude],                            @"neLon",
+                               [NSNumber numberWithFloat:self.mapView.centerCoordinate.latitude],  @"centerLat",
+                               [NSNumber numberWithFloat:self.mapView.centerCoordinate.longitude], @"centerLon",
+                               self.timeLabel.text,                                                @"timeOffset", 
+                               [self.mapView.tileSource shortName],                                @"sourceName",
                                nil];
     
     if ([self.markers count])
@@ -202,8 +204,8 @@
         
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%f, %f)", 
                                     [marker valueForKey:@"sourceName"],
-                                    (([[marker valueForKey:@"neLat"] floatValue] - [[marker valueForKey:@"swLat"] floatValue]) / 2),
-                                    (([[marker valueForKey:@"neLon"] floatValue] - [[marker valueForKey:@"swLon"] floatValue]) / 2)];
+                                    [[marker valueForKey:@"centerLat"] floatValue],
+                                    [[marker valueForKey:@"centerLon"] floatValue]];
     
     return cell;
 }
