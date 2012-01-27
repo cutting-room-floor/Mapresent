@@ -94,15 +94,30 @@
     {
         UIView *markerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 20)];
         
-        markerView.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2];
+        CGFloat placement, width;
         
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:[marker.snapshot imageByScalingProportionallyToSize:CGSizeMake(18, 18)]];
-
-        imageView.center = CGPointMake(11, 11);
+        if (marker.sourceName)
+        {
+            markerView.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2];
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[marker.snapshot imageByScalingProportionallyToSize:CGSizeMake(18, 18)]];
+            
+            imageView.center = CGPointMake(11, 11);
+            
+            [markerView addSubview:imageView];
+            
+            placement = 100;
+            width     = markerView.frame.size.width;
+        }
+        else if (marker.recording)
+        {
+            markerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.2];
+            
+            placement = 130;
+            width     = marker.duration * 64.0;
+        }
         
-        [markerView addSubview:imageView];
-        
-        markerView.frame = CGRectMake((marker.timeOffset * 64.0) + 512.0, 100, markerView.frame.size.width, markerView.frame.size.height);
+        markerView.frame = CGRectMake((marker.timeOffset * 64.0) + 512.0, placement, width, markerView.frame.size.height);
         
         [self.timeline addSubview:markerView];
     }

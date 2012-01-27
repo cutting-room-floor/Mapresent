@@ -98,7 +98,9 @@
 #pragma mark -
 
 - (IBAction)pressedPlay:(id)sender
-{    
+{
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    
     if ([self.markers count] && [[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
         [self fireMarkerAtIndex:0];
     
@@ -133,11 +135,41 @@
 
         [self.audioButton setTitle:@"Audio" forState:UIControlStateNormal];
         
-        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-
-        self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.recorder.url error:nil];
-
-        [self.player play];
+        AVAudioPlayer *clip = [[AVAudioPlayer alloc] initWithContentsOfURL:self.recorder.url error:nil];
+        
+        DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
+        
+        marker.timeOffset = [self.timeLabel.text doubleValue];
+        marker.recording  = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:[self.recorder.url absoluteString]]];
+        marker.duration   = clip.duration;
+        
+        [[NSFileManager defaultManager] removeItemAtURL:self.recorder.url error:nil];
+        
+        if ([self.markers count])
+        {
+            int startCount = [self.markers count];
+            
+            for (DSMRTimelineMarker *otherMarker in [self.markers copy])
+            {
+                if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
+                {
+                    [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
+                    
+                    break;
+                }
+            }
+            
+            if ([self.markers count] == startCount)
+                [self.markers addObject:marker];
+        }
+        else
+        {
+            [self.markers addObject:marker];
+        }
+        
+        [self.markerTableView reloadData];
+        
+        [self.timelineView redrawMarkers];
     }
 }
 
@@ -193,7 +225,16 @@
 {
     DSMRTimelineMarker *marker = [self.markers objectAtIndex:index];
     
-    [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:marker.southWest northEast:marker.northEast animated:YES];
+    if (marker.sourceName)
+    {
+        [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:marker.southWest northEast:marker.northEast animated:YES];
+    }
+    else if (marker.recording)
+    {
+        self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
+    
+        [self.player play];
+    }
 }
 
 - (void)appWillBackground:(NSNotification *)notification
@@ -255,9 +296,18 @@
     
     DSMRTimelineMarker *marker = [self.markers objectAtIndex:indexPath.row];
 
-    cell.textLabel.text = [NSString stringWithFormat:@"Marker @ %fs", marker.timeOffset];
-        
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%f, %f)", marker.sourceName, marker.center.latitude, marker.center.longitude];
+    if (marker.sourceName)
+    {
+        cell.textLabel.text = [NSString stringWithFormat:@"Map @ %fs", marker.timeOffset];
+
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%f, %f)", marker.sourceName, marker.center.latitude, marker.center.longitude];
+    }
+    else if (marker.recording)
+    {
+        cell.textLabel.text = [NSString stringWithFormat:@"Audio @ %fs", marker.timeOffset];
+
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%f seconds", marker.duration];
+    }
     
     return cell;
 }
