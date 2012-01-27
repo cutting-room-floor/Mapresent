@@ -229,6 +229,8 @@
     [self.markers removeObjectAtIndex:indexPath.row];
     
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    
+    [self.timelineView redrawMarkers];
 }
 
 #pragma mark -
