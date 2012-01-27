@@ -127,7 +127,7 @@
         
         self.recorder = [[AVAudioRecorder alloc] initWithURL:recordURL settings:settings error:nil];
         
-        [self.recorder record];        
+        [self.recorder record];
     }
     else
     {
@@ -170,6 +170,8 @@
         [self.markerTableView reloadData];
         
         [self.timelineView redrawMarkers];
+        
+        [TestFlight passCheckpoint:@"recorded audio marker"];
     }
 }
 
@@ -217,6 +219,8 @@
     [self.markerTableView reloadData];
     
     [self.timelineView redrawMarkers];
+    
+    [TestFlight passCheckpoint:@"created map marker"];
 }
 
 #pragma mark -
@@ -246,11 +250,15 @@
     
     [[NSUserDefaults standardUserDefaults] setObject:savedMarkers forKey:@"markers"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [TestFlight passCheckpoint:@"backgrounded app"];
 }
 
 - (void)playToggled:(NSNotification *)notification
 {
     [self.playButton setTitle:([self.playButton.currentTitle isEqualToString:@"Play"] ? @"Pause" : @"Play") forState:UIControlStateNormal];
+    
+    [TestFlight passCheckpoint:@"toggled play"];
 }
 
 - (void)playProgressed:(NSNotification *)notification
@@ -319,6 +327,8 @@
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     
     [self.timelineView redrawMarkers];
+    
+    [TestFlight passCheckpoint:@"deleted marker"];
 }
 
 #pragma mark -
@@ -328,6 +338,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     [self fireMarkerAtIndex:indexPath.row];
+    
+    [TestFlight passCheckpoint:@"selected marker"];
 }
 
 #pragma mark -

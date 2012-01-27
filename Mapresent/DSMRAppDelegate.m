@@ -33,6 +33,8 @@
     
     [self.window makeKeyAndVisible];
     
+    [TestFlight takeOff:@"e801c1913c6812d34c0c7764f6bf406a_OTIwOA"];
+
     return YES;
 }
 
