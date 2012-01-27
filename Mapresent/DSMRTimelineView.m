@@ -60,14 +60,14 @@
     if ([self.playTimer isValid])
         [self.playTimer invalidate];
     else
-        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:(1 / 64) target:self selector:@selector(firePlayTimer:) userInfo:nil repeats:YES];
+        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 / 64.0) target:self selector:@selector(firePlayTimer:) userInfo:nil repeats:YES];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayToggled object:self];
 }
 
 - (void)firePlayTimer:(NSTimer *)timer
 {
-    CGPoint targetOffset = CGPointMake(self.scroller.contentOffset.x + 1, self.scroller.contentOffset.y);
+    CGPoint targetOffset = CGPointMake(self.scroller.contentOffset.x + 1.0, self.scroller.contentOffset.y);
     
     if (targetOffset.x > self.timeline.bounds.size.width - self.scroller.bounds.size.width)
     {

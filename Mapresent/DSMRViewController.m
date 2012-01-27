@@ -86,7 +86,7 @@
 
 - (IBAction)pressedPlay:(id)sender
 {    
-    if ([[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
+    if ([self.markers count] && [[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
         [self fireMarkerAtIndex:0];
     
     [self.timelineView togglePlay];
