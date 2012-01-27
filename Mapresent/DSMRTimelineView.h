@@ -11,8 +11,19 @@
 static NSString *DSMRTimelineViewPlayToggled     = @"DSMRTimelineViewPlayToggled";
 static NSString *DSMRTimelineViewPlayProgressed  = @"DSMRTimelineViewPlayProgressed";
 
+@protocol DSMRTimelineViewDelegate
+
+- (NSArray *)timelineMarkers;
+
+@end
+
+#pragma mark -
+
 @interface DSMRTimelineView : UIView <UIScrollViewDelegate>
 
+@property (nonatomic, weak) id <DSMRTimelineViewDelegate>delegate;
+
 - (void)togglePlay;
+- (void)redrawMarkers;
 
 @end

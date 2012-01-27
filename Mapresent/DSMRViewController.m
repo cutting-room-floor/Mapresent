@@ -8,12 +8,11 @@
 
 #import "DSMRViewController.h"
 
-#import "DSMRTimelineView.h"
-
 #import "RMMapView.h"
 #import "RMMBTilesTileSource.h"
 
 #import <CoreLocation/CoreLocation.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface DSMRViewController () 
 
@@ -65,6 +64,10 @@
     
     [self.markerTableView reloadData];
     
+    self.timelineView.delegate = self;
+    
+    [self.timelineView redrawMarkers];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playToggled:)       name:DSMRTimelineViewPlayToggled               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:)    name:DSMRTimelineViewPlayProgressed            object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillBackground:) name:UIApplicationWillResignActiveNotification object:nil];
@@ -94,6 +97,14 @@
 
 - (IBAction)pressedMarker:(id)sender
 {
+    UIGraphicsBeginImageContext(self.mapView.bounds.size);
+    
+    [self.mapView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
     CLLocationCoordinate2D sw = self.mapView.latitudeLongitudeBoundingBox.southWest;
     CLLocationCoordinate2D ne = self.mapView.latitudeLongitudeBoundingBox.northEast;
     
@@ -106,6 +117,7 @@
                                [NSNumber numberWithFloat:self.mapView.centerCoordinate.longitude], @"centerLon",
                                self.timeLabel.text,                                                @"timeOffset", 
                                [self.mapView.tileSource shortName],                                @"sourceName",
+                               UIImagePNGRepresentation(snapshot),                                 @"snapshot",
                                nil];
     
     if ([self.markers count])
@@ -131,6 +143,8 @@
     }
 
     [self.markerTableView reloadData];
+    
+    [self.timelineView redrawMarkers];
 }
 
 #pragma mark -
@@ -224,6 +238,13 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     [self fireMarkerAtIndex:indexPath.row];
+}
+
+#pragma mark -
+
+- (NSArray *)timelineMarkers
+{
+    return [NSArray arrayWithArray:self.markers];
 }
 
 @end

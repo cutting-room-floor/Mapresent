@@ -8,6 +8,8 @@
 
 #import "DSMRTimelineView.h"
 
+#import "UIImage-Extensions.h"
+
 @interface DSMRTileLineViewTimeline : UIView
 
 @end
@@ -26,6 +28,7 @@
 
 @implementation DSMRTimelineView
 
+@synthesize delegate;
 @synthesize scroller;
 @synthesize timeline;
 @synthesize playTimer;
@@ -78,6 +81,30 @@
         [self.scroller setContentOffset:targetOffset animated:NO];
      
         [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:targetOffset.x]];
+    }
+}
+
+- (void)redrawMarkers
+{
+    [self.timeline.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    for (NSDictionary *marker in [self.delegate timelineMarkers])
+    {
+        UIView *markerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 20)];
+        
+        markerView.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2];
+        
+        UIImage *snapshot = [UIImage imageWithData:[marker objectForKey:@"snapshot"]];
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[snapshot imageByScalingProportionallyToSize:CGSizeMake(18, 18)]];
+
+        imageView.center = CGPointMake(11, 11);
+        
+        [markerView addSubview:imageView];
+        
+        markerView.frame = CGRectMake(([[marker objectForKey:@"timeOffset"] floatValue] * 64.0) + 512.0, 100, markerView.frame.size.width, markerView.frame.size.height);
+        
+        [self.timeline addSubview:markerView];
     }
 }
 

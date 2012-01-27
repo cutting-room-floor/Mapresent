@@ -21,6 +21,7 @@
 		DD2B373E14CF7BFB008DE8CB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */; };
 		DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = DD2B375814CF822C008DE8CB /* geography-class.mbtiles */; };
 		DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */; };
+		DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		DD2B375814CF822C008DE8CB /* geography-class.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class.mbtiles"; sourceTree = "<group>"; };
 		DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineView.h; sourceTree = "<group>"; };
 		DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineView.m; sourceTree = "<group>"; };
+		DD96078D14D32C2800FA2CBA /* UIImage-Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage-Extensions.h"; path = "Externals/UIImage-Extensions/UIImage-Extensions.h"; sourceTree = SOURCE_ROOT; };
+		DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage-Extensions.m"; path = "Externals/UIImage-Extensions/UIImage-Extensions.m"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				DD2B373514CF79F2008DE8CB /* alpstein-route-me */,
+				DD96079014D32C2D00FA2CBA /* UIImage-Extensions */,
 			);
 			name = Externals;
 			path = Mapresent;
@@ -179,6 +183,15 @@
 			);
 			name = Resources;
 			path = Mapresent;
+			sourceTree = "<group>";
+		};
+		DD96079014D32C2D00FA2CBA /* UIImage-Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				DD96078D14D32C2800FA2CBA /* UIImage-Extensions.h */,
+				DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */,
+			);
+			name = "UIImage-Extensions";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,6 +286,7 @@
 				DD2B335114CF75AE008DE8CB /* DSMRAppDelegate.m in Sources */,
 				DD2B335414CF75AE008DE8CB /* DSMRViewController.m in Sources */,
 				DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */,
+				DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

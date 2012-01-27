@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "DSMRTimelineView.h"
+
 #import "RMMapViewDelegate.h"
 
-@interface DSMRViewController : UIViewController <RMMapViewDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface DSMRViewController : UIViewController <RMMapViewDelegate, UITableViewDataSource, UITableViewDelegate, DSMRTimelineViewDelegate>
 
 @end
