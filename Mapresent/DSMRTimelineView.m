@@ -60,14 +60,14 @@
     if ([self.playTimer isValid])
         [self.playTimer invalidate];
     else
-        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(firePlayTimer:) userInfo:nil repeats:YES];
+        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:(1 / 64) target:self selector:@selector(firePlayTimer:) userInfo:nil repeats:YES];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayToggled object:self];
 }
 
 - (void)firePlayTimer:(NSTimer *)timer
 {
-    CGPoint targetOffset = CGPointMake(self.scroller.contentOffset.x + 5, self.scroller.contentOffset.y);
+    CGPoint targetOffset = CGPointMake(self.scroller.contentOffset.x + 1, self.scroller.contentOffset.y);
     
     if (targetOffset.x > self.timeline.bounds.size.width - self.scroller.bounds.size.width)
     {
@@ -75,7 +75,7 @@
     }
     else
     {
-        [self.scroller setContentOffset:targetOffset animated:YES];
+        [self.scroller setContentOffset:targetOffset animated:NO];
      
         [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:targetOffset.x]];
     }
@@ -91,7 +91,13 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:scroller.contentOffset.x / 100]];
+    if (scrollView.dragging && scrollView.contentOffset.x >= 0 && scrollView.contentOffset.x <= (self.timeline.bounds.size.width - self.scroller.bounds.size.width))
+        [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:scroller.contentOffset.x]];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:scroller.contentOffset.x]];
 }
 
 @end

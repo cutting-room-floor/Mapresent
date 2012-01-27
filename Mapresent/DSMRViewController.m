@@ -26,6 +26,7 @@
 @property (nonatomic, strong) NSMutableArray *markers;
 
 - (IBAction)pressedPlay:(id)sender;
+- (void)fireMarkerAtIndex:(NSInteger)index;
 
 @end
 
@@ -81,7 +82,12 @@
 
 - (IBAction)pressedPlay:(id)sender
 {    
+    if ([[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
+        [self fireMarkerAtIndex:0];
+    
     [self.timelineView togglePlay];
+    
+    
 }
 
 - (IBAction)pressedMarker:(id)sender
@@ -128,8 +134,10 @@
 {
     NSDictionary *marker = [self.markers objectAtIndex:index];
     
-    [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:CLLocationCoordinate2DMake([[marker objectForKey:@"swLat"] floatValue], [[marker objectForKey:@"swLon"] floatValue])
-                                                 northEast:CLLocationCoordinate2DMake([[marker objectForKey:@"neLat"] floatValue], [[marker objectForKey:@"neLon"] floatValue]) 
+    [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:CLLocationCoordinate2DMake([[marker objectForKey:@"swLat"] floatValue], 
+                                                                                      [[marker objectForKey:@"swLon"] floatValue])
+                                                 northEast:CLLocationCoordinate2DMake([[marker objectForKey:@"neLat"] floatValue], 
+                                                                                      [[marker objectForKey:@"neLon"] floatValue]) 
                                                   animated:YES];
 }
 
@@ -146,15 +154,13 @@
 
 - (void)playProgressed:(NSNotification *)notification
 {
-    float result = ([((NSNumber *)[notification object]) floatValue] < 0.01 ? 0 : [((NSNumber *)[notification object]) floatValue]);
-    
-    self.timeLabel.text = [[NSString stringWithFormat:@"%f", result] substringToIndex:5];
+    self.timeLabel.text = [NSString stringWithFormat:@"%f", [((NSNumber *)[notification object]) floatValue] / 64];
     
     if ([self.playButton.currentTitle isEqualToString:@"Pause"] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:self.timeLabel.text])
     {
         for (NSDictionary *marker in self.markers)
         {
-            if ([[marker objectForKey:@"timeOffset"] floatValue] == result)
+            if ([[marker objectForKey:@"timeOffset"] floatValue] == [self.timeLabel.text floatValue])
             {
                 [self fireMarkerAtIndex:[self.markers indexOfObject:marker]];
                 
