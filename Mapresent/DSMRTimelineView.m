@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) UIScrollView *scroller;
 @property (nonatomic, strong) DSMRTileLineViewTimeline *timeline;
+@property (nonatomic, strong) NSTimer *playTimer;
 
 @end
 
@@ -27,6 +28,7 @@
 
 @synthesize scroller;
 @synthesize timeline;
+@synthesize playTimer;
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
@@ -45,9 +47,51 @@
         [scroller addSubview:timeline];
 
         scroller.contentSize = timeline.frame.size;
+        scroller.delegate = self;
     }
     
     return self;
+}
+
+#pragma mark -
+
+- (void)togglePlay
+{
+    if ([self.playTimer isValid])
+        [self.playTimer invalidate];
+    else
+        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:0.05 target:self selector:@selector(firePlayTimer:) userInfo:nil repeats:YES];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayToggled object:self];
+}
+
+- (void)firePlayTimer:(NSTimer *)timer
+{
+    CGPoint targetOffset = CGPointMake(self.scroller.contentOffset.x + 5, self.scroller.contentOffset.y);
+    
+    if (targetOffset.x > self.timeline.bounds.size.width - self.scroller.bounds.size.width)
+    {
+        [self togglePlay];
+    }
+    else
+    {
+        [self.scroller setContentOffset:targetOffset animated:YES];
+     
+        [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:targetOffset.x]];
+    }
+}
+
+#pragma mark -
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    if ([self.playTimer isValid])
+        [self togglePlay];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:scroller.contentOffset.x / 100]];
 }
 
 @end

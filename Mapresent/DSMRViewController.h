@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DSMRViewController : UIViewController
+@interface DSMRViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 @end

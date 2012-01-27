@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DSMRTimelineView : UIView
+static NSString *DSMRTimelineViewPlayToggled     = @"DSMRTimelineViewPlayToggled";
+static NSString *DSMRTimelineViewPlayProgressed  = @"DSMRTimelineViewPlayProgressed";
+
+@interface DSMRTimelineView : UIView <UIScrollViewDelegate>
+
+- (void)togglePlay;
 
 @end
