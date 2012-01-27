@@ -8,6 +8,8 @@
 
 #import "DSMRViewController.h"
 
+#import "DSMRTimelineMarker.h"
+
 #import "RMMapView.h"
 #import "RMMBTilesTileSource.h"
 
@@ -64,9 +66,9 @@
     
     timeLabel.text = @"0.000000";
 
-    if ([[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"])
-        markers = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"]];
-    else
+//    if ([[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"])
+//        markers = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"]];
+//    else
         markers = [NSMutableArray array];
     
     [self.markerTableView reloadData];
@@ -122,8 +124,6 @@
         
         self.recorder = [[AVAudioRecorder alloc] initWithURL:recordURL settings:settings error:nil];
         
-        self.recorder.delegate = self;
-        
         [self.recorder record];        
     }
     else
@@ -131,7 +131,7 @@
         [self.recorder stop];
 
         [self.audioButton setTitle:@"Audio" forState:UIControlStateNormal];
-
+        
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
 
         self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.recorder.url error:nil];
@@ -150,28 +150,22 @@
     
     UIGraphicsEndImageContext();
     
-    CLLocationCoordinate2D sw = self.mapView.latitudeLongitudeBoundingBox.southWest;
-    CLLocationCoordinate2D ne = self.mapView.latitudeLongitudeBoundingBox.northEast;
+    DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
     
-    NSDictionary *marker = [NSDictionary dictionaryWithObjectsAndKeys:
-                               [NSNumber numberWithFloat:sw.latitude],                             @"swLat",
-                               [NSNumber numberWithFloat:sw.longitude],                            @"swLon",
-                               [NSNumber numberWithFloat:ne.latitude],                             @"neLat",
-                               [NSNumber numberWithFloat:ne.longitude],                            @"neLon",
-                               [NSNumber numberWithFloat:self.mapView.centerCoordinate.latitude],  @"centerLat",
-                               [NSNumber numberWithFloat:self.mapView.centerCoordinate.longitude], @"centerLon",
-                               self.timeLabel.text,                                                @"timeOffset", 
-                               [self.mapView.tileSource shortName],                                @"sourceName",
-                               UIImagePNGRepresentation(snapshot),                                 @"snapshot",
-                               nil];
+    marker.southWest  = self.mapView.latitudeLongitudeBoundingBox.southWest;
+    marker.northEast  = self.mapView.latitudeLongitudeBoundingBox.northEast;
+    marker.center     = self.mapView.centerCoordinate;
+    marker.timeOffset = [self.timeLabel.text doubleValue];
+    marker.sourceName = [self.mapView.tileSource shortName];
+    marker.snapshot   = snapshot;
     
     if ([self.markers count])
     {
         int startCount = [self.markers count];
         
-        for (NSDictionary *otherMarker in [self.markers copy])
+        for (DSMRTimelineMarker *otherMarker in [self.markers copy])
         {
-            if ([self.timeLabel.text floatValue] < [[otherMarker valueForKey:@"timeOffset"] floatValue])
+            if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
             {
                 [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
                 
@@ -196,19 +190,15 @@
 
 - (void)fireMarkerAtIndex:(NSInteger)index
 {
-    NSDictionary *marker = [self.markers objectAtIndex:index];
+    DSMRTimelineMarker *marker = [self.markers objectAtIndex:index];
     
-    [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:CLLocationCoordinate2DMake([[marker objectForKey:@"swLat"] floatValue], 
-                                                                                      [[marker objectForKey:@"swLon"] floatValue])
-                                                 northEast:CLLocationCoordinate2DMake([[marker objectForKey:@"neLat"] floatValue], 
-                                                                                      [[marker objectForKey:@"neLon"] floatValue]) 
-                                                  animated:YES];
+    [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:marker.southWest northEast:marker.northEast animated:YES];
 }
 
 - (void)appWillBackground:(NSNotification *)notification
 {
-    [[NSUserDefaults standardUserDefaults] setObject:self.markers forKey:@"markers"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+//    [[NSUserDefaults standardUserDefaults] setObject:self.markers forKey:@"markers"];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)playToggled:(NSNotification *)notification
@@ -220,11 +210,11 @@
 {
     self.timeLabel.text = [NSString stringWithFormat:@"%f", [((NSNumber *)[notification object]) floatValue] / 64];
     
-    if ([self.playButton.currentTitle isEqualToString:@"Pause"] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:self.timeLabel.text])
+    if ([self.playButton.currentTitle isEqualToString:@"Pause"] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
     {
-        for (NSDictionary *marker in self.markers)
+        for (DSMRTimelineMarker *marker in self.markers)
         {
-            if ([[marker objectForKey:@"timeOffset"] floatValue] == [self.timeLabel.text floatValue])
+            if (marker.timeOffset == [self.timeLabel.text doubleValue])
             {
                 [self fireMarkerAtIndex:[self.markers indexOfObject:marker]];
                 
@@ -257,14 +247,11 @@
     if ( ! cell)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:DSMRViewControllerMarkerIdentifier];
     
-    NSDictionary *marker = [self.markers objectAtIndex:indexPath.row];
+    DSMRTimelineMarker *marker = [self.markers objectAtIndex:indexPath.row];
 
-    cell.textLabel.text = [NSString stringWithFormat:@"Marker @ %@s", [marker valueForKey:@"timeOffset"]];
+    cell.textLabel.text = [NSString stringWithFormat:@"Marker @ %fs", marker.timeOffset];
         
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%f, %f)", 
-                                    [marker valueForKey:@"sourceName"],
-                                    [[marker valueForKey:@"centerLat"] floatValue],
-                                    [[marker valueForKey:@"centerLon"] floatValue]];
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%f, %f)", marker.sourceName, marker.center.latitude, marker.center.longitude];
     
     return cell;
 }

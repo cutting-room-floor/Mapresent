@@ -23,6 +23,7 @@
 		DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */; };
 		DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD9607C614D33E5D00FA2CBA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */; };
+		DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,8 @@
 		DD96078D14D32C2800FA2CBA /* UIImage-Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage-Extensions.h"; path = "Externals/UIImage-Extensions/UIImage-Extensions.h"; sourceTree = SOURCE_ROOT; };
 		DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage-Extensions.m"; path = "Externals/UIImage-Extensions/UIImage-Extensions.m"; sourceTree = SOURCE_ROOT; };
 		DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		DD9607C714D34CA900FA2CBA /* DSMRTimelineMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineMarker.h; sourceTree = "<group>"; };
+		DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineMarker.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +138,8 @@
 				DD2B335214CF75AE008DE8CB /* DSMRViewController.h */,
 				DD2B335314CF75AE008DE8CB /* DSMRViewController.m */,
 				DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */,
+				DD9607C714D34CA900FA2CBA /* DSMRTimelineMarker.h */,
+				DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */,
 				DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */,
 				DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */,
 				DD2B334714CF75AE008DE8CB /* Supporting Files */,
@@ -291,6 +296,7 @@
 				DD2B335414CF75AE008DE8CB /* DSMRViewController.m in Sources */,
 				DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */,
 				DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */,
+				DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
