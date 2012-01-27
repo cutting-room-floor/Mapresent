@@ -18,6 +18,7 @@
 @interface DSMRViewController () 
 
 @property (nonatomic, strong) IBOutlet RMMapView *mapView;
+@property (nonatomic, strong) IBOutlet UILabel *mapLabel;
 @property (nonatomic, strong) IBOutlet UIView *inspectorView;
 @property (nonatomic, strong) IBOutlet DSMRTimelineView *timelineView;
 @property (nonatomic, strong) IBOutlet UITableView *markerTableView;
@@ -35,6 +36,7 @@
 @implementation DSMRViewController
 
 @synthesize mapView;
+@synthesize mapLabel;
 @synthesize inspectorView;
 @synthesize timelineView;
 @synthesize markerTableView;
@@ -45,6 +47,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.mapView.delegate = self;
     
     self.mapView.tileSource = [[RMMBTilesTileSource alloc] initWithTileSetURL:[[NSBundle mainBundle] URLForResource:@"geography-class" withExtension:@"mbtiles"]];
     self.mapView.decelerationMode = RMMapDecelerationFast;
@@ -167,6 +171,13 @@
             }
         }
     }
+}
+
+#pragma mark -
+
+- (void)mapViewRegionDidChange:(RMMapView *)mapView
+{
+    self.mapLabel.text = [NSString stringWithFormat:@"%f, %f", self.mapView.centerCoordinate.latitude, self.mapView.centerCoordinate.longitude];
 }
 
 #pragma mark -

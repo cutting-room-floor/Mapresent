@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DSMRViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+#import "RMMapViewDelegate.h"
+
+@interface DSMRViewController : UIViewController <RMMapViewDelegate, UITableViewDataSource, UITableViewDelegate>
 
 @end
