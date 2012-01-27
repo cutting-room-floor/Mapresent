@@ -52,7 +52,7 @@
     
     [RMMapView class]; // avoid code stripping
     
-    timeLabel.text = @"0.00";
+    timeLabel.text = @"0.000000";
 
     if ([[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"])
         markers = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"]];
@@ -86,8 +86,6 @@
         [self fireMarkerAtIndex:0];
     
     [self.timelineView togglePlay];
-    
-    
 }
 
 - (IBAction)pressedMarker:(id)sender
@@ -101,6 +99,7 @@
                                [NSNumber numberWithFloat:ne.latitude],  @"neLat",
                                [NSNumber numberWithFloat:ne.longitude], @"neLon",
                                self.timeLabel.text,                     @"timeOffset", 
+                               [self.mapView.tileSource shortName],     @"sourceName",
                                nil];
     
     if ([self.markers count])
@@ -186,8 +185,14 @@
     if ( ! cell)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:DSMRViewControllerMarkerIdentifier];
     
-    cell.textLabel.text       = @"Marker";
-    cell.detailTextLabel.text = [[self.markers objectAtIndex:indexPath.row] valueForKey:@"timeOffset"];
+    NSDictionary *marker = [self.markers objectAtIndex:indexPath.row];
+
+    cell.textLabel.text = [NSString stringWithFormat:@"Marker @ %@s", [marker valueForKey:@"timeOffset"]];
+        
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%f, %f)", 
+                                    [marker valueForKey:@"sourceName"],
+                                    (([[marker valueForKey:@"neLat"] floatValue] - [[marker valueForKey:@"swLat"] floatValue]) / 2),
+                                    (([[marker valueForKey:@"neLon"] floatValue] - [[marker valueForKey:@"swLon"] floatValue]) / 2)];
     
     return cell;
 }
