@@ -10,7 +10,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-@interface DSMRTimelineMarker : NSObject
+@interface DSMRTimelineMarker : NSObject <NSCoding>
 
 @property (nonatomic, assign) CLLocationCoordinate2D southWest;
 @property (nonatomic, assign) CLLocationCoordinate2D northEast;

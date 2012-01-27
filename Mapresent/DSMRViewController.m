@@ -66,10 +66,11 @@
     
     timeLabel.text = @"0.000000";
 
-//    if ([[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"])
-//        markers = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"]];
-//    else
-        markers = [NSMutableArray array];
+    markers = [NSMutableArray array];
+
+    if ([[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"])
+        for (NSData *savedMarker in [[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"])
+            [markers addObject:[NSKeyedUnarchiver unarchiveObjectWithData:savedMarker]];
     
     [self.markerTableView reloadData];
     
@@ -197,8 +198,13 @@
 
 - (void)appWillBackground:(NSNotification *)notification
 {
-//    [[NSUserDefaults standardUserDefaults] setObject:self.markers forKey:@"markers"];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSMutableArray *savedMarkers = [NSMutableArray array];
+    
+    for (DSMRTimelineMarker *marker in self.markers)
+        [savedMarkers addObject:[NSKeyedArchiver archivedDataWithRootObject:marker]];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:savedMarkers forKey:@"markers"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)playToggled:(NSNotification *)notification
