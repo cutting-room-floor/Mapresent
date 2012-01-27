@@ -11,6 +11,7 @@
 #import "RMMapView.h"
 #import "RMMBTilesTileSource.h"
 
+#import <AVFoundation/AVFoundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -22,8 +23,11 @@
 @property (nonatomic, strong) IBOutlet DSMRTimelineView *timelineView;
 @property (nonatomic, strong) IBOutlet UITableView *markerTableView;
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
+@property (nonatomic, strong) IBOutlet UIButton *audioButton;
 @property (nonatomic, strong) IBOutlet UILabel *timeLabel;
 @property (nonatomic, strong) NSMutableArray *markers;
+@property (nonatomic, strong) AVAudioRecorder *recorder;
+@property (nonatomic, strong) AVAudioPlayer *player;
 
 - (IBAction)pressedPlay:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
@@ -40,8 +44,11 @@
 @synthesize timelineView;
 @synthesize markerTableView;
 @synthesize playButton;
+@synthesize audioButton;
 @synthesize timeLabel;
 @synthesize markers;
+@synthesize recorder;
+@synthesize player;
 
 - (void)viewDidLoad
 {
@@ -93,6 +100,44 @@
         [self fireMarkerAtIndex:0];
     
     [self.timelineView togglePlay];
+}
+
+- (IBAction)pressedAudio:(id)sender
+{
+    if ( ! self.recorder.recording)
+    {
+        [self.audioButton setTitle:@"Stop" forState:UIControlStateNormal];
+
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
+
+        NSURL *recordURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@.rec", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]]];
+        
+        NSDictionary *settings = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     [NSNumber numberWithFloat:8000.0],                  AVSampleRateKey,
+                                     [NSNumber numberWithInt:kAudioFormatAppleLossless], AVFormatIDKey,
+                                     [NSNumber numberWithInt:1],                         AVNumberOfChannelsKey,
+                                     [NSNumber numberWithInt:AVAudioQualityMax],         AVEncoderAudioQualityKey,
+                                     nil];
+        
+        self.recorder = [[AVAudioRecorder alloc] initWithURL:recordURL settings:settings error:nil];
+        
+        self.recorder.delegate = self;
+        
+        [self.recorder record];        
+    }
+    else
+    {
+        [self.recorder stop];
+
+        [self.audioButton setTitle:@"Audio" forState:UIControlStateNormal];
+
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+
+        self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.recorder.url error:nil];
+
+        [self.player play];
+    }
 }
 
 - (IBAction)pressedMarker:(id)sender

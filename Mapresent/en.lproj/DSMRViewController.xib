@@ -109,7 +109,7 @@
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MQA</bytes>
 								</object>
-								<object class="NSColor" key="IBUINormalTitleColor" id="255970107">
+								<object class="NSColor" key="IBUINormalTitleColor" id="748113308">
 									<int key="NSColorSpace">3</int>
 									<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 								</object>
@@ -166,7 +166,7 @@
 								<int key="IBUIButtonType">1</int>
 								<string key="IBUINormalTitle">Line</string>
 								<reference key="IBUIHighlightedTitleColor" ref="404848745"/>
-								<reference key="IBUINormalTitleColor" ref="255970107"/>
+								<reference key="IBUINormalTitleColor" ref="748113308"/>
 								<reference key="IBUINormalTitleShadowColor" ref="417769957"/>
 								<reference key="IBUIFontDescription" ref="507993772"/>
 								<reference key="IBUIFont" ref="651645916"/>
@@ -181,13 +181,15 @@
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<bool key="IBUIEnabled">NO</bool>
 								<int key="IBUIContentHorizontalAlignment">0</int>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<int key="IBUIButtonType">1</int>
 								<string key="IBUINormalTitle">Audio</string>
 								<reference key="IBUIHighlightedTitleColor" ref="404848745"/>
-								<reference key="IBUINormalTitleColor" ref="255970107"/>
+								<object class="NSColor" key="IBUINormalTitleColor">
+									<int key="NSColorSpace">1</int>
+									<bytes key="NSRGB">MC4xOTYwNzg0MzE0IDAuMzA5ODAzOTIxNiAwLjUyMTU2ODYyNzUAA</bytes>
+								</object>
 								<reference key="IBUINormalTitleShadowColor" ref="417769957"/>
 								<reference key="IBUIFontDescription" ref="507993772"/>
 								<reference key="IBUIFont" ref="651645916"/>
@@ -373,6 +375,23 @@
 					<int key="connectionID">30</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">audioButton</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="937289877"/>
+					</object>
+					<int key="connectionID">32</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">pressedAudio:</string>
+						<reference key="source" ref="937289877"/>
+						<reference key="destination" ref="841351856"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">31</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">pressedMarker:</string>
 						<reference key="source" ref="434368851"/>
@@ -527,7 +546,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">30</int>
+			<int key="maxID">32</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -554,6 +573,7 @@
 						</object>
 					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="audioButton">UIButton</string>
 						<string key="inspectorView">UIView</string>
 						<string key="mapLabel">UILabel</string>
 						<string key="mapView">RMMapView</string>
@@ -563,6 +583,10 @@
 						<string key="timelineView">DSMRTimelineView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="audioButton">
+							<string key="name">audioButton</string>
+							<string key="candidateClassName">UIButton</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="inspectorView">
 							<string key="name">inspectorView</string>
 							<string key="candidateClassName">UIView</string>

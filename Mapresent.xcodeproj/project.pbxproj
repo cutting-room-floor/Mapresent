@@ -22,6 +22,7 @@
 		DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = DD2B375814CF822C008DE8CB /* geography-class.mbtiles */; };
 		DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */; };
 		DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DD9607C614D33E5D00FA2CBA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineView.m; sourceTree = "<group>"; };
 		DD96078D14D32C2800FA2CBA /* UIImage-Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage-Extensions.h"; path = "Externals/UIImage-Extensions/UIImage-Extensions.h"; sourceTree = SOURCE_ROOT; };
 		DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage-Extensions.m"; path = "Externals/UIImage-Extensions/UIImage-Extensions.m"; sourceTree = SOURCE_ROOT; };
+		DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD9607C614D33E5D00FA2CBA /* AVFoundation.framework in Frameworks */,
 				DD2B334514CF75AE008DE8CB /* CoreGraphics.framework in Frameworks */,
 				DD2B373E14CF7BFB008DE8CB /* CoreLocation.framework in Frameworks */,
 				DD2B334314CF75AE008DE8CB /* Foundation.framework in Frameworks */,
@@ -113,6 +116,7 @@
 		DD2B333F14CF75AE008DE8CB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */,
 				DD2B334414CF75AE008DE8CB /* CoreGraphics.framework */,
 				DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */,
 				DD2B334214CF75AE008DE8CB /* Foundation.framework */,
