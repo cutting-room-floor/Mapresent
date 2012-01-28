@@ -134,6 +134,8 @@
         [self.recorder stop];
 
         [self.audioButton setTitle:@"Audio" forState:UIControlStateNormal];
+
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
         
         AVAudioPlayer *clip = [[AVAudioPlayer alloc] initWithContentsOfURL:self.recorder.url error:nil];
         
