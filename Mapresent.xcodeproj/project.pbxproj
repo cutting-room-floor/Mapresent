@@ -25,6 +25,7 @@
 		DD9607C614D33E5D00FA2CBA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */; };
 		DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */; };
 		DD9607D114D36FDE00FA2CBA /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607CD14D36FDE00FA2CBA /* libTestFlight.a */; };
+		DD9607D514D371FC00FA2CBA /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD9607D414D371FC00FA2CBA /* Entitlements.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +80,7 @@
 		DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineMarker.m; sourceTree = "<group>"; };
 		DD9607CD14D36FDE00FA2CBA /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		DD9607D014D36FDE00FA2CBA /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		DD9607D414D371FC00FA2CBA /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +160,7 @@
 				DD2B334914CF75AE008DE8CB /* InfoPlist.strings */,
 				DD2B334C14CF75AE008DE8CB /* main.m */,
 				DD2B334E14CF75AE008DE8CB /* Mapresent-Prefix.pch */,
+				DD9607D414D371FC00FA2CBA /* Entitlements.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 				DD2B334B14CF75AE008DE8CB /* InfoPlist.strings in Resources */,
 				DD2B335714CF75AE008DE8CB /* DSMRViewController.xib in Resources */,
 				DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */,
+				DD9607D514D371FC00FA2CBA /* Entitlements.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,7 +435,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -441,6 +445,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -451,6 +456,7 @@
 		DD9607CB14D36EEB00FA2CBA /* Ad Hoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
