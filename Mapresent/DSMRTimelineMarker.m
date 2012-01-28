@@ -42,8 +42,8 @@
 {
     [coder encodeDouble:southWest.latitude  forKey:@"swLat"];
     [coder encodeDouble:southWest.longitude forKey:@"swLon"];
-    [coder encodeDouble:southWest.latitude  forKey:@"neLat"];
-    [coder encodeDouble:southWest.longitude forKey:@"neLon"];
+    [coder encodeDouble:northEast.latitude  forKey:@"neLat"];
+    [coder encodeDouble:northEast.longitude forKey:@"neLon"];
     [coder encodeDouble:center.latitude     forKey:@"centerLat"];
     [coder encodeDouble:center.longitude    forKey:@"centerLon"];
     [coder encodeDouble:timeOffset          forKey:@"timeOffset"];
