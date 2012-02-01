@@ -12,6 +12,6 @@
 
 #import "RMMapViewDelegate.h"
 
-@interface DSMRViewController : UIViewController <RMMapViewDelegate, UITableViewDataSource, UITableViewDelegate, DSMRTimelineViewDelegate>
+@interface DSMRViewController : UIViewController <RMMapViewDelegate, UITableViewDataSource, UITableViewDelegate, DSMRTimelineViewDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
 @end

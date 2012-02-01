@@ -116,6 +116,13 @@
             placement = 130;
             width     = marker.duration * 64.0;
         }
+        else if (marker.tileSourceInfo)
+        {
+            markerView.backgroundColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.2];
+            
+            placement = 160;
+            width     = markerView.frame.size.width;
+        }
         
         markerView.frame = CGRectMake((marker.timeOffset * 64.0) + 512.0, placement, width, markerView.frame.size.height);
         

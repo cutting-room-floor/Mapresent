@@ -20,5 +20,6 @@
 @property (nonatomic, strong) UIImage *snapshot;
 @property (nonatomic, strong) NSData *recording;
 @property (nonatomic, assign) NSTimeInterval duration;
+@property (nonatomic, strong) NSDictionary *tileSourceInfo;
 
 @end

@@ -9,9 +9,12 @@
 #import "DSMRViewController.h"
 
 #import "DSMRTimelineMarker.h"
+#import "DSMRWrapperController.h"
+#import "DSMRThemePicker.h"
 
 #import "RMMapView.h"
 #import "RMMBTilesTileSource.h"
+#import "RMTileStreamSource.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -30,6 +33,8 @@
 @property (nonatomic, strong) NSMutableArray *markers;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) AVAudioPlayer *player;
+@property (nonatomic, strong) NSMutableArray *themes;
+@property (nonatomic, strong) NSDictionary *chosenThemeInfo;
 
 - (IBAction)pressedPlay:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
@@ -51,6 +56,8 @@
 @synthesize markers;
 @synthesize recorder;
 @synthesize player;
+@synthesize themes;
+@synthesize chosenThemeInfo;
 
 - (void)viewDidLoad
 {
@@ -105,6 +112,121 @@
         [self fireMarkerAtIndex:0];
     
     [self.timelineView togglePlay];
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
+{
+    int index = [self.themes indexOfObject:((DSMRThemePicker *)viewController).info];
+    
+    if (index > 0)
+        return [[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:(index - 1)]];
+        
+    return nil;
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
+{
+    int index = [self.themes indexOfObject:((DSMRThemePicker *)viewController).info];
+    
+    if (index < [self.themes count] - 1)
+        return [[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:(index + 1)]];
+    
+    return nil;
+}
+
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
+{
+    int index = [self.themes indexOfObject:((DSMRThemePicker *)[pageViewController.viewControllers lastObject]).info];
+
+    self.chosenThemeInfo = [self.themes objectAtIndex:index];
+}
+
+- (IBAction)pressedTheme:(id)sender
+{
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://api.tiles.mapbox.com/v1/mapbox/tilesets.json"]]
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error)
+                           {
+                               self.themes = [NSMutableArray array];
+                               
+                               for (NSDictionary *tileset in [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil])
+                               {
+                                   RMTileStreamSource *source = [[RMTileStreamSource alloc] initWithInfo:tileset];
+                                   
+                                   if ([source coversFullWorld])
+                                       [self.themes addObject:tileset];
+                               }
+                               
+                               UIPageViewController *pager = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+                                                                                             navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                                                                                           options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMin] forKey:UIPageViewControllerOptionSpineLocationKey]];
+                               
+                               [pager setViewControllers:[NSArray arrayWithObject:[[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:0]]]
+                                                                                                              direction:UIPageViewControllerNavigationDirectionForward 
+                                                                                                               animated:NO 
+                                                                                                             completion:nil];
+                               
+                               pager.dataSource = self;
+                               pager.delegate   = self;
+                               
+                               DSMRWrapperController *wrapper = [[DSMRWrapperController alloc] initWithRootViewController:pager];
+
+                               wrapper.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+                               
+                               wrapper.modalPresentationStyle = UIModalPresentationFullScreen;
+                               wrapper.modalTransitionStyle   = UIModalTransitionStyleCrossDissolve;
+                               
+                               pager.navigationItem.title = @"Choose Theme";
+                               
+                               pager.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                                                      target:self
+                                                                                                                      action:@selector(dismissModalViewControllerAnimated:)];
+                               
+                               pager.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Choose"
+                                                                                                          style:UIBarButtonItemStyleDone
+                                                                                                         target:self
+                                                                                                         action:@selector(addThemeTransition:)];
+                               
+                               self.chosenThemeInfo = [self.themes objectAtIndex:0];
+                               
+                               [self presentModalViewController:wrapper animated:YES];
+                           }];
+}
+
+- (void)addThemeTransition:(id)sender
+{
+    [self dismissModalViewControllerAnimated:YES];
+    
+    DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
+    
+    marker.timeOffset     = [self.timeLabel.text doubleValue];
+    marker.tileSourceInfo = self.chosenThemeInfo;
+    
+    if ([self.markers count])
+    {
+        int startCount = [self.markers count];
+        
+        for (DSMRTimelineMarker *otherMarker in [self.markers copy])
+        {
+            if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
+            {
+                [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
+                
+                break;
+            }
+        }
+        
+        if ([self.markers count] == startCount)
+            [self.markers addObject:marker];
+    }
+    else
+    {
+        [self.markers addObject:marker];
+    }
+    
+    [self.markerTableView reloadData];
+    
+    [self.timelineView redrawMarkers];
 }
 
 - (IBAction)pressedAudio:(id)sender
@@ -235,7 +357,11 @@
     {
         self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
     
-        [self.player play];
+        [self.player performSelector:@selector(play) withObject:nil afterDelay:0.0];
+    }
+    else if (marker.tileSourceInfo)
+    {
+        [self.mapView performSelector:@selector(setTileSource:) withObject:[[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo] afterDelay:0.0];
     }
 }
 
@@ -309,6 +435,12 @@
         cell.textLabel.text = [NSString stringWithFormat:@"Audio @ %fs", marker.timeOffset];
 
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%f seconds", marker.duration];
+    }
+    else if (marker.tileSourceInfo)
+    {
+        cell.textLabel.text = [NSString stringWithFormat:@"Theme @ %fs", marker.timeOffset];
+        
+        cell.detailTextLabel.text = [marker.tileSourceInfo objectForKey:@"name"];
     }
     
     return cell;

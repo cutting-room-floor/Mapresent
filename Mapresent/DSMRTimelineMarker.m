@@ -18,6 +18,7 @@
 @synthesize snapshot;
 @synthesize recording;
 @synthesize duration;
+@synthesize tileSourceInfo;
 
 - (id)initWithCoder:(NSCoder *)coder
 {
@@ -25,14 +26,15 @@
     
     if (self)
     {
-        southWest  = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"swLat"],     [coder decodeDoubleForKey:@"swLon"]);
-        northEast  = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"neLat"],     [coder decodeDoubleForKey:@"neLon"]);
-        center     = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"centerLat"], [coder decodeDoubleForKey:@"centerLon"]);
-        timeOffset = [coder decodeDoubleForKey:@"timeOffset"];
-        sourceName = [coder decodeObjectForKey:@"sourceName"];
-        snapshot   = [coder decodeObjectForKey:@"snapshot"];
-        recording  = [coder decodeObjectForKey:@"recording"];
-        duration   = [coder decodeDoubleForKey:@"duration"];
+        southWest      = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"swLat"],     [coder decodeDoubleForKey:@"swLon"]);
+        northEast      = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"neLat"],     [coder decodeDoubleForKey:@"neLon"]);
+        center         = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"centerLat"], [coder decodeDoubleForKey:@"centerLon"]);
+        timeOffset     = [coder decodeDoubleForKey:@"timeOffset"];
+        sourceName     = [coder decodeObjectForKey:@"sourceName"];
+        snapshot       = [coder decodeObjectForKey:@"snapshot"];
+        recording      = [coder decodeObjectForKey:@"recording"];
+        duration       = [coder decodeDoubleForKey:@"duration"];
+        tileSourceInfo = [coder decodeObjectForKey:@"tileSourceInfo"];
     }
     
     return self;
@@ -51,6 +53,7 @@
     [coder encodeObject:snapshot            forKey:@"snapshot"];
     [coder encodeObject:recording           forKey:@"recording"];
     [coder encodeDouble:duration            forKey:@"duration"];
+    [coder encodeObject:tileSourceInfo      forKey:@"tileSourceInfo"];
 }
 
 @end
