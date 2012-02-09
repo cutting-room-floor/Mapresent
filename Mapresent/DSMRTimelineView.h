@@ -22,6 +22,7 @@ static NSString *DSMRTimelineViewPlayProgressed  = @"DSMRTimelineViewPlayProgres
 @interface DSMRTimelineView : UIView <UIScrollViewDelegate>
 
 @property (nonatomic, weak) id <DSMRTimelineViewDelegate>delegate;
+@property (nonatomic, assign, getter=isExporting) BOOL exporting;
 
 - (void)togglePlay;
 - (void)redrawMarkers;

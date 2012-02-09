@@ -13,6 +13,7 @@
 #import "DSMRThemePicker.h"
 
 #import "RMMapView.h"
+#import "RMScrollView.h"
 #import "RMMBTilesTileSource.h"
 #import "RMTileStreamSource.h"
 
@@ -37,6 +38,7 @@
 @property (nonatomic, strong) NSDictionary *chosenThemeInfo;
 
 - (IBAction)pressedPlay:(id)sender;
+- (IBAction)pressedExport:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
 
 @end
@@ -111,7 +113,40 @@
     if ([self.markers count] && [[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
         [self fireMarkerAtIndex:0];
     
+    if (self.timelineView.isExporting)
+    {
+        self.timelineView.exporting = NO;
+        ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
+    }
+    
     [self.timelineView togglePlay];
+}
+
+- (IBAction)pressedExport:(id)sender
+{
+    ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 8.0;
+    
+    self.timelineView.exporting = YES;
+    
+    [NSTimer scheduledTimerWithTimeInterval:(1.0 / 8.0) target:self selector:@selector(takeSnapshot:) userInfo:nil repeats:YES];
+    
+    [self.timelineView togglePlay];
+}
+
+CGImageRef UIGetScreenImage(void); // um, FIXME
+
+- (void)takeSnapshot:(NSTimer *)timer
+{
+    if ( ! self.timelineView.isExporting)
+        [timer invalidate];
+    
+    static int i = 0;
+    
+    NSString *filename = [NSString stringWithFormat:@"/tmp/snap_%i.png", i];
+    
+    [UIImagePNGRepresentation([UIImage imageWithCGImage:UIGetScreenImage()]) writeToFile:filename atomically:YES];
+    
+    i++;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
