@@ -21,6 +21,8 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import <CoreMedia/CoreMedia.h>
+#import <CoreVideo/CoreVideo.h>
 #import <QuartzCore/QuartzCore.h>
 
 @interface DSMRViewController () 
@@ -38,11 +40,13 @@
 @property (nonatomic, strong) AVAudioPlayer *player;
 @property (nonatomic, strong) NSMutableArray *themes;
 @property (nonatomic, strong) NSDictionary *chosenThemeInfo;
+@property (nonatomic, assign) dispatch_queue_t serialQueue;
 @property (nonatomic, assign) dispatch_queue_t processingQueue;
 
 - (IBAction)pressedPlay:(id)sender;
 - (IBAction)pressedExport:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
+- (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
 
 @end
 
@@ -63,6 +67,7 @@
 @synthesize player;
 @synthesize themes;
 @synthesize chosenThemeInfo;
+@synthesize serialQueue;
 @synthesize processingQueue;
 
 - (void)viewDidLoad
@@ -95,6 +100,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:)    name:DSMRTimelineViewPlayProgressed            object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillBackground:) name:UIApplicationWillResignActiveNotification object:nil];
     
+    serialQueue     = dispatch_queue_create("mapresent.serial", DISPATCH_QUEUE_SERIAL);
     processingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
 }
 
@@ -124,37 +130,162 @@
         self.timelineView.exporting = NO;
         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
+        // give capture some time to wrap up
+        //
+        dispatch_async(self.serialQueue, ^(void) { sleep(2); });
+        
+        // clean up capture frames
+        //
+        dispatch_async(self.serialQueue, ^(void)
         {
-            for (NSString *imageFile in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/tmp" error:nil])
+            for (NSString *imageFile in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil])
             {
                 if ([imageFile hasPrefix:@"snap_"] && [imageFile hasSuffix:@".png"])
                 {
-                    dispatch_async(processingQueue, ^(void)
-                    {
-                        // these are not thread-safe, but that doesn't matter (much) for now
-                        //
-                        UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"/tmp/%@", imageFile]];
+//                    dispatch_async(self.processingQueue, ^(void)
+//                    {
+//                        // these are not thread-safe, but that doesn't matter (much) for now
+//                        //
+                        UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
                         UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 350, 498, 674)];
                         UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
 
-                        [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"/tmp/%@", imageFile] atomically:YES];
-                    });
+                        [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile] atomically:YES];
+//                    });
                 }
             }
         });
+        
+        // make the video
+        //
+        dispatch_async(self.serialQueue, ^(void)
+        {
+            CGSize size = CGSizeMake(674, 498);
+            
+            
+            NSString *betaCompressionDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"Movie.m4v"];
+            
+            NSError *error = nil;
+            
+            unlink([betaCompressionDirectory UTF8String]);
+            
+            //----initialize compression engine
+            AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:betaCompressionDirectory]
+                                                                   fileType:AVFileTypeQuickTimeMovie
+                                                                      error:&error];
+            NSParameterAssert(videoWriter);
+            if(error)
+                NSLog(@"error = %@", [error localizedDescription]);
+            
+            NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:AVVideoCodecH264, AVVideoCodecKey,
+                                           [NSNumber numberWithInt:size.width], AVVideoWidthKey,
+                                           [NSNumber numberWithInt:size.height], AVVideoHeightKey, nil];
+            AVAssetWriterInput *writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
+            
+            NSDictionary *sourcePixelBufferAttributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                                   [NSNumber numberWithInt:kCVPixelFormatType_32ARGB], kCVPixelBufferPixelFormatTypeKey, nil];
+            
+            AVAssetWriterInputPixelBufferAdaptor *adaptor = [AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:writerInput
+                                                                                                                             sourcePixelBufferAttributes:sourcePixelBufferAttributesDictionary];
+            NSParameterAssert(writerInput);
+            NSParameterAssert([videoWriter canAddInput:writerInput]);
+            
+            if ([videoWriter canAddInput:writerInput])
+                NSLog(@"I can add this input");
+            else
+                NSLog(@"i can't add this input");
+            
+            [videoWriter addInput:writerInput];
+            
+            [videoWriter startWriting];
+            [videoWriter startSessionAtSourceTime:kCMTimeZero];
+            
+            //---
+            // insert demo debugging code to write the same image repeated as a movie
+            
+//            CGImageRef theImage = [[UIImage imageNamed:@"Lotus.png"] CGImage];
+            
+//            dispatch_queue_t    dispatchQueue = dispatch_queue_create("mediaInputQueue", NULL);
+            int __block         frame = 0;
+            
+            for (NSString *imageFile in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil])
+            {
+                if ([imageFile hasPrefix:@"snap_"] && [imageFile hasSuffix:@".png"])
+                {
+                    
+                    NSLog(@"doing %@", imageFile);
+                    
+                    while ( ! [writerInput isReadyForMoreMediaData])
+                        [NSThread sleepForTimeInterval:0.5];
+                    
+                    UIImage *image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
+
+                    CVPixelBufferRef buffer = (CVPixelBufferRef)[self pixelBufferFromCGImage:[image CGImage] size:size];
+                    if (buffer)
+                    {
+                        if(![adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMakeWithSeconds(frame * (1.0 / 64.0), 1000)])
+                            NSLog(@"FAIL");
+                        else
+                            NSLog(@"Success:%d", frame);
+                        CFRelease(buffer);
+                    }
+                    
+                    frame++;
+                }
+
+                
+                
+            }
+            
+            [writerInput markAsFinished];
+            [videoWriter finishWriting];
+//            [videoWriter release];
+        });
+        
+        // log that we're done
+        //
+        dispatch_async(self.serialQueue, ^(void) { NSLog(@"video done"); } );
     }
     
     [self.timelineView togglePlay];
+}
+                       
+- (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
+{
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey, 
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, nil];
+    CVPixelBufferRef pxbuffer = NULL;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, size.width, size.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options, &pxbuffer);
+    // CVReturn status = CVPixelBufferPoolCreatePixelBuffer(NULL, adaptor.pixelBufferPool, &pxbuffer);
+    
+    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL); 
+    
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    NSParameterAssert(pxdata != NULL);
+    
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(pxdata, size.width, size.height, 8, CVPixelBufferGetBytesPerRow(pxbuffer)/*4*size.width*/, rgbColorSpace, kCGImageAlphaPremultipliedFirst);
+    NSParameterAssert(context);
+    
+    CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)), image);
+    
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+    
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+    
+    return pxbuffer;
 }
 
 - (IBAction)pressedExport:(id)sender
 {
     if ( ! self.timelineView.isExporting)
     {
-        for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/tmp" error:nil])
+        for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil])
             if ([file hasPrefix:@"snap_"] && [file hasSuffix:@".png"])
-                [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"/tmp/%@", file] error:nil];
+                [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), file] error:nil];
         
         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 8.0;
         
@@ -178,11 +309,11 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         i = 0;
     }
     
-    NSString *filename = [NSString stringWithFormat:@"/tmp/snap_%@%i.png", (i < 10 ? @"00" : (i < 100 ? @"0" : @"")), i];
+    NSString *filename = [NSString stringWithFormat:@"%@/snap_%@%i.png", NSTemporaryDirectory(), (i < 10 ? @"00" : (i < 100 ? @"0" : @"")), i];
     
     CGImageRef image = UIGetScreenImage();
     
-    dispatch_async(processingQueue, ^(void)
+    dispatch_async(self.processingQueue, ^(void)
     {
         [UIImagePNGRepresentation([UIImage imageWithCGImage:image]) writeToFile:filename atomically:YES];
     });
