@@ -151,6 +151,8 @@
                         UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
 
                         [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile] atomically:YES];
+                    
+                    NSLog(@"processed %@", imageFile);
 //                    });
                 }
             }
@@ -244,7 +246,16 @@
         
         // log that we're done
         //
-        dispatch_async(self.serialQueue, ^(void) { NSLog(@"video done"); } );
+        dispatch_async(self.serialQueue, ^(void)
+        {
+            NSLog(@"video done"); 
+            
+            NSString *writtenFile = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.m4v"];
+            NSString *finalFile   = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"export.m4v"];
+
+            [[NSFileManager defaultManager] removeItemAtPath:finalFile error:nil];
+            [[NSFileManager defaultManager] moveItemAtPath:writtenFile toPath:finalFile error:nil];
+        });
     }
     
     [self.timelineView togglePlay];
