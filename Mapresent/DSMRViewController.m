@@ -17,6 +17,8 @@
 #import "RMMBTilesTileSource.h"
 #import "RMTileStreamSource.h"
 
+#import "UIImage-Extensions.h"
+
 #import <AVFoundation/AVFoundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -36,6 +38,7 @@
 @property (nonatomic, strong) AVAudioPlayer *player;
 @property (nonatomic, strong) NSMutableArray *themes;
 @property (nonatomic, strong) NSDictionary *chosenThemeInfo;
+@property (nonatomic, assign) dispatch_queue_t processingQueue;
 
 - (IBAction)pressedPlay:(id)sender;
 - (IBAction)pressedExport:(id)sender;
@@ -60,6 +63,7 @@
 @synthesize player;
 @synthesize themes;
 @synthesize chosenThemeInfo;
+@synthesize processingQueue;
 
 - (void)viewDidLoad
 {
@@ -90,6 +94,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playToggled:)       name:DSMRTimelineViewPlayToggled               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:)    name:DSMRTimelineViewPlayProgressed            object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillBackground:) name:UIApplicationWillResignActiveNotification object:nil];
+    
+    processingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -117,6 +123,26 @@
     {
         self.timelineView.exporting = NO;
         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
+        {
+            for (NSString *imageFile in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/tmp" error:nil])
+            {
+                if ([imageFile hasPrefix:@"snap_"] && [imageFile hasSuffix:@".png"])
+                {
+                    dispatch_async(processingQueue, ^(void)
+                    {
+                        // these are not thread-safe, but that doesn't matter (much) for now
+                        //
+                        UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"/tmp/%@", imageFile]];
+                        UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 350, 498, 674)];
+                        UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
+
+                        [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"/tmp/%@", imageFile] atomically:YES];
+                    });
+                }
+            }
+        });
     }
     
     [self.timelineView togglePlay];
@@ -124,27 +150,42 @@
 
 - (IBAction)pressedExport:(id)sender
 {
-    ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 8.0;
-    
-    self.timelineView.exporting = YES;
-    
-    [NSTimer scheduledTimerWithTimeInterval:(1.0 / 8.0) target:self selector:@selector(takeSnapshot:) userInfo:nil repeats:YES];
-    
-    [self.timelineView togglePlay];
+    if ( ! self.timelineView.isExporting)
+    {
+        for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/tmp" error:nil])
+            if ([file hasPrefix:@"snap_"] && [file hasSuffix:@".png"])
+                [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"/tmp/%@", file] error:nil];
+        
+        ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 8.0;
+        
+        self.timelineView.exporting = YES;
+        
+        [NSTimer scheduledTimerWithTimeInterval:(1.0 / 8.0) target:self selector:@selector(takeSnapshot:) userInfo:nil repeats:YES];
+        
+        [self.timelineView togglePlay];
+    }
 }
 
 CGImageRef UIGetScreenImage(void); // um, FIXME
 
 - (void)takeSnapshot:(NSTimer *)timer
 {
-    if ( ! self.timelineView.isExporting)
-        [timer invalidate];
-    
     static int i = 0;
     
-    NSString *filename = [NSString stringWithFormat:@"/tmp/snap_%i.png", i];
+    if ( ! self.timelineView.isExporting)
+    {
+        [timer invalidate];
+        i = 0;
+    }
     
-    [UIImagePNGRepresentation([UIImage imageWithCGImage:UIGetScreenImage()]) writeToFile:filename atomically:YES];
+    NSString *filename = [NSString stringWithFormat:@"/tmp/snap_%@%i.png", (i < 10 ? @"00" : (i < 100 ? @"0" : @"")), i];
+    
+    CGImageRef image = UIGetScreenImage();
+    
+    dispatch_async(processingQueue, ^(void)
+    {
+        [UIImagePNGRepresentation([UIImage imageWithCGImage:image]) writeToFile:filename atomically:YES];
+    });
     
     i++;
 }
