@@ -50,6 +50,7 @@
 - (IBAction)pressedExport:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
+- (NSString *)documentsFolderPath;
 
 @end
 
@@ -258,7 +259,7 @@
             NSLog(@"video done"); 
             
             NSString *writtenFile = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.m4v"];
-            NSString *finalFile   = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"export.m4v"];
+            NSString *finalFile   = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
 
             [[NSFileManager defaultManager] removeItemAtPath:finalFile error:nil];
             [[NSFileManager defaultManager] moveItemAtPath:writtenFile toPath:finalFile error:nil];
@@ -309,6 +310,11 @@
     }
     
     [self.timelineView togglePlay];
+}
+
+- (NSString *)documentsFolderPath
+{
+    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
@@ -648,6 +654,9 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     [[NSUserDefaults standardUserDefaults] setObject:savedMarkers forKey:@"markers"];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:[[self documentsFolderPath] stringByAppendingPathComponent:@"defaults.plist"]
+                                                                         atomically:YES];
 }
 
 - (void)playToggled:(NSNotification *)notification
