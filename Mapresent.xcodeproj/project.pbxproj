@@ -34,6 +34,7 @@
 		DD98B6FE14D76C090092882F /* mapbox.geography-class.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */; };
 		DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E59C14E5B463000F611E /* libBlocksKit.a */; };
 		DDC6E5A814E5B5F6000F611E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E5A714E5B5F6000F611E /* MessageUI.framework */; };
+		DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,6 +148,8 @@
 		DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mapbox.geography-class.plist"; sourceTree = "<group>"; };
 		DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BlocksKit.xcodeproj; path = Externals/BlocksKit/BlocksKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		DDC6E5A714E5B5F6000F611E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		DDC6E5AA14E5BA4E000F611E /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = Externals/MBProgressHUD/MBProgressHUD.h; sourceTree = SOURCE_ROOT; };
+		DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = Externals/MBProgressHUD/MBProgressHUD.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,8 +249,9 @@
 		DD2B336214CF79BF008DE8CB /* Externals */ = {
 			isa = PBXGroup;
 			children = (
-				DD2B373514CF79F2008DE8CB /* alpstein-route-me */,
+				DD2B373514CF79F2008DE8CB /* Alpstein Route-Me */,
 				DDC6E5A314E5B467000F611E /* BlocksKit */,
+				DDC6E5A914E5BA2E000F611E /* MBProgressHUD */,
 				DD96079014D32C2D00FA2CBA /* UIImage-Extensions */,
 			);
 			name = Externals;
@@ -263,12 +267,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DD2B373514CF79F2008DE8CB /* alpstein-route-me */ = {
+		DD2B373514CF79F2008DE8CB /* Alpstein Route-Me */ = {
 			isa = PBXGroup;
 			children = (
 				DD2B372114CF79ED008DE8CB /* MapView.xcodeproj */,
 			);
-			name = "alpstein-route-me";
+			name = "Alpstein Route-Me";
 			sourceTree = "<group>";
 		};
 		DD2B375714CF81F1008DE8CB /* Resources */ = {
@@ -310,6 +314,15 @@
 				DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */,
 			);
 			name = BlocksKit;
+			sourceTree = "<group>";
+		};
+		DDC6E5A914E5BA2E000F611E /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				DDC6E5AA14E5BA4E000F611E /* MBProgressHUD.h */,
+				DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -458,6 +471,7 @@
 				DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */,
 				DD4312F814D8AACA00697249 /* DSMRThemePicker.m in Sources */,
 				DD4312FC14D8B1C500697249 /* DSMRWrapperController.m in Sources */,
+				DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

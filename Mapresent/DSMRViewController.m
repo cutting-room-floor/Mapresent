@@ -17,6 +17,8 @@
 #import "RMMBTilesTileSource.h"
 #import "RMTileStreamSource.h"
 
+#import "MBProgressHUD.h"
+
 #import "UIImage-Extensions.h"
 
 #import <AVFoundation/AVFoundation.h>
@@ -130,6 +132,10 @@
     {
         self.timelineView.exporting = NO;
         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
+        
+        // start progress HUD
+        //
+        [MBProgressHUD showHUDAddedTo:self.view.window animated:YES].labelText = @"Creating video...";
         
         // give capture some time to wrap up
         //
@@ -259,20 +265,57 @@
             
             dispatch_async(dispatch_get_main_queue(), ^(void)
             {
-                NSURL *movieURL = [NSURL fileURLWithPath:finalFile];
-
-                MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
-
-                moviePresenter.moviePlayer.shouldAutoplay = NO;
+                [MBProgressHUD hideHUDForView:self.view.window animated:YES];
                 
-                [self presentMoviePlayerViewControllerAnimated:moviePresenter];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
+                {
+                    [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
+                                                message:@"Your video exported successfully. Would you like to view it now?"
+                                      cancelButtonTitle:nil
+                                      otherButtonTitles:[NSArray arrayWithObjects:@"Email", @"View", nil]
+                                                handler:^(UIAlertView *alertView, NSInteger buttonIndex)
+                                                {
+                                                    if (buttonIndex == alertView.firstOtherButtonIndex)
+                                                    {
+                                                        MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+                                                        
+                                                        [mailer setSubject:@"Mapresent!"];
+                                                        [mailer setMessageBody:@"<p>&nbsp;</p><p>Powered by <a href=\"http://mapbox.com\">MapBox</a></p>" 
+                                                                        isHTML:YES];
+                                                        [mailer addAttachmentData:[NSData dataWithContentsOfFile:finalFile]
+                                                                         mimeType:@"video/mp4"
+                                                                         fileName:[finalFile lastPathComponent]];
+
+                                                        mailer.modalPresentationStyle = UIModalPresentationPageSheet;
+                                                        
+                                                        mailer.mailComposeDelegate = self;
+                                                        
+                                                        [self presentModalViewController:mailer animated:YES];
+                                                    }
+                                                    else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
+                                                    {
+                                                        NSURL *movieURL = [NSURL fileURLWithPath:finalFile];
+                                                        
+                                                        MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
+                                                        
+                                                        moviePresenter.moviePlayer.shouldAutoplay = NO;
+                                                        
+                                                        [self presentMoviePlayerViewControllerAnimated:moviePresenter];
+                                                    }
+                                                }];
+                });
             });
         });
     }
     
     [self.timelineView togglePlay];
 }
-                       
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    [self dismissModalViewControllerAnimated:YES];
+}
+
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
 {
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
