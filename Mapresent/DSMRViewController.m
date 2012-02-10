@@ -307,6 +307,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     {
         [timer invalidate];
         i = 0;
+        return;
     }
     
     NSString *filename = [NSString stringWithFormat:@"%@/snap_%@%i.png", NSTemporaryDirectory(), (i < 10 ? @"00" : (i < 100 ? @"0" : @"")), i];
