@@ -163,7 +163,7 @@
             CGSize size = CGSizeMake(674, 498);
             
             
-            NSString *betaCompressionDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"Movie.m4v"];
+            NSString *betaCompressionDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.m4v"];
             
             NSError *error = nil;
             
