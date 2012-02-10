@@ -555,6 +555,10 @@
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
 				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -570,6 +574,10 @@
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
 				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
