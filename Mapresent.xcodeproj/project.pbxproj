@@ -27,6 +27,7 @@
 		DD43131314D8D26800697249 /* needle.png in Resources */ = {isa = PBXBuildFile; fileRef = DD43131214D8D26800697249 /* needle.png */; };
 		DD8B4ED314E4A6FA00D15AF9 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8B4ED214E4A6FA00D15AF9 /* CoreVideo.framework */; };
 		DD8B4ED514E4A73200D15AF9 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8B4ED414E4A73200D15AF9 /* CoreMedia.framework */; };
+		DD8B4F1714E50C2800D15AF9 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8B4F1614E50C2800D15AF9 /* MediaPlayer.framework */; };
 		DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD9607C614D33E5D00FA2CBA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */; };
 		DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */; };
@@ -86,6 +87,7 @@
 		DD43131214D8D26800697249 /* needle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = needle.png; sourceTree = "<group>"; };
 		DD8B4ED214E4A6FA00D15AF9 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		DD8B4ED414E4A73200D15AF9 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		DD8B4F1614E50C2800D15AF9 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		DD96078D14D32C2800FA2CBA /* UIImage-Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage-Extensions.h"; path = "Externals/UIImage-Extensions/UIImage-Extensions.h"; sourceTree = SOURCE_ROOT; };
 		DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage-Extensions.m"; path = "Externals/UIImage-Extensions/UIImage-Extensions.m"; sourceTree = SOURCE_ROOT; };
 		DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -105,6 +107,7 @@
 				DD8B4ED514E4A73200D15AF9 /* CoreMedia.framework in Frameworks */,
 				DD8B4ED314E4A6FA00D15AF9 /* CoreVideo.framework in Frameworks */,
 				DD2B334314CF75AE008DE8CB /* Foundation.framework in Frameworks */,
+				DD8B4F1714E50C2800D15AF9 /* MediaPlayer.framework in Frameworks */,
 				DD2B373C14CF7AC7008DE8CB /* QuartzCore.framework in Frameworks */,
 				DD2B334114CF75AE008DE8CB /* UIKit.framework in Frameworks */,
 				DD2B373814CF7A4D008DE8CB /* libMapView.a in Frameworks */,
@@ -143,6 +146,7 @@
 				DD8B4ED414E4A73200D15AF9 /* CoreMedia.framework */,
 				DD8B4ED214E4A6FA00D15AF9 /* CoreVideo.framework */,
 				DD2B334214CF75AE008DE8CB /* Foundation.framework */,
+				DD8B4F1614E50C2800D15AF9 /* MediaPlayer.framework */,
 				DD2B373B14CF7AC7008DE8CB /* QuartzCore.framework */,
 				DD2B334014CF75AE008DE8CB /* UIKit.framework */,
 				DD2B373914CF7AAB008DE8CB /* libsqlite3.dylib */,

@@ -23,6 +23,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMedia/CoreMedia.h>
 #import <CoreVideo/CoreVideo.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import <QuartzCore/QuartzCore.h>
 
 @interface DSMRViewController () 
@@ -255,6 +256,17 @@
 
             [[NSFileManager defaultManager] removeItemAtPath:finalFile error:nil];
             [[NSFileManager defaultManager] moveItemAtPath:writtenFile toPath:finalFile error:nil];
+            
+            dispatch_async(dispatch_get_main_queue(), ^(void)
+            {
+                NSURL *movieURL = [NSURL fileURLWithPath:finalFile];
+
+                MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
+
+                moviePresenter.moviePlayer.shouldAutoplay = NO;
+                
+                [self presentMoviePlayerViewControllerAnimated:moviePresenter];
+            });
         });
     }
     
