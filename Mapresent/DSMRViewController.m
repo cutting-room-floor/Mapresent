@@ -43,7 +43,6 @@
 @property (nonatomic, strong) AVAudioPlayer *player;
 @property (nonatomic, strong) NSMutableArray *themes;
 @property (nonatomic, strong) NSDictionary *chosenThemeInfo;
-@property (nonatomic, assign) dispatch_queue_t serialQueue;
 @property (nonatomic, assign) dispatch_queue_t processingQueue;
 
 - (IBAction)pressedPlay:(id)sender;
@@ -71,7 +70,6 @@
 @synthesize player;
 @synthesize themes;
 @synthesize chosenThemeInfo;
-@synthesize serialQueue;
 @synthesize processingQueue;
 
 - (void)viewDidLoad
@@ -104,7 +102,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:)    name:DSMRTimelineViewPlayProgressed            object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillBackground:) name:UIApplicationWillResignActiveNotification object:nil];
     
-    serialQueue     = dispatch_queue_create("mapresent.serial", DISPATCH_QUEUE_SERIAL);
     processingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
 }
 
@@ -132,48 +129,45 @@
     if (self.timelineView.isExporting)
     {
         self.timelineView.exporting = NO;
+        
         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
+        
+        [self.timelineView togglePlay];
         
         // start progress HUD
         //
         [MBProgressHUD showHUDAddedTo:self.view.window animated:YES].labelText = @"Creating video...";
-        
-        // give capture some time to wrap up
-        //
-        dispatch_async(self.serialQueue, ^(void) { sleep(2); });
-        
-        // clean up capture frames
-        //
-        dispatch_async(self.serialQueue, ^(void)
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
         {
+            // clean up capture frames
+            //
             for (NSString *imageFile in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil])
             {
                 if ([imageFile hasPrefix:@"snap_"] && [imageFile hasSuffix:@".png"])
                 {
-//                    dispatch_async(self.processingQueue, ^(void)
-//                    {
-//                        // these are not thread-safe, but that doesn't matter (much) for now
-//                        //
-                        UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
-                        UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 350, 498, 674)];
-                        UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
-
-                        [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile] atomically:YES];
+                    //                    dispatch_async(self.processingQueue, ^(void)
+                    //                    {
+                    //                        // these are not thread-safe, but that doesn't matter (much) for now
+                    //                        //
+                    UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
+                    UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 350, 498, 674)];
+                    UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
+                    
+                    [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile] atomically:YES];
                     
                     NSLog(@"processed %@", imageFile);
-//                    });
+                    //                    });
                 }
             }
-        });
-        
-        // make the video
-        //
-        dispatch_async(self.serialQueue, ^(void)
-        {
+            
+            // make the video
+            //
+            // write images out to video track
+            //
             CGSize size = CGSizeMake(674, 498);
             
-            
-            NSString *betaCompressionDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.m4v"];
+            NSString *betaCompressionDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export-video.m4v"];
             
             NSError *error = nil;
             
@@ -183,13 +177,14 @@
             AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:betaCompressionDirectory]
                                                                    fileType:AVFileTypeQuickTimeMovie
                                                                       error:&error];
-            NSParameterAssert(videoWriter);
+            //            NSParameterAssert(videoWriter);
             if(error)
                 NSLog(@"error = %@", [error localizedDescription]);
             
             NSDictionary *videoSettings = [NSDictionary dictionaryWithObjectsAndKeys:AVVideoCodecH264, AVVideoCodecKey,
                                            [NSNumber numberWithInt:size.width], AVVideoWidthKey,
                                            [NSNumber numberWithInt:size.height], AVVideoHeightKey, nil];
+            
             AVAssetWriterInput *writerInput = [AVAssetWriterInput assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:videoSettings];
             
             NSDictionary *sourcePixelBufferAttributesDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -197,8 +192,8 @@
             
             AVAssetWriterInputPixelBufferAdaptor *adaptor = [AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:writerInput
                                                                                                                              sourcePixelBufferAttributes:sourcePixelBufferAttributesDictionary];
-            NSParameterAssert(writerInput);
-            NSParameterAssert([videoWriter canAddInput:writerInput]);
+            //            NSParameterAssert(writerInput);
+            //            NSParameterAssert([videoWriter canAddInput:writerInput]);
             
             if ([videoWriter canAddInput:writerInput])
                 NSLog(@"I can add this input");
@@ -210,12 +205,6 @@
             [videoWriter startWriting];
             [videoWriter startSessionAtSourceTime:kCMTimeZero];
             
-            //---
-            // insert demo debugging code to write the same image repeated as a movie
-            
-//            CGImageRef theImage = [[UIImage imageNamed:@"Lotus.png"] CGImage];
-            
-//            dispatch_queue_t    dispatchQueue = dispatch_queue_create("mediaInputQueue", NULL);
             int __block         frame = 0;
             
             for (NSString *imageFile in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil])
@@ -229,7 +218,7 @@
                         [NSThread sleepForTimeInterval:0.5];
                     
                     UIImage *image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
-
+                    
                     CVPixelBufferRef buffer = (CVPixelBufferRef)[self pixelBufferFromCGImage:[image CGImage] size:size];
                     if (buffer)
                     {
@@ -242,74 +231,166 @@
                     
                     frame++;
                 }
-
-                
-                
             }
             
             [writerInput markAsFinished];
             [videoWriter finishWriting];
-//            [videoWriter release];
-        });
-        
-        // log that we're done
-        //
-        dispatch_async(self.serialQueue, ^(void)
-        {
-            NSLog(@"video done"); 
             
-            NSString *writtenFile = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.m4v"];
-            NSString *finalFile   = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
-
-            [[NSFileManager defaultManager] removeItemAtPath:finalFile error:nil];
-            [[NSFileManager defaultManager] moveItemAtPath:writtenFile toPath:finalFile error:nil];
+            // add audio markers to video file via new composition
+            //
+            AVMutableComposition *composition = [AVMutableComposition composition];
             
-            dispatch_async(dispatch_get_main_queue(), ^(void)
+            // get existing video asset
+            //
+            AVURLAsset *videoAsset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:betaCompressionDirectory] 
+                                                         options:nil];
+            
+            // get its video track
+            //
+            AVAssetTrack *videoAssetTrack = [[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+            
+            // create video track on target composition
+            //
+            AVMutableCompositionTrack *compositionVideoTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo 
+                                                                                        preferredTrackID:kCMPersistentTrackID_Invalid];
+            
+            // add existing video track to target composition video track
+            //
+            [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration) 
+                                           ofTrack:videoAssetTrack 
+                                            atTime:kCMTimeZero
+                                             error:nil];     
+            
+            // iterate & add audio markers
+            //
+            for (DSMRTimelineMarker *marker in self.markers)
             {
-                [MBProgressHUD hideHUDForView:self.view.window animated:YES];
+                AVMutableCompositionTrack *compositionAudioTrack;
+                BOOL hasAudio;
                 
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
+                if (marker.recording)
                 {
-                    [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
-                                                message:@"Your video exported successfully. Would you like to view it now?"
-                                      cancelButtonTitle:nil
-                                      otherButtonTitles:[NSArray arrayWithObjects:@"Email", @"View", nil]
-                                                handler:^(UIAlertView *alertView, NSInteger buttonIndex)
-                                                {
-                                                    if (buttonIndex == alertView.firstOtherButtonIndex)
-                                                    {
-                                                        MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
-                                                        
-                                                        [mailer setSubject:@"Mapresent!"];
-                                                        [mailer setMessageBody:@"<p>&nbsp;</p><p>Powered by <a href=\"http://mapbox.com\">MapBox</a></p>" 
-                                                                        isHTML:YES];
-                                                        [mailer addAttachmentData:[NSData dataWithContentsOfFile:finalFile]
-                                                                         mimeType:@"video/mp4"
-                                                                         fileName:[finalFile lastPathComponent]];
-
-                                                        mailer.modalPresentationStyle = UIModalPresentationPageSheet;
-                                                        
-                                                        mailer.mailComposeDelegate = self;
-                                                        
-                                                        [self presentModalViewController:mailer animated:YES];
-                                                    }
-                                                    else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
-                                                    {
-                                                        NSURL *movieURL = [NSURL fileURLWithPath:finalFile];
-                                                        
-                                                        MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
-                                                        
-                                                        moviePresenter.moviePlayer.shouldAutoplay = NO;
-                                                        
-                                                        [self presentMoviePlayerViewControllerAnimated:moviePresenter];
-                                                    }
-                                                }];
-                });
-            });
+                    if ( ! hasAudio)
+                    {
+                        // create audio track on target composition
+                        //
+                        compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio 
+                                                                         preferredTrackID:kCMPersistentTrackID_Invalid];
+                        
+                        hasAudio = YES;
+                    }
+                    
+                    // write marker audio data to temp file
+                    //
+                    NSString *tempFile = [NSString stringWithFormat:@"%@/%@.aiff", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]];
+                    
+                    [marker.recording writeToFile:tempFile atomically:YES];
+                    
+                    // get audio asset
+                    //
+                    AVURLAsset *audioAsset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:tempFile] 
+                                                                 options:nil];
+                    
+                    // get its audio track
+                    //
+                    AVAssetTrack *audioAssetTrack = [[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0];
+                    
+                    // add marker audio track to target composition audio track
+                    //
+                    [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration) 
+                                                   ofTrack:audioAssetTrack 
+                                                    atTime:CMTimeMakeWithSeconds(marker.timeOffset, 1000) 
+                                                     error:nil];
+                    
+                    // FIXME: clean up
+                }
+            }
+            
+            // setup export session for composition
+            //
+            AVAssetExportSession *assetExport = [[AVAssetExportSession alloc] initWithAsset:composition 
+                                                                                 presetName:AVAssetExportPresetPassthrough];  
+            
+            NSString *outputPath = [betaCompressionDirectory stringByReplacingOccurrencesOfString:@"-video" withString:@""];
+            
+            [[NSFileManager defaultManager] removeItemAtPath:outputPath error:nil];
+            
+            assetExport.outputFileType = AVFileTypeMPEG4;
+            assetExport.outputURL = [NSURL fileURLWithPath:outputPath];
+            
+            [assetExport exportAsynchronouslyWithCompletionHandler:^(void)
+             {
+                 switch (assetExport.status) 
+                 {
+                     case AVAssetExportSessionStatusCompleted:
+                     {
+                         NSLog(@"Export Complete");
+                         
+                         NSString *writtenFile = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export.m4v"];
+                         NSString *finalFile   = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
+                         
+                         [[NSFileManager defaultManager] removeItemAtPath:finalFile error:nil];
+                         [[NSFileManager defaultManager] moveItemAtPath:writtenFile toPath:finalFile error:nil];
+                         
+                         [MBProgressHUD hideHUDForView:self.view.window animated:YES];
+                         
+                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
+                                        {
+                                            [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
+                                                                        message:@"Your video exported successfully. Would you like to view it now?"
+                                                              cancelButtonTitle:nil
+                                                              otherButtonTitles:[NSArray arrayWithObjects:@"Email", @"View", nil]
+                                                                        handler:^(UIAlertView *alertView, NSInteger buttonIndex)
+                                             {
+                                                 if (buttonIndex == alertView.firstOtherButtonIndex)
+                                                 {
+                                                     MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+                                                     
+                                                     [mailer setSubject:@"Mapresent!"];
+                                                     [mailer setMessageBody:@"<p>&nbsp;</p><p>Powered by <a href=\"http://mapbox.com\">MapBox</a></p>" 
+                                                                     isHTML:YES];
+                                                     [mailer addAttachmentData:[NSData dataWithContentsOfFile:finalFile]
+                                                                      mimeType:@"video/mp4"
+                                                                      fileName:[finalFile lastPathComponent]];
+                                                     
+                                                     mailer.modalPresentationStyle = UIModalPresentationPageSheet;
+                                                     
+                                                     mailer.mailComposeDelegate = self;
+                                                     
+                                                     [self presentModalViewController:mailer animated:YES];
+                                                 }
+                                                 else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
+                                                 {
+                                                     NSURL *movieURL = [NSURL fileURLWithPath:finalFile];
+                                                     
+                                                     MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
+                                                     
+                                                     moviePresenter.moviePlayer.shouldAutoplay = NO;
+                                                     
+                                                     [self presentMoviePlayerViewControllerAnimated:moviePresenter];
+                                                 }
+                                             }];
+                                        });
+                         break;
+                     }
+                     case AVAssetExportSessionStatusFailed:
+                     {
+                         NSLog(@"Export Failed");
+                         NSLog(@"ExportSessionError: %@", [assetExport.error localizedDescription]);
+                         break;
+                     }
+                     case AVAssetExportSessionStatusCancelled:
+                     {
+                         NSLog(@"Export Failed");
+                         NSLog(@"ExportSessionError: %@", [assetExport.error localizedDescription]);
+                         break;
+                     }
+                 }
+             }];
         });
     }
-    
-    [self.timelineView togglePlay];
+    else
+        [self.timelineView togglePlay];
 }
 
 - (NSString *)documentsFolderPath
@@ -328,18 +409,18 @@
                              [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey, 
                              [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, nil];
     CVPixelBufferRef pxbuffer = NULL;
-    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, size.width, size.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options, &pxbuffer);
+    CVPixelBufferCreate(kCFAllocatorDefault, size.width, size.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options, &pxbuffer);
     // CVReturn status = CVPixelBufferPoolCreatePixelBuffer(NULL, adaptor.pixelBufferPool, &pxbuffer);
     
-    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL); 
+//    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL); 
     
     CVPixelBufferLockBaseAddress(pxbuffer, 0);
     void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
-    NSParameterAssert(pxdata != NULL);
+//    NSParameterAssert(pxdata != NULL);
     
     CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(pxdata, size.width, size.height, 8, CVPixelBufferGetBytesPerRow(pxbuffer)/*4*size.width*/, rgbColorSpace, kCGImageAlphaPremultipliedFirst);
-    NSParameterAssert(context);
+//    NSParameterAssert(context);
     
     CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)), image);
     
@@ -386,10 +467,10 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     CGImageRef image = UIGetScreenImage();
     
-    dispatch_async(self.processingQueue, ^(void)
-    {
+//    dispatch_async(self.processingQueue, ^(void)
+//    {
         [UIImagePNGRepresentation([UIImage imageWithCGImage:image]) writeToFile:filename atomically:YES];
-    });
+//    });
     
     i++;
 }
@@ -633,7 +714,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     {
         [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:marker.southWest northEast:marker.northEast animated:YES];
     }
-    else if (marker.recording)
+    else if (marker.recording && ! self.timelineView.isExporting) // don't play audio live when exporting
     {
         self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
     
