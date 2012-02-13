@@ -222,7 +222,7 @@
                     CVPixelBufferRef buffer = (CVPixelBufferRef)[self pixelBufferFromCGImage:[image CGImage] size:size];
                     if (buffer)
                     {
-                        if(![adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(frame, 64.0)])
+                        if(![adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(frame, 16.0)])
                             NSLog(@"FAIL");
                         else
                             NSLog(@"Success:%d", frame);
@@ -444,7 +444,7 @@
         
         self.timelineView.exporting = YES;
         
-        [NSTimer scheduledTimerWithTimeInterval:(1.0 / 8.0) target:self selector:@selector(takeSnapshot:) userInfo:nil repeats:YES];
+        [NSTimer scheduledTimerWithTimeInterval:(0.5) target:self selector:@selector(takeSnapshot:) userInfo:nil repeats:YES];
         
         [self.timelineView togglePlay];
     }
