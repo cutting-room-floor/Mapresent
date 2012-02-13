@@ -123,6 +123,8 @@
 {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     
+    ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
+    
     if ([self.markers count] && [[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
         [self fireMarkerAtIndex:0];
     
@@ -130,7 +132,7 @@
     {
         self.timelineView.exporting = NO;
         
-        ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
+        ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
         
         [self.timelineView togglePlay];
         
