@@ -472,6 +472,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         [UIImagePNGRepresentation([UIImage imageWithCGImage:image]) writeToFile:filename atomically:YES];
 //    });
     
+    CGImageRelease(image);
+    
     i++;
 }
 
