@@ -222,7 +222,7 @@
                     CVPixelBufferRef buffer = (CVPixelBufferRef)[self pixelBufferFromCGImage:[image CGImage] size:size];
                     if (buffer)
                     {
-                        if(![adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMakeWithSeconds(frame * (1.0 / 64.0), 1000)])
+                        if(![adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(frame, 64.0)])
                             NSLog(@"FAIL");
                         else
                             NSLog(@"Success:%d", frame);
@@ -299,7 +299,7 @@
                     //
                     [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration) 
                                                    ofTrack:audioAssetTrack 
-                                                    atTime:CMTimeMakeWithSeconds(marker.timeOffset, 1000) 
+                                                    atTime:CMTimeMake(marker.timeOffset * 1000, 1000) 
                                                      error:nil];
                     
                     // FIXME: clean up
