@@ -37,6 +37,7 @@
 		DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */; };
 		DDE3D6E514E9EF9000B71543 /* curl.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E414E9EF9000B71543 /* curl.png */; };
 		DDE3D6E714E9F10900B71543 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E614E9F10900B71543 /* loading.png */; };
+		DDE3D6E914EAE6E000B71543 /* fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E814EAE6E000B71543 /* fullscreen.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -154,6 +155,7 @@
 		DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = Externals/MBProgressHUD/MBProgressHUD.m; sourceTree = SOURCE_ROOT; };
 		DDE3D6E414E9EF9000B71543 /* curl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = curl.png; sourceTree = "<group>"; };
 		DDE3D6E614E9F10900B71543 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
+		DDE3D6E814EAE6E000B71543 /* fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullscreen.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -287,6 +289,7 @@
 				DD43131214D8D26800697249 /* needle.png */,
 				DDE3D6E414E9EF9000B71543 /* curl.png */,
 				DDE3D6E614E9F10900B71543 /* loading.png */,
+				DDE3D6E814EAE6E000B71543 /* fullscreen.png */,
 			);
 			name = Resources;
 			path = Mapresent;
@@ -461,6 +464,7 @@
 				DD43131314D8D26800697249 /* needle.png in Resources */,
 				DDE3D6E514E9EF9000B71543 /* curl.png in Resources */,
 				DDE3D6E714E9F10900B71543 /* loading.png in Resources */,
+				DDE3D6E914EAE6E000B71543 /* fullscreen.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

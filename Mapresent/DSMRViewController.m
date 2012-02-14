@@ -38,6 +38,7 @@
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
 @property (nonatomic, strong) IBOutlet UIButton *audioButton;
 @property (nonatomic, strong) IBOutlet UILabel *timeLabel;
+@property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
 @property (nonatomic, strong) NSMutableArray *markers;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) AVAudioPlayer *player;
@@ -48,6 +49,7 @@
 
 - (IBAction)pressedPlay:(id)sender;
 - (IBAction)pressedExport:(id)sender;
+- (IBAction)pressedFullScreen:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
 - (NSString *)documentsFolderPath;
@@ -66,6 +68,7 @@
 @synthesize playButton;
 @synthesize audioButton;
 @synthesize timeLabel;
+@synthesize fullScreenButton;
 @synthesize markers;
 @synthesize recorder;
 @synthesize player;
@@ -135,6 +138,8 @@
         self.timelineView.exporting = NO;
         
         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
+        
+        self.fullScreenButton.hidden = NO;
         
         [self.timelineView togglePlay];
         
@@ -407,6 +412,18 @@
     [self dismissModalViewControllerAnimated:YES];
 }
 
+- (IBAction)pressedFullScreen:(id)sender
+{
+    CGSize newMapSize = (self.mapView.bounds.size.width == self.view.bounds.size.width ? CGSizeMake(640.0, 480.0) : self.view.bounds.size);
+    
+    [UIView animateWithDuration:0.25 animations:^(void)
+    {
+        self.mapView.frame = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, newMapSize.width, newMapSize.height);
+        
+        self.fullScreenButton.transform = CGAffineTransformRotate(self.fullScreenButton.transform, M_PI);
+    }];
+}
+
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
 {
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -445,6 +462,8 @@
                 [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), file] error:nil];
         
         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 8.0;
+        
+        self.fullScreenButton.hidden = YES;
         
         self.timelineView.exporting = YES;
         
