@@ -47,6 +47,7 @@
 @property (nonatomic, strong) UIPageViewController *themePager;
 @property (nonatomic, assign) dispatch_queue_t processingQueue;
 @property (nonatomic, assign) NSTimeInterval presentationDuration;
+@property (nonatomic, readonly, assign) BOOL isFullScreen;
 
 - (IBAction)pressedPlay:(id)sender;
 - (IBAction)pressedPlayFullscreen:(id)sender;
@@ -135,6 +136,11 @@
     [self pressedFullScreen:self];
     
     [self performSelector:@selector(pressedPlay:) withObject:self afterDelay:1.0];
+}
+
+- (BOOL)isFullScreen
+{
+    return (self.mapView.bounds.size.width == self.view.bounds.size.width);
 }
 
 - (IBAction)pressedPlay:(id)sender
@@ -412,7 +418,7 @@
     CGFloat timelineTranslation;
     CGSize  newMapSize;
     
-    if (self.mapView.bounds.size.width == self.view.bounds.size.width)
+    if (self.isFullScreen)
     {
         inspectorTranslation = -self.inspectorView.bounds.size.width;
         timelineTranslation  = -self.timelineView.bounds.size.height;
@@ -711,23 +717,25 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 
 - (void)refresh
 {
+    NSTimeInterval endBumperDuration = 5.0;
+    
     DSMRTimelineMarker *lastMarker = [self.markers lastObject];
     
     switch (lastMarker.markerType)
     {
         case DSMRTimelineMarkerTypeLocation:
         {
-            self.presentationDuration = lastMarker.timeOffset + 2.0;
+            self.presentationDuration = lastMarker.timeOffset + endBumperDuration;
             break;
         }
         case DSMRTimelineMarkerTypeAudio:
         {
-            self.presentationDuration = lastMarker.timeOffset = lastMarker.duration + 2.0;
+            self.presentationDuration = lastMarker.timeOffset = lastMarker.duration + endBumperDuration;
             break;
         }
         case DSMRTimelineMarkerTypeTheme:
         {
-            self.presentationDuration = lastMarker.timeOffset + 2.0;
+            self.presentationDuration = lastMarker.timeOffset + endBumperDuration;
             break;
         }
     }
@@ -897,7 +905,12 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     self.timeLabel.text = [NSString stringWithFormat:@"%f", [((NSNumber *)[notification object]) floatValue] / 64];
     
     if ([self.timeLabel.text intValue] >= self.presentationDuration)
+    {
         [self pressedPlay:self];
+        
+        if (self.isFullScreen)
+            [self pressedFullScreen:self];
+    }
     
     else if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
     {
