@@ -11,6 +11,7 @@
 @interface DSMRThemePicker : UIViewController
 
 @property (nonatomic, strong) NSDictionary *info;
+@property (nonatomic, assign) BOOL transitioning;
 
 - (id)initWithInfo:(NSDictionary *)info;
 

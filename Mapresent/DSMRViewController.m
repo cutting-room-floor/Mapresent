@@ -43,6 +43,7 @@
 @property (nonatomic, strong) AVAudioPlayer *player;
 @property (nonatomic, strong) NSMutableArray *themes;
 @property (nonatomic, strong) NSDictionary *chosenThemeInfo;
+@property (nonatomic, strong) UIPageViewController *themePager;
 @property (nonatomic, assign) dispatch_queue_t processingQueue;
 
 - (IBAction)pressedPlay:(id)sender;
@@ -70,6 +71,7 @@
 @synthesize player;
 @synthesize themes;
 @synthesize chosenThemeInfo;
+@synthesize themePager;
 @synthesize processingQueue;
 
 - (void)viewDidLoad
@@ -504,58 +506,87 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     int index = [self.themes indexOfObject:((DSMRThemePicker *)[pageViewController.viewControllers lastObject]).info];
 
     self.chosenThemeInfo = [self.themes objectAtIndex:index];
+    
+    if (finished)
+        [self performSelector:@selector(updateThemePages) withObject:nil afterDelay:0.0];
+}
+
+- (void)updateThemePages
+{
+    DSMRThemePicker *currentThemePicker = (DSMRThemePicker *)[self.themePager.viewControllers lastObject];
+    
+    if ([self pageViewController:self.themePager viewControllerAfterViewController:currentThemePicker])
+        currentThemePicker.transitioning = NO;
 }
 
 - (IBAction)pressedTheme:(id)sender
 {
+    [MBProgressHUD showHUDAddedTo:self.view.window animated:YES].labelText = @"Loading themes...";
+    
     [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://api.tiles.mapbox.com/v1/mapbox/tilesets.json"]]
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error)
                            {
                                self.themes = [NSMutableArray array];
                                
-                               for (NSDictionary *tileset in [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil])
+                               for (NSMutableDictionary *tileset in [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil])
                                {
                                    RMTileStreamSource *source = [[RMTileStreamSource alloc] initWithInfo:tileset];
                                    
                                    if ([source coversFullWorld])
+                                   {
+                                       [tileset setObject:[NSString stringWithFormat:@"%i", ([self.themes count] + 1)] forKey:@"pageNumber"];
+                                       
                                        [self.themes addObject:tileset];
+                                   }
                                }
                                
-                               UIPageViewController *pager = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
-                                                                                             navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
-                                                                                                           options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMin] forKey:UIPageViewControllerOptionSpineLocationKey]];
+                               self.themePager = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+                                                                                 navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                                                                               options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMin] forKey:UIPageViewControllerOptionSpineLocationKey]];
                                
-                               [pager setViewControllers:[NSArray arrayWithObject:[[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:0]]]
-                                                                                                              direction:UIPageViewControllerNavigationDirectionForward 
-                                                                                                               animated:NO 
-                                                                                                             completion:nil];
+                               [self.themePager setViewControllers:[NSArray arrayWithObject:[[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:0]]]
+                                                         direction:UIPageViewControllerNavigationDirectionForward 
+                                                          animated:NO 
+                                                        completion:nil];
                                
-                               pager.dataSource = self;
-                               pager.delegate   = self;
+                               ((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).transitioning = NO;
                                
-                               DSMRWrapperController *wrapper = [[DSMRWrapperController alloc] initWithRootViewController:pager];
+                               [(UIPanGestureRecognizer *)[[self.themePager.gestureRecognizers filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF isKindOfClass:%@", [UIPanGestureRecognizer class]]] lastObject] addTarget:self action:@selector(handlePagerPan:)];
+                               
+                               self.themePager.dataSource = self;
+                               self.themePager.delegate   = self;
+                               
+                               DSMRWrapperController *wrapper = [[DSMRWrapperController alloc] initWithRootViewController:self.themePager];
 
                                wrapper.navigationBar.barStyle = UIBarStyleBlackTranslucent;
                                
                                wrapper.modalPresentationStyle = UIModalPresentationFullScreen;
                                wrapper.modalTransitionStyle   = UIModalTransitionStyleCrossDissolve;
                                
-                               pager.navigationItem.title = @"Choose Theme";
+                               self.themePager.navigationItem.title = @"Choose Theme";
                                
-                               pager.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                                                      target:self
-                                                                                                                      action:@selector(dismissModalViewControllerAnimated:)];
+                               self.themePager.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                                                                target:self
+                                                                                                                                action:@selector(dismissModalViewControllerAnimated:)];
                                
-                               pager.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Choose"
-                                                                                                          style:UIBarButtonItemStyleDone
-                                                                                                         target:self
-                                                                                                         action:@selector(addThemeTransition:)];
+                               self.themePager.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Choose"
+                                                                                                                    style:UIBarButtonItemStyleDone
+                                                                                                                   target:self
+                                                                                                                   action:@selector(addThemeTransition:)];
                                
                                self.chosenThemeInfo = [self.themes objectAtIndex:0];
                                
                                [self presentModalViewController:wrapper animated:YES];
+                               
+                               [MBProgressHUD hideHUDForView:self.view.window animated:YES];
                            }];
+}
+
+- (void)handlePagerPan:(UIGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateBegan)
+        ((DSMRThemePicker *)[self.themePager.viewControllers lastObject]).transitioning = YES;
 }
 
 - (void)addThemeTransition:(id)sender
