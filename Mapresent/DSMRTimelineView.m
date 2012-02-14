@@ -46,7 +46,7 @@
         
         scroller = [[UIScrollView alloc] initWithFrame:[self bounds]];
         
-        [self addSubview:scroller];
+        [self insertSubview:scroller atIndex:0];
         
         timeline = [[DSMRTileLineViewTimeline alloc] initWithFrame:CGRectMake(0, 0, [self bounds].size.width * 3, [self bounds].size.height)];
         
