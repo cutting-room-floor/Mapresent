@@ -904,7 +904,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 {
     self.timeLabel.text = [NSString stringWithFormat:@"%f", [((NSNumber *)[notification object]) floatValue] / 64];
     
-    if ([self.timeLabel.text intValue] >= self.presentationDuration)
+    if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [self.timeLabel.text intValue] >= self.presentationDuration)
     {
         [self pressedPlay:self];
         
