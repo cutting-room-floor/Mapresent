@@ -169,8 +169,8 @@
     CGContextFillRect(c, rect);
 
     CGContextSetFillColorWithColor(c, [[UIColor colorWithWhite:0.0 alpha:0.5] CGColor]);
-    CGContextFillRect(c, CGRectMake(0, 0, 512.0, 250.0));
-    CGContextFillRect(c, CGRectMake(self.bounds.size.width - 512.0, 0, 512.0, 250.0));
+    CGContextFillRect(c, CGRectMake(0, 0, 512.0, 270.0));
+    CGContextFillRect(c, CGRectMake(self.bounds.size.width - 512.0, 0, 512.0, 270.0));
 
     CGContextSetStrokeColorWithColor(c, [[UIColor colorWithWhite:1.0 alpha:0.25] CGColor]);
     CGContextSetFillColorWithColor(c, [[UIColor colorWithWhite:1.0 alpha:0.25] CGColor]);

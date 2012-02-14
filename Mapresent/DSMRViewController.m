@@ -155,7 +155,7 @@
                     //                        // these are not thread-safe, but that doesn't matter (much) for now
                     //                        //
                     UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
-                    UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 350, 498, 674)];
+                    UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 384, 480, 640)];
                     UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
                     
                     [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile] atomically:YES];
@@ -169,7 +169,7 @@
             //
             // write images out to video track
             //
-            CGSize size = CGSizeMake(674, 498);
+            CGSize size = CGSizeMake(640, 480);
             
             NSString *betaCompressionDirectory = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export-video.m4v"];
             
