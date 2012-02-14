@@ -414,13 +414,35 @@
 
 - (IBAction)pressedFullScreen:(id)sender
 {
-    CGSize newMapSize = (self.mapView.bounds.size.width == self.view.bounds.size.width ? CGSizeMake(640.0, 480.0) : self.view.bounds.size);
+    CGFloat inspectorTranslation;
+    CGFloat timelineTranslation;
+    CGSize  newMapSize;
+    
+    if (self.mapView.bounds.size.width == self.view.bounds.size.width)
+    {
+        inspectorTranslation = -self.inspectorView.bounds.size.width;
+        timelineTranslation  = -self.timelineView.bounds.size.height;
+        newMapSize           = CGSizeMake(640.0, 480.0);
+    }
+    else
+    {
+        inspectorTranslation = self.inspectorView.bounds.size.width;
+        timelineTranslation  = self.timelineView.bounds.size.height;
+        newMapSize           = self.view.bounds.size;
+    }
+    
+    CLLocationCoordinate2D mapCenter = self.mapView.centerCoordinate;
     
     [UIView animateWithDuration:0.25 animations:^(void)
     {
         self.mapView.frame = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, newMapSize.width, newMapSize.height);
-        
+
         self.fullScreenButton.transform = CGAffineTransformRotate(self.fullScreenButton.transform, M_PI);
+
+        self.inspectorView.center = CGPointMake(self.inspectorView.center.x + inspectorTranslation, self.inspectorView.center.y);
+        self.timelineView.center  = CGPointMake(self.timelineView.center.x, self.timelineView.center.y + timelineTranslation);
+
+        self.mapView.centerCoordinate = mapCenter;
     }];
 }
 
