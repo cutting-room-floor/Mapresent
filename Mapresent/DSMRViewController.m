@@ -53,6 +53,8 @@
 - (void)fireMarkerAtIndex:(NSInteger)index;
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
 - (NSString *)documentsFolderPath;
+- (void)refresh;
+- (void)saveState:(id)sender;
 
 @end
 
@@ -97,15 +99,13 @@
         for (NSData *savedMarker in [[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"])
             [markers addObject:[NSKeyedUnarchiver unarchiveObjectWithData:savedMarker]];
     
-    [self.markerTableView reloadData];
-    
     self.timelineView.delegate = self;
     
-    [self.timelineView redrawMarkers];
+    [self refresh];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playToggled:)       name:DSMRTimelineViewPlayToggled               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:)    name:DSMRTimelineViewPlayProgressed            object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillBackground:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playToggled:)    name:DSMRTimelineViewPlayToggled               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:) name:DSMRTimelineViewPlayProgressed            object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveState:)      name:UIApplicationWillResignActiveNotification object:nil];
     
     processingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
 }
@@ -665,9 +665,16 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         [self.markers addObject:marker];
     }
     
+    [self refresh];
+}
+
+- (void)refresh
+{
     [self.markerTableView reloadData];
     
     [self.timelineView redrawMarkers];
+    
+    [self saveState:self];
 }
 
 - (IBAction)pressedAudio:(id)sender
@@ -732,9 +739,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
             [self.markers addObject:marker];
         }
         
-        [self.markerTableView reloadData];
-        
-        [self.timelineView redrawMarkers];
+        [self refresh];
     }
 }
 
@@ -779,9 +784,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         [self.markers addObject:marker];
     }
 
-    [self.markerTableView reloadData];
-    
-    [self.timelineView redrawMarkers];
+    [self refresh];
 }
 
 #pragma mark -
@@ -806,7 +809,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     }
 }
 
-- (void)appWillBackground:(NSNotification *)notification
+- (void)saveState:(id)sender
 {
     NSMutableArray *savedMarkers = [NSMutableArray array];
     
@@ -896,7 +899,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     
-    [self.timelineView redrawMarkers];
+    [self refresh];
 }
 
 #pragma mark -
