@@ -42,7 +42,7 @@
 
     if (self)
     {
-        [self setBackgroundColor:[UIColor darkGrayColor]];
+        [self setBackgroundColor:[UIColor blackColor]];
         
         scroller = [[UIScrollView alloc] initWithFrame:[self bounds]];
         

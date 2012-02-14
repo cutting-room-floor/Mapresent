@@ -92,6 +92,7 @@
     
     self.mapView.delegate = self;
     
+    self.mapView.backgroundColor = [UIColor blackColor];
     self.mapView.tileSource = [[RMMBTilesTileSource alloc] initWithTileSetURL:[[NSBundle mainBundle] URLForResource:@"geography-class" withExtension:@"mbtiles"]];
     self.mapView.decelerationMode = RMMapDecelerationFast;
     self.mapView.zoom = 1.396605;
