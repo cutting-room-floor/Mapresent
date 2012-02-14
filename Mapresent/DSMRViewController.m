@@ -48,13 +48,16 @@
 @property (nonatomic, assign) dispatch_queue_t processingQueue;
 
 - (IBAction)pressedPlay:(id)sender;
-- (IBAction)pressedExport:(id)sender;
+- (IBAction)pressedShare:(id)sender;
 - (IBAction)pressedFullScreen:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
 - (NSString *)documentsFolderPath;
 - (void)refresh;
 - (void)saveState:(id)sender;
+- (void)playLatestMovie;
+- (void)emailLatestMovie;
+- (void)beginExport;
 
 @end
 
@@ -353,30 +356,11 @@
                                              {
                                                  if (buttonIndex == alertView.firstOtherButtonIndex)
                                                  {
-                                                     MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
-                                                     
-                                                     [mailer setSubject:@"Mapresent!"];
-                                                     [mailer setMessageBody:@"<p>&nbsp;</p><p>Powered by <a href=\"http://mapbox.com\">MapBox</a></p>" 
-                                                                     isHTML:YES];
-                                                     [mailer addAttachmentData:[NSData dataWithContentsOfFile:finalFile]
-                                                                      mimeType:@"video/mp4"
-                                                                      fileName:[finalFile lastPathComponent]];
-                                                     
-                                                     mailer.modalPresentationStyle = UIModalPresentationPageSheet;
-                                                     
-                                                     mailer.mailComposeDelegate = self;
-                                                     
-                                                     [self presentModalViewController:mailer animated:YES];
+                                                     [self emailLatestMovie];
                                                  }
                                                  else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
                                                  {
-                                                     NSURL *movieURL = [NSURL fileURLWithPath:finalFile];
-                                                     
-                                                     MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
-                                                     
-                                                     moviePresenter.moviePlayer.shouldAutoplay = NO;
-                                                     
-                                                     [self presentMoviePlayerViewControllerAnimated:moviePresenter];
+                                                     [self playLatestMovie];
                                                  }
                                              }];
                                         });
@@ -479,7 +463,53 @@
     return pxbuffer;
 }
 
-- (IBAction)pressedExport:(id)sender
+- (IBAction)pressedShare:(id)sender
+{
+    UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:nil];
+    
+    [actionSheet addButtonWithTitle:@"Export To Video" handler:^(void) { [self beginExport]; }];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"]])
+    {
+        [actionSheet addButtonWithTitle:@"View Latest Video"  handler:^(void) { [self playLatestMovie]; }];
+        [actionSheet addButtonWithTitle:@"Email Latest Video" handler:^(void) { [self emailLatestMovie]; }];
+    }
+    
+    [actionSheet showFromRect:CGRectMake(696, 435, 1, 1) inView:self.view animated:YES];
+}
+
+- (void)playLatestMovie
+{
+    NSURL *movieURL = [NSURL fileURLWithPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"]];
+    
+    MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
+    
+    moviePresenter.moviePlayer.shouldAutoplay = NO;
+    
+    [self presentMoviePlayerViewControllerAnimated:moviePresenter];
+}
+
+- (void)emailLatestMovie
+{
+    NSString *movieFile = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
+
+    MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
+    
+    [mailer setSubject:@"Mapresent!"];
+    [mailer setMessageBody:@"<p>&nbsp;</p><p>Powered by <a href=\"http://mapbox.com\">MapBox</a></p>" 
+                    isHTML:YES];
+    [mailer addAttachmentData:[NSData dataWithContentsOfFile:movieFile]
+                     mimeType:@"video/mp4"
+                     fileName:[movieFile lastPathComponent]];
+    
+    mailer.modalPresentationStyle = UIModalPresentationPageSheet;
+    
+    mailer.mailComposeDelegate = self;
+    
+    [self presentModalViewController:mailer animated:YES];
+}
+
+- (void)beginExport
 {
     if ( ! self.timelineView.isExporting)
     {
