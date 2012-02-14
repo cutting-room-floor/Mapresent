@@ -433,17 +433,21 @@
     
     CLLocationCoordinate2D mapCenter = self.mapView.centerCoordinate;
     
-    [UIView animateWithDuration:0.25 animations:^(void)
-    {
-        self.mapView.frame = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, newMapSize.width, newMapSize.height);
-
-        self.fullScreenButton.transform = CGAffineTransformRotate(self.fullScreenButton.transform, M_PI);
-
-        self.inspectorView.center = CGPointMake(self.inspectorView.center.x + inspectorTranslation, self.inspectorView.center.y);
-        self.timelineView.center  = CGPointMake(self.timelineView.center.x, self.timelineView.center.y + timelineTranslation);
-
-        self.mapView.centerCoordinate = mapCenter;
-    }];
+    [UIView animateWithDuration:0.25
+                          delay:0.0
+                        options:UIViewAnimationCurveEaseInOut
+                     animations:^(void)
+                     {
+                         self.mapView.frame = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, newMapSize.width, newMapSize.height);
+ 
+                         self.fullScreenButton.transform = CGAffineTransformRotate(self.fullScreenButton.transform, M_PI);
+ 
+                         self.inspectorView.center = CGPointMake(self.inspectorView.center.x + inspectorTranslation, self.inspectorView.center.y);
+                         self.timelineView.center  = CGPointMake(self.timelineView.center.x, self.timelineView.center.y + timelineTranslation);
+ 
+                         self.mapView.centerCoordinate = mapCenter;
+                     }
+                     completion:nil];
 }
 
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
