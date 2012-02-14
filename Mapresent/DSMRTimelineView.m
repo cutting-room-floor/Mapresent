@@ -12,7 +12,7 @@
 
 #import "UIImage-Extensions.h"
 
-@interface DSMRTileLineViewTimeline : UIView
+@interface DSMRTimeLineViewTimeline : UIView
 
 @end
 
@@ -21,7 +21,7 @@
 @interface DSMRTimelineView ()
 
 @property (nonatomic, strong) UIScrollView *scroller;
-@property (nonatomic, strong) DSMRTileLineViewTimeline *timeline;
+@property (nonatomic, strong) DSMRTimeLineViewTimeline *timeline;
 @property (nonatomic, strong) NSTimer *playTimer;
 
 @end
@@ -48,7 +48,7 @@
         
         [self insertSubview:scroller atIndex:0];
         
-        timeline = [[DSMRTileLineViewTimeline alloc] initWithFrame:CGRectMake(0, 0, [self bounds].size.width * 3, [self bounds].size.height)];
+        timeline = [[DSMRTimeLineViewTimeline alloc] initWithFrame:CGRectMake(0, 0, [self bounds].size.width * 3, [self bounds].size.height)];
         
         [scroller addSubview:timeline];
 
@@ -159,7 +159,7 @@
 
 #pragma mark -
 
-@implementation DSMRTileLineViewTimeline
+@implementation DSMRTimeLineViewTimeline
 
 - (void)drawRect:(CGRect)rect
 {
