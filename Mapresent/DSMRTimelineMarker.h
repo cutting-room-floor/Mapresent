@@ -10,8 +10,15 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+typedef enum {
+    DSMRTimelineMarkerTypeLocation = 0,
+    DSMRTimelineMarkerTypeAudio    = 1,
+    DSMRTimelineMarkerTypeTheme    = 2,
+} DSMRTimelineMarkerType;
+
 @interface DSMRTimelineMarker : NSObject <NSCoding>
 
+@property (nonatomic, assign) DSMRTimelineMarkerType markerType;
 @property (nonatomic, assign) CLLocationCoordinate2D southWest;
 @property (nonatomic, assign) CLLocationCoordinate2D northEast;
 @property (nonatomic, assign) CLLocationCoordinate2D center;

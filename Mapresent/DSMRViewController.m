@@ -46,6 +46,7 @@
 @property (nonatomic, strong) NSDictionary *chosenThemeInfo;
 @property (nonatomic, strong) UIPageViewController *themePager;
 @property (nonatomic, assign) dispatch_queue_t processingQueue;
+@property (nonatomic, assign) NSTimeInterval presentationDuration;
 
 - (IBAction)pressedPlay:(id)sender;
 - (IBAction)pressedShare:(id)sender;
@@ -81,6 +82,7 @@
 @synthesize chosenThemeInfo;
 @synthesize themePager;
 @synthesize processingQueue;
+@synthesize presentationDuration;
 
 - (void)viewDidLoad
 {
@@ -670,6 +672,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
     
+    marker.markerType     = DSMRTimelineMarkerTypeTheme;
     marker.timeOffset     = [self.timeLabel.text doubleValue];
     marker.tileSourceInfo = self.chosenThemeInfo;
     
@@ -700,6 +703,27 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 
 - (void)refresh
 {
+    DSMRTimelineMarker *lastMarker = [self.markers lastObject];
+    
+    switch (lastMarker.markerType)
+    {
+        case DSMRTimelineMarkerTypeLocation:
+        {
+            self.presentationDuration = lastMarker.timeOffset + 2.0;
+            break;
+        }
+        case DSMRTimelineMarkerTypeAudio:
+        {
+            self.presentationDuration = lastMarker.timeOffset = lastMarker.duration + 2.0;
+            break;
+        }
+        case DSMRTimelineMarkerTypeTheme:
+        {
+            self.presentationDuration = lastMarker.timeOffset + 2.0;
+            break;
+        }
+    }
+    
     [self.markerTableView reloadData];
     
     [self.timelineView redrawMarkers];
@@ -741,6 +765,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         
         DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
         
+        marker.markerType = DSMRTimelineMarkerTypeAudio;
         marker.timeOffset = [self.timeLabel.text doubleValue];
         marker.recording  = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:[self.recorder.url absoluteString]]];
         marker.duration   = clip.duration;
@@ -785,6 +810,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
     
+    marker.markerType = DSMRTimelineMarkerTypeLocation;
     marker.southWest  = self.mapView.latitudeLongitudeBoundingBox.southWest;
     marker.northEast  = self.mapView.latitudeLongitudeBoundingBox.northEast;
     marker.center     = self.mapView.centerCoordinate;
@@ -862,7 +888,10 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 {
     self.timeLabel.text = [NSString stringWithFormat:@"%f", [((NSNumber *)[notification object]) floatValue] / 64];
     
-    if ([self.playButton.currentTitle isEqualToString:@"Pause"] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
+    if ([self.timeLabel.text intValue] >= self.presentationDuration)
+        [self pressedPlay:self];
+    
+    else if ([self.playButton.currentTitle isEqualToString:@"Pause"] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
     {
         for (DSMRTimelineMarker *marker in self.markers)
         {

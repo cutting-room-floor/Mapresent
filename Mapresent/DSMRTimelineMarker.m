@@ -10,6 +10,7 @@
 
 @implementation DSMRTimelineMarker
 
+@synthesize markerType;
 @synthesize southWest;
 @synthesize northEast;
 @synthesize center;
@@ -26,6 +27,7 @@
     
     if (self)
     {
+        markerType     = [coder decodeIntForKey:@"markerType"];
         southWest      = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"swLat"],     [coder decodeDoubleForKey:@"swLon"]);
         northEast      = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"neLat"],     [coder decodeDoubleForKey:@"neLon"]);
         center         = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"centerLat"], [coder decodeDoubleForKey:@"centerLon"]);
@@ -42,6 +44,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
+    [coder encodeInt:markerType             forKey:@"markerType"];
     [coder encodeDouble:southWest.latitude  forKey:@"swLat"];
     [coder encodeDouble:southWest.longitude forKey:@"swLon"];
     [coder encodeDouble:northEast.latitude  forKey:@"neLat"];
