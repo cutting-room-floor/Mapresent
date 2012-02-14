@@ -753,7 +753,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     {
         self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
     
-        [self.player performSelector:@selector(play) withObject:nil afterDelay:0.0];
+        [self.player play];
     }
     else if (marker.tileSourceInfo)
     {
