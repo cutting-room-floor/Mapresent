@@ -49,6 +49,7 @@
 @property (nonatomic, assign) NSTimeInterval presentationDuration;
 
 - (IBAction)pressedPlay:(id)sender;
+- (IBAction)pressedPlayFullscreen:(id)sender;
 - (IBAction)pressedShare:(id)sender;
 - (IBAction)pressedFullScreen:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
@@ -128,6 +129,13 @@
 }
 
 #pragma mark -
+
+- (IBAction)pressedPlayFullscreen:(id)sender
+{
+    [self pressedFullScreen:self];
+    
+    [self performSelector:@selector(pressedPlay:) withObject:self afterDelay:1.0];
+}
 
 - (IBAction)pressedPlay:(id)sender
 {
@@ -881,7 +889,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 
 - (void)playToggled:(NSNotification *)notification
 {
-    [self.playButton setTitle:([self.playButton.currentTitle isEqualToString:@"Play"] ? @"Pause" : @"Play") forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageNamed:([self.playButton.currentImage isEqual:[UIImage imageNamed:@"play.png"]] ? @"pause.png" : @"play.png")] forState:UIControlStateNormal];
 }
 
 - (void)playProgressed:(NSNotification *)notification
@@ -891,7 +899,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     if ([self.timeLabel.text intValue] >= self.presentationDuration)
         [self pressedPlay:self];
     
-    else if ([self.playButton.currentTitle isEqualToString:@"Pause"] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
+    else if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
     {
         for (DSMRTimelineMarker *marker in self.markers)
         {
