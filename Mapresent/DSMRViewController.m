@@ -816,7 +816,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     [[NSUserDefaults standardUserDefaults] setObject:savedMarkers forKey:@"markers"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:[[self documentsFolderPath] stringByAppendingPathComponent:@"defaults.plist"]
+    [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:[[self documentsFolderPath] stringByAppendingPathComponent:@"Document.mapresent"]
                                                                          atomically:YES];
 }
 
