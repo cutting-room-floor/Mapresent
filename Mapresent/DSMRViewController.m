@@ -64,6 +64,8 @@
 - (void)playLatestMovie;
 - (void)emailLatestMovie;
 - (void)beginExport;
+- (void)cleanupExportUIWithSuccess:(BOOL)flag;
+- (void)pressedExportCancel:(id)sender;
 
 @end
 
@@ -154,6 +156,30 @@
     return (self.mapView.bounds.size.width == self.view.bounds.size.width);
 }
 
+- (void)pressedExportCancel:(id)sender
+{
+    [UIAlertView showAlertViewWithTitle:@"Stop Export?"
+                                message:@"Are you sure that you want to stop the video export?"
+                      cancelButtonTitle:@"Don't Stop"
+                      otherButtonTitles:[NSArray arrayWithObject:@"Stop Export"]
+                                handler:^(UIAlertView *alertView, NSInteger buttonIndex)
+                                 {
+                                     if (buttonIndex == alertView.firstOtherButtonIndex)
+                                     {
+                                         self.timelineView.exporting = NO;
+                                         
+                                         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
+                                         
+                                         self.fullScreenButton.hidden = NO;
+                                         self.mapLabel.hidden = NO;
+                                         
+                                         [self.timelineView togglePlay];
+                                         
+                                         [self cleanupExportUIWithSuccess:NO];
+                                     }
+                                 }];
+}
+
 - (IBAction)pressedPlay:(id)sender
 {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
@@ -173,13 +199,12 @@
         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
         
         self.fullScreenButton.hidden = NO;
+        self.mapLabel.hidden = NO;
         
         [self.timelineView togglePlay];
         
-        // start progress HUD
+        // start video assembly
         //
-        [MBProgressHUD showHUDAddedTo:self.view.window animated:YES].labelText = @"Creating video...";
-
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
         {
             // clean up capture frames
@@ -193,7 +218,7 @@
                     //                        // these are not thread-safe, but that doesn't matter (much) for now
                     //                        //
                     UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
-                    UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 384, 480, 640)];
+                    UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 192, 480, 640)];
                     UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
                     
                     [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile] atomically:YES];
@@ -374,26 +399,8 @@
                          [[NSFileManager defaultManager] removeItemAtPath:finalFile error:nil];
                          [[NSFileManager defaultManager] moveItemAtPath:writtenFile toPath:finalFile error:nil];
                          
-                         [MBProgressHUD hideHUDForView:self.view.window animated:YES];
+                         [self cleanupExportUIWithSuccess:YES];
                          
-                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.25 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
-                                        {
-                                            [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
-                                                                        message:@"Your video exported successfully. Would you like to view it now?"
-                                                              cancelButtonTitle:nil
-                                                              otherButtonTitles:[NSArray arrayWithObjects:@"Email", @"View", nil]
-                                                                        handler:^(UIAlertView *alertView, NSInteger buttonIndex)
-                                             {
-                                                 if (buttonIndex == alertView.firstOtherButtonIndex)
-                                                 {
-                                                     [self emailLatestMovie];
-                                                 }
-                                                 else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
-                                                 {
-                                                     [self playLatestMovie];
-                                                 }
-                                             }];
-                                        });
                          break;
                      }
                      case AVAssetExportSessionStatusFailed:
@@ -543,6 +550,50 @@
 {
     if ( ! self.timelineView.isExporting)
     {
+        UIView *exportModal = [[[NSBundle mainBundle] loadNibNamed:@"DSMRExportModalView" owner:self options:nil] lastObject];
+        
+        UIButton *cancelButton = (UIButton *)[[exportModal.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF isKindOfClass:%@", [UIButton class]]] lastObject];
+        
+        [cancelButton addTarget:self action:@selector(pressedExportCancel:) forControlEvents:UIControlEventTouchUpInside];
+        
+        exportModal.frame = self.timelineView.frame;
+        exportModal.alpha = 0.0;
+        
+        [self.view addSubview:exportModal];
+        
+        [self.timelineView rewindToBeginning];
+        
+        [UIView animateWithDuration:0.75
+                         animations:^(void)
+                        {
+                            exportModal.alpha = 1.0;
+                            
+                            self.timelineView.alpha = 0.75;
+                            
+                            self.inspectorView.frame = CGRectMake(self.inspectorView.frame.origin.x + self.inspectorView.frame.size.width, 
+                                                                  self.inspectorView.frame.origin.y, 
+                                                                  self.inspectorView.frame.size.width, 
+                                                                  self.inspectorView.frame.size.height);
+                            
+                            self.mapView.frame = CGRectMake((self.view.bounds.size.width - self.mapView.bounds.size.width) / 2.0, 
+                                                            self.mapView.frame.origin.y, 
+                                                            self.mapView.frame.size.width, 
+                                                            self.mapView.frame.size.height);
+                        }
+                         completion:^(BOOL finished)
+                         {
+                             UIView *shieldView = [[UIView alloc] initWithFrame:self.mapView.frame];
+                             
+                             shieldView.backgroundColor = [UIColor clearColor];
+                             shieldView.userInteractionEnabled = NO;
+                             
+                             [self.view addSubview:shieldView];
+                             
+                             [NSTimer scheduledTimerWithTimeInterval:(0.5) target:self selector:@selector(takeSnapshot:) userInfo:nil repeats:YES];
+                             
+                             [self.timelineView togglePlay];
+                         }];
+        
         for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil])
             if ([file hasPrefix:@"snap_"] && [file hasSuffix:@".png"])
                 [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), file] error:nil];
@@ -550,13 +601,57 @@
         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 8.0;
         
         self.fullScreenButton.hidden = YES;
+        self.mapLabel.hidden = YES;
         
         self.timelineView.exporting = YES;
-        
-        [NSTimer scheduledTimerWithTimeInterval:(0.5) target:self selector:@selector(takeSnapshot:) userInfo:nil repeats:YES];
-        
-        [self.timelineView togglePlay];
     }
+}
+
+- (void)cleanupExportUIWithSuccess:(BOOL)flag
+{
+    [[self.view.subviews lastObject] removeFromSuperview]; // shield view
+    [[self.view.subviews lastObject] removeFromSuperview]; // export view
+    
+    [UIView animateWithDuration:0.25
+                     animations:^(void)
+                     {
+                         self.timelineView.alpha = 1.0;
+                         
+                         self.inspectorView.frame = CGRectMake(self.inspectorView.frame.origin.x - self.inspectorView.frame.size.width, 
+                                                               self.inspectorView.frame.origin.y, 
+                                                               self.inspectorView.frame.size.width, 
+                                                               self.inspectorView.frame.size.height);
+                         
+                         self.mapView.frame = CGRectMake(self.view.bounds.origin.x, 
+                                                         self.mapView.frame.origin.y, 
+                                                         self.mapView.frame.size.width, 
+                                                         self.mapView.frame.size.height);
+                     }
+                     completion:^(BOOL finished)
+                     {
+                         [self.timelineView rewindToBeginning];
+                         
+                         if (flag)
+                         {
+                             [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
+                                                         message:@"Your video exported successfully. Would you like to view it now?"
+                                               cancelButtonTitle:nil
+                                               otherButtonTitles:[NSArray arrayWithObjects:@"Email", @"View", nil]
+                                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex)
+                              {
+                                  if (buttonIndex == alertView.firstOtherButtonIndex)
+                                  {
+                                      [self emailLatestMovie];
+                                  }
+                                  else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
+                                  {
+                                      [self playLatestMovie];
+                                  }
+                              }];
+                         }
+                     }];
+    
+    // TODO: cleanup temp files
 }
 
 CGImageRef UIGetScreenImage(void); // um, FIXME
