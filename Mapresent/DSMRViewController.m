@@ -158,26 +158,16 @@
 
 - (void)pressedExportCancel:(id)sender
 {
-    [UIAlertView showAlertViewWithTitle:@"Stop Export?"
-                                message:@"Are you sure that you want to stop the video export?"
-                      cancelButtonTitle:@"Don't Stop"
-                      otherButtonTitles:[NSArray arrayWithObject:@"Stop Export"]
-                                handler:^(UIAlertView *alertView, NSInteger buttonIndex)
-                                 {
-                                     if (buttonIndex == alertView.firstOtherButtonIndex)
-                                     {
-                                         self.timelineView.exporting = NO;
-                                         
-                                         ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
-                                         
-                                         self.fullScreenButton.hidden = NO;
-                                         self.mapLabel.hidden = NO;
-                                         
-                                         [self.timelineView togglePlay];
-                                         
-                                         [self cleanupExportUIWithSuccess:NO];
-                                     }
-                                 }];
+    self.timelineView.exporting = NO;
+    
+    ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
+    
+    self.fullScreenButton.hidden = NO;
+    self.mapLabel.hidden = NO;
+    
+    [self.timelineView togglePlay];
+    
+    [self cleanupExportUIWithSuccess:NO];
 }
 
 - (IBAction)pressedPlay:(id)sender
