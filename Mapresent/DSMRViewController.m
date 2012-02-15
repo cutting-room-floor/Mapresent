@@ -391,6 +391,14 @@
                          
                          [self cleanupExportUIWithSuccess:YES];
                          
+                         UILocalNotification *notification = [[UILocalNotification alloc] init];
+                         
+                         notification.alertAction = @"Launch";
+                         notification.alertBody   = @"The video export has completed.";
+                         notification.soundName   = UILocalNotificationDefaultSoundName;
+                         
+                         [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                         
                          break;
                      }
                      case AVAssetExportSessionStatusFailed:
@@ -407,6 +415,8 @@
                      }
                  }
              }];
+            
+            [UIApplication sharedApplication].idleTimerDisabled = NO;
         });
     }
     else
@@ -540,6 +550,8 @@
 {
     if ( ! self.timelineView.isExporting)
     {
+        [UIApplication sharedApplication].idleTimerDisabled = YES;
+        
         UIView *exportModal = [[[NSBundle mainBundle] loadNibNamed:@"DSMRExportModalView" owner:self options:nil] lastObject];
         
         UIButton *cancelButton = (UIButton *)[[exportModal.subviews filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF isKindOfClass:%@", [UIButton class]]] lastObject];
