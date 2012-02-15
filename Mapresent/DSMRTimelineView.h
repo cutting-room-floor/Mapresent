@@ -26,5 +26,6 @@ static NSString *DSMRTimelineViewPlayProgressed  = @"DSMRTimelineViewPlayProgres
 
 - (void)togglePlay;
 - (void)redrawMarkers;
+- (void)rewindToBeginning;
 
 @end

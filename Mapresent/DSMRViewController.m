@@ -36,6 +36,8 @@
 @property (nonatomic, strong) IBOutlet DSMRTimelineView *timelineView;
 @property (nonatomic, strong) IBOutlet UITableView *markerTableView;
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
+@property (nonatomic, strong) IBOutlet UIButton *backButton;
+@property (nonatomic, strong) IBOutlet UIButton *playFullScreenButton;
 @property (nonatomic, strong) IBOutlet UIButton *audioButton;
 @property (nonatomic, strong) IBOutlet UILabel *timeLabel;
 @property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
@@ -53,6 +55,7 @@
 - (IBAction)pressedPlayFullscreen:(id)sender;
 - (IBAction)pressedShare:(id)sender;
 - (IBAction)pressedFullScreen:(id)sender;
+- (IBAction)pressedBack:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
 - (NSString *)documentsFolderPath;
@@ -74,6 +77,8 @@
 @synthesize timelineView;
 @synthesize markerTableView;
 @synthesize playButton;
+@synthesize backButton;
+@synthesize playFullScreenButton;
 @synthesize audioButton;
 @synthesize timeLabel;
 @synthesize fullScreenButton;
@@ -132,6 +137,11 @@
 
 #pragma mark -
 
+- (IBAction)pressedBack:(id)sender
+{
+    [self.timelineView rewindToBeginning];
+}
+
 - (IBAction)pressedPlayFullscreen:(id)sender
 {
     [self pressedFullScreen:self];
@@ -149,6 +159,9 @@
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     
     ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
+    
+    self.backButton.enabled           = ! self.backButton.enabled;
+    self.playFullScreenButton.enabled = ! self.playFullScreenButton.enabled;
     
     if ([self.markers count] && [[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
         [self fireMarkerAtIndex:0];

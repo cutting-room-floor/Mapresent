@@ -60,7 +60,7 @@
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 								<string key="IBUIText">Label</string>
-								<object class="NSColor" key="IBUITextColor" id="10300973">
+								<object class="NSColor" key="IBUITextColor" id="1035654623">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MCAwIDAAA</bytes>
 								</object>
@@ -159,7 +159,7 @@
 							<object class="IBUIButton" id="694809190">
 								<reference key="NSNextResponder" ref="850126027"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{148, 430}, {37, 37}}</string>
+								<string key="NSFrame">{{174, 430}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="145777068"/>
@@ -181,10 +181,35 @@
 								<reference key="IBUIFontDescription" ref="507993772"/>
 								<reference key="IBUIFont" ref="778809757"/>
 							</object>
+							<object class="IBUIButton" id="185569722">
+								<reference key="NSNextResponder" ref="850126027"/>
+								<int key="NSvFlags">292</int>
+								<string key="NSFrame">{{127, 430}, {37, 37}}</string>
+								<reference key="NSSuperview" ref="850126027"/>
+								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="694809190"/>
+								<string key="NSReuseIdentifierKey">_NS:241</string>
+								<bool key="IBUIOpaque">NO</bool>
+								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+								<int key="IBUIContentHorizontalAlignment">0</int>
+								<int key="IBUIContentVerticalAlignment">0</int>
+								<reference key="IBUIHighlightedTitleColor" ref="404848745"/>
+								<object class="NSColor" key="IBUINormalTitleColor">
+									<int key="NSColorSpace">1</int>
+									<bytes key="NSRGB">MC4xOTYwNzg0MzQ2IDAuMzA5ODAzOTMyOSAwLjUyMTU2ODY1NgA</bytes>
+								</object>
+								<reference key="IBUINormalTitleShadowColor" ref="417769957"/>
+								<object class="NSCustomResource" key="IBUINormalImage">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">back.png</string>
+								</object>
+								<reference key="IBUIFontDescription" ref="507993772"/>
+								<reference key="IBUIFont" ref="778809757"/>
+							</object>
 							<object class="IBUIButton" id="145777068">
 								<reference key="NSNextResponder" ref="850126027"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{199, 430}, {37, 37}}</string>
+								<string key="NSFrame">{{221, 430}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="671413658"/>
@@ -212,7 +237,7 @@
 								<string key="NSFrame">{{20, 430}, {72, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="694809190"/>
+								<reference key="NSNextKeyView" ref="185569722"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -351,7 +376,7 @@
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="944136835"/>
 						<string key="NSReuseIdentifierKey">_NS:212</string>
-						<reference key="IBUIBackgroundColor" ref="10300973"/>
+						<reference key="IBUIBackgroundColor" ref="1035654623"/>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 					</object>
 					<object class="IBUIView" id="101332526">
@@ -387,7 +412,7 @@
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="178641545"/>
-				<reference key="IBUIBackgroundColor" ref="10300973"/>
+				<reference key="IBUIBackgroundColor" ref="1035654623"/>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
 					<int key="IBUIStatusBarStyle">2</int>
 				</object>
@@ -481,6 +506,22 @@
 					<int key="connectionID">39</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">playFullScreenButton</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="145777068"/>
+					</object>
+					<int key="connectionID">45</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">backButton</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="185569722"/>
+					</object>
+					<int key="connectionID">48</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">pressedTheme:</string>
 						<reference key="source" ref="711335449"/>
@@ -559,6 +600,15 @@
 					</object>
 					<int key="connectionID">44</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">pressedBack:</string>
+						<reference key="source" ref="185569722"/>
+						<reference key="destination" ref="841351856"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">49</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -602,6 +652,7 @@
 							<reference ref="71763495"/>
 							<reference ref="694809190"/>
 							<reference ref="145777068"/>
+							<reference ref="185569722"/>
 						</array>
 						<reference key="parent" ref="766721923"/>
 					</object>
@@ -682,6 +733,11 @@
 						<reference key="object" ref="145777068"/>
 						<reference key="parent" ref="850126027"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">46</int>
+						<reference key="object" ref="185569722"/>
+						<reference key="parent" ref="850126027"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -704,6 +760,7 @@
 				<string key="4.CustomClassName">DSMRTimelineView</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="42.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="46.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="5.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="6.CustomClassName">RMMapView</string>
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -712,7 +769,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">44</int>
+			<int key="maxID">49</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -728,12 +785,17 @@
 					<string key="className">DSMRViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="pressedBack:">id</string>
 						<string key="pressedFullScreen:">id</string>
 						<string key="pressedPlay:">id</string>
 						<string key="pressedPlayFullscreen:">id</string>
 						<string key="pressedShare:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="pressedBack:">
+							<string key="name">pressedBack:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="pressedFullScreen:">
 							<string key="name">pressedFullScreen:</string>
 							<string key="candidateClassName">id</string>
@@ -753,18 +815,24 @@
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="audioButton">UIButton</string>
+						<string key="backButton">UIButton</string>
 						<string key="fullScreenButton">UIButton</string>
 						<string key="inspectorView">UIView</string>
 						<string key="mapLabel">UILabel</string>
 						<string key="mapView">RMMapView</string>
 						<string key="markerTableView">UITableView</string>
 						<string key="playButton">UIButton</string>
+						<string key="playFullScreenButton">UIButton</string>
 						<string key="timeLabel">UILabel</string>
 						<string key="timelineView">DSMRTimelineView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="audioButton">
 							<string key="name">audioButton</string>
+							<string key="candidateClassName">UIButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="backButton">
+							<string key="name">backButton</string>
 							<string key="candidateClassName">UIButton</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="fullScreenButton">
@@ -789,6 +857,10 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="playButton">
 							<string key="name">playButton</string>
+							<string key="candidateClassName">UIButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="playFullScreenButton">
+							<string key="name">playFullScreenButton</string>
 							<string key="candidateClassName">UIButton</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="timeLabel">
@@ -820,6 +892,7 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
+			<string key="back.png">{50, 50}</string>
 			<string key="fullscreen.png">{46, 46}</string>
 			<string key="needle.png">{28, 250}</string>
 			<string key="play.png">{50, 50}</string>

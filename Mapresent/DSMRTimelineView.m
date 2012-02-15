@@ -136,6 +136,11 @@
     }
 }
 
+- (void)rewindToBeginning
+{
+    [self.scroller setContentOffset:CGPointMake(0, 0) animated:YES];
+}
+
 #pragma mark -
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView

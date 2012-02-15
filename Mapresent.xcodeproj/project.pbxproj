@@ -25,6 +25,7 @@
 		DD4312F914D8AACA00697249 /* DSMRThemePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD4312F714D8AACA00697249 /* DSMRThemePicker.xib */; };
 		DD4312FC14D8B1C500697249 /* DSMRWrapperController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */; };
 		DD43131314D8D26800697249 /* needle.png in Resources */ = {isa = PBXBuildFile; fileRef = DD43131214D8D26800697249 /* needle.png */; };
+		DD7779DE14EB2D54002089D0 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = DD7779DD14EB2D54002089D0 /* back.png */; };
 		DD8B4ED314E4A6FA00D15AF9 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8B4ED214E4A6FA00D15AF9 /* CoreVideo.framework */; };
 		DD8B4ED514E4A73200D15AF9 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8B4ED414E4A73200D15AF9 /* CoreMedia.framework */; };
 		DD8B4F1714E50C2800D15AF9 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8B4F1614E50C2800D15AF9 /* MediaPlayer.framework */; };
@@ -143,6 +144,7 @@
 		DD4312FA14D8B1C500697249 /* DSMRWrapperController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRWrapperController.h; sourceTree = "<group>"; };
 		DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRWrapperController.m; sourceTree = "<group>"; };
 		DD43131214D8D26800697249 /* needle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = needle.png; sourceTree = "<group>"; };
+		DD7779DD14EB2D54002089D0 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		DD8B4ED214E4A6FA00D15AF9 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		DD8B4ED414E4A73200D15AF9 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		DD8B4F1614E50C2800D15AF9 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -299,6 +301,7 @@
 				DDE3D6ED14EB1AFD00B71543 /* pause.png */,
 				DDE3D6EE14EB1AFD00B71543 /* play.png */,
 				DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */,
+				DD7779DD14EB2D54002089D0 /* back.png */,
 			);
 			name = Resources;
 			path = Mapresent;
@@ -477,6 +480,7 @@
 				DDE3D6F014EB1AFD00B71543 /* pause.png in Resources */,
 				DDE3D6F114EB1AFD00B71543 /* play.png in Resources */,
 				DDE3D6F214EB1AFD00B71543 /* play_fullscreen.png in Resources */,
+				DD7779DE14EB2D54002089D0 /* back.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
