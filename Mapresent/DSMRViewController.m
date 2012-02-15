@@ -575,7 +575,6 @@
                              UIView *shieldView = [[UIView alloc] initWithFrame:self.mapView.frame];
                              
                              shieldView.backgroundColor = [UIColor clearColor];
-                             shieldView.userInteractionEnabled = NO;
                              
                              [self.view addSubview:shieldView];
                              
