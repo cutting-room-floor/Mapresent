@@ -179,7 +179,8 @@
     self.playFullScreenButton.enabled = ! self.playFullScreenButton.enabled;
     
     if ([self.markers count] && [[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
-        [self fireMarkerAtIndex:0];
+        for (DSMRTimelineMarker *zeroMarker in [self.markers select:^BOOL(id obj) { return ([[obj valueForKey:@"timeOffset"] floatValue] == 0); }])
+            [self fireMarkerAtIndex:[self.markers indexOfObject:zeroMarker]];
     
     if (self.timelineView.isExporting)
     {
