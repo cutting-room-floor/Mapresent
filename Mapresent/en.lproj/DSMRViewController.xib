@@ -329,7 +329,6 @@
 								<string key="NSFrame">{{245, 438}, {111, 21}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:345</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -480,14 +479,6 @@
 						<reference key="destination" ref="71763495"/>
 					</object>
 					<int key="connectionID">25</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">audioButton</string>
-						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="937289877"/>
-					</object>
-					<int key="connectionID">32</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -814,7 +805,6 @@
 						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="audioButton">UIButton</string>
 						<string key="backButton">UIButton</string>
 						<string key="fullScreenButton">UIButton</string>
 						<string key="inspectorView">UIView</string>
@@ -827,10 +817,6 @@
 						<string key="timelineView">DSMRTimelineView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="audioButton">
-							<string key="name">audioButton</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
 						<object class="IBToOneOutletInfo" key="backButton">
 							<string key="name">backButton</string>
 							<string key="candidateClassName">UIButton</string>

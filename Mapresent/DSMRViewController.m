@@ -11,6 +11,7 @@
 #import "DSMRTimelineMarker.h"
 #import "DSMRWrapperController.h"
 #import "DSMRThemePicker.h"
+#import "DSMRAudioRecorderView.h"
 
 #import "RMMapView.h"
 #import "RMScrollView.h"
@@ -38,7 +39,6 @@
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
 @property (nonatomic, strong) IBOutlet UIButton *backButton;
 @property (nonatomic, strong) IBOutlet UIButton *playFullScreenButton;
-@property (nonatomic, strong) IBOutlet UIButton *audioButton;
 @property (nonatomic, strong) IBOutlet UILabel *timeLabel;
 @property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
 @property (nonatomic, strong) NSMutableArray *markers;
@@ -81,7 +81,6 @@
 @synthesize playButton;
 @synthesize backButton;
 @synthesize playFullScreenButton;
-@synthesize audioButton;
 @synthesize timeLabel;
 @synthesize fullScreenButton;
 @synthesize markers;
@@ -880,29 +879,57 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 {
     if ( ! self.recorder.recording)
     {
-        [self.audioButton setTitle:@"Stop" forState:UIControlStateNormal];
-
         [[AVAudioSession sharedInstance] setActive:YES error:nil];
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
-
+        
         NSURL *recordURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@.rec", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]]];
         
         NSDictionary *settings = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     [NSNumber numberWithFloat:8000.0],                  AVSampleRateKey,
-                                     [NSNumber numberWithInt:kAudioFormatAppleLossless], AVFormatIDKey,
-                                     [NSNumber numberWithInt:1],                         AVNumberOfChannelsKey,
-                                     [NSNumber numberWithInt:AVAudioQualityMax],         AVEncoderAudioQualityKey,
-                                     nil];
+                                  [NSNumber numberWithFloat:8000.0],                  AVSampleRateKey,
+                                  [NSNumber numberWithInt:kAudioFormatAppleLossless], AVFormatIDKey,
+                                  [NSNumber numberWithInt:1],                         AVNumberOfChannelsKey,
+                                  [NSNumber numberWithInt:AVAudioQualityMax],         AVEncoderAudioQualityKey,
+                                  nil];
         
         self.recorder = [[AVAudioRecorder alloc] initWithURL:recordURL settings:settings error:nil];
+
+        UIView *shieldView = [[UIView alloc] initWithFrame:self.view.bounds];
         
-        [self.recorder record];        
+        shieldView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+        shieldView.alpha = 0.0;
+        shieldView.tag = 8;
+        
+        [self.view addSubview:shieldView];
+        
+        DSMRAudioRecorderView *recorderView = [[DSMRAudioRecorderView alloc] initWithAudioRecorder:self.recorder target:self action:_cmd];
+        
+        recorderView.center = CGPointMake(round(self.view.bounds.size.width / 2), round(self.view.bounds.size.height / 2));
+        
+        [shieldView addSubview:recorderView];
+        
+        [UIView animateWithDuration:0.25
+                         animations:^(void)
+                         {
+                             shieldView.alpha = 1.0;
+                         }
+                         completion:^(BOOL finished)
+                         {
+                             [self.recorder record];        
+                         }];
     }
     else
     {
+        [UIView animateWithDuration:0.25
+                         animations:^(void)
+                         {
+                             [self.view viewWithTag:8].alpha = 0.0;
+                         }
+                         completion:^(BOOL finished)
+                         {
+                             [[self.view viewWithTag:8] removeFromSuperview];
+                         }];
+        
         [self.recorder stop];
-
-        [self.audioButton setTitle:@"Audio" forState:UIControlStateNormal];
 
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
         

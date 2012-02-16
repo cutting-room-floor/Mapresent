@@ -31,6 +31,7 @@ This stuff is working, albeit roughly.
  * Button for rewinding to beginning. 
  * Unlimited-length scrolling timeline. 
  * Device is prevented from auto-sleep when exporting (for now). 
+ * Nice-looking audio record interface. 
 
 ### Todo
 
