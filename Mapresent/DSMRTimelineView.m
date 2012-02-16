@@ -102,7 +102,7 @@
         
         CGFloat placement, width;
         
-        if (marker.sourceName)
+        if (marker.markerType == DSMRTimelineMarkerTypeLocation)
         {
             markerView.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2];
             
@@ -115,18 +115,25 @@
             placement = 100;
             width     = markerView.frame.size.width;
         }
-        else if (marker.recording)
+        else if (marker.markerType == DSMRTimelineMarkerTypeAudio)
         {
             markerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.2];
             
             placement = 130;
             width     = marker.duration * 64.0;
         }
-        else if (marker.tileSourceInfo)
+        else if (marker.markerType == DSMRTimelineMarkerTypeTheme)
         {
             markerView.backgroundColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.2];
             
             placement = 160;
+            width     = markerView.frame.size.width;
+        }
+        else if (marker.markerType == DSMRTimelineMarkerTypeDrawing || marker.markerType == DSMRTimelineMarkerTypeDrawingClear)
+        {
+            markerView.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:1.0 alpha:0.2];
+            
+            placement = 190;
             width     = markerView.frame.size.width;
         }
         

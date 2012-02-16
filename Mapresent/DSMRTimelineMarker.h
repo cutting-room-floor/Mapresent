@@ -11,9 +11,11 @@
 #import <CoreLocation/CoreLocation.h>
 
 typedef enum {
-    DSMRTimelineMarkerTypeLocation = 0,
-    DSMRTimelineMarkerTypeAudio    = 1,
-    DSMRTimelineMarkerTypeTheme    = 2,
+    DSMRTimelineMarkerTypeLocation     = 0,
+    DSMRTimelineMarkerTypeAudio        = 1,
+    DSMRTimelineMarkerTypeTheme        = 2,
+    DSMRTimelineMarkerTypeDrawing      = 4,
+    DSMRTimelineMarkerTypeDrawingClear = 8,
 } DSMRTimelineMarkerType;
 
 @interface DSMRTimelineMarker : NSObject <NSCoding>
@@ -28,5 +30,6 @@ typedef enum {
 @property (nonatomic, strong) NSData *recording;
 @property (nonatomic, assign) NSTimeInterval duration;
 @property (nonatomic, strong) NSDictionary *tileSourceInfo;
+@property (nonatomic, strong) UIImage *drawingImage;
 
 @end

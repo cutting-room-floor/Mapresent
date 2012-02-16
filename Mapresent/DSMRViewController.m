@@ -855,17 +855,12 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     switch (lastMarker.markerType)
     {
-        case DSMRTimelineMarkerTypeLocation:
-        {
-            self.presentationDuration = lastMarker.timeOffset + endBumperDuration;
-            break;
-        }
         case DSMRTimelineMarkerTypeAudio:
         {
             self.presentationDuration = lastMarker.timeOffset = lastMarker.duration + endBumperDuration;
             break;
         }
-        case DSMRTimelineMarkerTypeTheme:
+        default:
         {
             self.presentationDuration = lastMarker.timeOffset + endBumperDuration;
             break;
@@ -1025,9 +1020,57 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     UIPopoverController *drawingPopover = [[UIPopoverController alloc] initWithContentViewController:wrapper];
     
+    DSMRDrawingSurfaceView *drawingView = [[DSMRDrawingSurfaceView alloc] initWithFrame:self.mapView.frame];
+
     DSMRDrawingPaletteViewController *drawingPalette = [[DSMRDrawingPaletteViewController alloc] initWithNibName:nil bundle:nil];
 
     drawingPalette.navigationItem.title = @"Draw";
+    
+    drawingPalette.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear Drawings"
+                                                                                       style:UIBarButtonItemStyleBordered
+                                                                                     handler:^(id sender)
+                                                                                     {
+                                                                                         // clear current drawing
+                                                                                         //
+                                                                                         [drawingView clearDrawings];
+                                                                                         
+                                                                                         // add drawing clear marker to timeline
+                                                                                         //
+                                                                                         DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
+                                                                                         
+                                                                                         marker.markerType = DSMRTimelineMarkerTypeDrawingClear;
+                                                                                         marker.timeOffset = [self.timeLabel.text doubleValue];
+                                                                                     
+                                                                                         if ([self.markers count])
+                                                                                         {
+                                                                                             int startCount = [self.markers count];
+                                                                                             
+                                                                                             for (DSMRTimelineMarker *otherMarker in [self.markers copy])
+                                                                                             {
+                                                                                                 if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
+                                                                                                 {
+                                                                                                     [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
+                                                                                                     
+                                                                                                     break;
+                                                                                                 }
+                                                                                             }
+                                                                                             
+                                                                                             if ([self.markers count] == startCount)
+                                                                                                 [self.markers addObject:marker];
+                                                                                         }
+                                                                                         else
+                                                                                         {
+                                                                                             [self.markers addObject:marker];
+                                                                                         }
+                                                                                         
+                                                                                         // refresh is called implicitly upon dismissal
+                                                                                         
+                                                                                         // dismiss drawing palette
+                                                                                         //
+                                                                                         [self popoverControllerShouldDismissPopover:drawingPopover];
+                                                                                         [drawingPopover dismissPopoverAnimated:YES];
+                                                                                     }];
+    
     drawingPalette.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                                     handler:^(id sender)
                                                                                                     {
@@ -1046,8 +1089,6 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
                   permittedArrowDirections:UIPopoverArrowDirectionUp 
                                   animated:YES];
     
-    DSMRDrawingSurfaceView *drawingView = [[DSMRDrawingSurfaceView alloc] initWithFrame:self.mapView.frame];
-
     drawingView.delegate = drawingPalette;
     drawingView.tag = 9;
     
@@ -1062,7 +1103,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 {
     // dismissed draw palette
     //
-    UIView *drawingView = [self.view viewWithTag:9];
+    DSMRDrawingSurfaceView *drawingView = (DSMRDrawingSurfaceView *)[self.view viewWithTag:9];
     
     [UIView animateWithDuration:0.25 
                      animations:^(void)
@@ -1074,8 +1115,45 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
                          [drawingView removeFromSuperview];
                      }];
     
-    // FIXME: actually save drawing data
+    UIImage *drawingImage = [drawingView snapshotImage];
     
+    if (drawingImage)
+    {
+        // add drawing marker to timeline
+        //
+        DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
+        
+        marker.markerType   = DSMRTimelineMarkerTypeDrawing;
+        marker.timeOffset   = [self.timeLabel.text doubleValue];
+        marker.drawingImage = drawingImage;
+        
+        // FIXME: this should be abstracted
+        //
+        if ([self.markers count])
+        {
+            int startCount = [self.markers count];
+            
+            for (DSMRTimelineMarker *otherMarker in [self.markers copy])
+            {
+                if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
+                {
+                    [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
+                    
+                    break;
+                }
+            }
+            
+            if ([self.markers count] == startCount)
+                [self.markers addObject:marker];
+        }
+        else
+        {
+            [self.markers addObject:marker];
+        }
+    }
+
+    [self refresh];
+
     return YES;
 }
 
@@ -1171,23 +1249,35 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     DSMRTimelineMarker *marker = [self.markers objectAtIndex:indexPath.row];
 
-    if (marker.sourceName)
+    if (marker.markerType == DSMRTimelineMarkerTypeLocation)
     {
         cell.textLabel.text = [NSString stringWithFormat:@"Map @ %fs", marker.timeOffset];
 
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%f, %f)", marker.sourceName, marker.center.latitude, marker.center.longitude];
     }
-    else if (marker.recording)
+    else if (marker.markerType == DSMRTimelineMarkerTypeAudio)
     {
         cell.textLabel.text = [NSString stringWithFormat:@"Audio @ %fs", marker.timeOffset];
 
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%f seconds", marker.duration];
     }
-    else if (marker.tileSourceInfo)
+    else if (marker.markerType == DSMRTimelineMarkerTypeTheme)
     {
         cell.textLabel.text = [NSString stringWithFormat:@"Theme @ %fs", marker.timeOffset];
         
         cell.detailTextLabel.text = [marker.tileSourceInfo objectForKey:@"name"];
+    }
+    else if (marker.markerType == DSMRTimelineMarkerTypeDrawing)
+    {
+        cell.textLabel.text = [NSString stringWithFormat:@"Drawing @ %fs", marker.timeOffset];
+        
+        cell.detailTextLabel.text = nil;
+    }
+    else if (marker.markerType == DSMRTimelineMarkerTypeDrawingClear)
+    {
+        cell.textLabel.text = [NSString stringWithFormat:@"Clear Drawings @ %fs", marker.timeOffset];
+        
+        cell.detailTextLabel.text = nil;
     }
     
     return cell;

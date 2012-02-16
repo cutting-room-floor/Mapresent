@@ -20,6 +20,7 @@
 @synthesize recording;
 @synthesize duration;
 @synthesize tileSourceInfo;
+@synthesize drawingImage;
 
 - (id)initWithCoder:(NSCoder *)coder
 {
@@ -37,6 +38,7 @@
         recording      = [coder decodeObjectForKey:@"recording"];
         duration       = [coder decodeDoubleForKey:@"duration"];
         tileSourceInfo = [coder decodeObjectForKey:@"tileSourceInfo"];
+        drawingImage   = [coder decodeObjectForKey:@"drawingImage"];
     }
     
     return self;
@@ -57,6 +59,7 @@
     [coder encodeObject:recording           forKey:@"recording"];
     [coder encodeDouble:duration            forKey:@"duration"];
     [coder encodeObject:tileSourceInfo      forKey:@"tileSourceInfo"];
+    [coder encodeObject:drawingImage        forKey:@"drawingImage"];
 }
 
 @end

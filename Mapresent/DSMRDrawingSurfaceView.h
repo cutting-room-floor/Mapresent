@@ -23,4 +23,7 @@
 
 @property (nonatomic, weak) id <DSMRDrawingSurfaceDelegate>delegate;
 
+- (void)clearDrawings;
+- (UIImage *)snapshotImage;
+
 @end

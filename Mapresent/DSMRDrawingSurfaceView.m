@@ -13,6 +13,7 @@
 @property (nonatomic, strong) NSMutableArray *subpaths;
 @property (nonatomic, strong) NSMutableArray *subpathLineColors;
 @property (nonatomic, strong) NSMutableArray *subpathLineWidths;
+@property (nonatomic, assign) BOOL drawingSnapshot;
 
 @end
 
@@ -24,6 +25,7 @@
 @synthesize subpaths;
 @synthesize subpathLineColors;
 @synthesize subpathLineWidths;
+@synthesize drawingSnapshot;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -80,8 +82,11 @@
     
     CGContextClearRect(c, rect);
     
-    CGContextSetFillColorWithColor(c, [[UIColor colorWithWhite:0.0 alpha:0.5] CGColor]);
-    CGContextFillRect(c, rect);
+    if ( ! self.drawingSnapshot)
+    {
+        CGContextSetFillColorWithColor(c, [[UIColor colorWithWhite:0.0 alpha:0.5] CGColor]);
+        CGContextFillRect(c, rect);
+    }
     
     CGContextSetLineCap(c, kCGLineCapRound);
     
@@ -98,6 +103,37 @@
 
         CGContextStrokePath(c);
     }
+}
+
+#pragma mark -
+
+- (void)clearDrawings
+{
+    [self.subpaths removeAllObjects];
+    [self.subpathLineColors removeAllObjects];
+    [self.subpathLineWidths removeAllObjects];
+    
+    [self setNeedsDisplay];
+}
+
+- (UIImage *)snapshotImage
+{
+    if ( ! [self.subpaths count])
+        return nil;
+    
+    self.drawingSnapshot = YES;
+    
+    UIGraphicsBeginImageContext(self.bounds.size);
+    
+    [self drawRect:self.bounds];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    self.drawingSnapshot = NO;
+    
+    return image;
 }
 
 @end
