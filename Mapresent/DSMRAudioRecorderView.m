@@ -80,7 +80,7 @@
     
     [self.recorder updateMeters];
     
-    self.levelsView.averageLevel = [self.recorder averagePowerForChannel:0];
+    self.levelsView.averageLevel = fminf([self.recorder averagePowerForChannel:0], 0.0); // clip at max of 0.0
     
     [self.levelsView setNeedsDisplay];
 }
@@ -96,10 +96,19 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    self.averageLevel = (self.averageLevel > 0.0 ? 0.0 : ((160.0 - (-1.0 * self.averageLevel)) / 160.0));
+    // update peak, still in dB, max below 0.0
+    //
+    self.peakLevel = (self.peakLevel < 0.0 ? self.peakLevel : -160.0);
     
-    if (self.averageLevel > self.peakLevel && self.averageLevel < 1.0)
+    if (self.averageLevel > self.peakLevel && self.averageLevel > -160.0 && self.averageLevel < 0.0)
         self.peakLevel = self.averageLevel;
+    
+    // convert to linear float scale
+    //
+    float averageScale = log10f((self.averageLevel) / -160.0) / -1.5; // first 0.0-1.0 represents good levels, 1.0+ bad
+    float peakScale    = log10f((self.peakLevel)    / -160.0) / -1.5;
+    
+    NSLog(@"%f (%f)", averageScale, peakScale);
     
     CGContextRef c = UIGraphicsGetCurrentContext();
     
@@ -108,15 +117,23 @@
     CGContextSetFillColorWithColor(c, [[UIColor darkGrayColor] CGColor]);
     CGContextFillRect(c, rect);
     
-    // green average level
+    // green "normal 2/3" background
     //
-    CGContextSetFillColorWithColor(c, [[UIColor greenColor] CGColor]);
-    CGContextFillRect(c, CGRectMake(0, 0, self.averageLevel * rect.size.width, rect.size.height));
+    CGContextSetFillColorWithColor(c, [[UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.2] CGColor]);
+    CGContextFillRect(c, CGRectMake(0, 0, (2.0 * rect.size.width) / 3.0, rect.size.height));
     
-    // red peak level
+    // red "bad 1/3" background
     //
+    CGContextSetFillColorWithColor(c, [[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2] CGColor]);
+    CGContextFillRect(c, CGRectMake((2.0 * rect.size.width) / 3.0, 0.0, rect.size.width / 3.0, rect.size.height));
+    
+    // animated average level bar
+    //
+    CGContextSetFillColorWithColor(c, [[UIColor yellowColor] CGColor]);
+    CGContextFillRect(c, CGRectMake(0.0, rect.size.height / 4.0, averageScale * rect.size.width, rect.size.height / 2.0));
+    
     CGContextSetFillColorWithColor(c, [[UIColor redColor] CGColor]);
-    CGContextFillRect(c, CGRectMake((self.peakLevel * rect.size.width - 2), 0, 4, rect.size.height));
+    CGContextFillRect(c, CGRectMake((peakScale * rect.size.width - 2), 0, 4, rect.size.height));
 }
 
 @end
