@@ -20,7 +20,7 @@ This stuff is working, albeit roughly.
 
  * Capture of map center & zoom transitions. 
  * Addition of audio bits to presentation. 
- * Basic map theme changes. 
+ * Basic map theme changes using a book page metaphor. 
  * Saving presentation work on edits and when backgrounding app. 
  * Able to retrieve copy of presentation from app via iTunes file sharing. 
  * Playback automatically stops at end of presentation. 
@@ -47,3 +47,5 @@ Pipe dreams of future functionality & things that need to happen.
  * Experiment with 3D transitions using [WhirlyGlobe MBTiles support](http://code.google.com/p/whirlyglobe/issues/detail?id=1). Will require use of local tiles. 
  * Allow for points & lines to be added to the presentation screen. 
  * Allow embedding of audio, video, and photo media into presentation. 
+ * Allow dragging of timeline items directly to rearrange. 
+ * Palette UI for editing fine details of selected timeline item (duration, timing curve, volume, etc.)
