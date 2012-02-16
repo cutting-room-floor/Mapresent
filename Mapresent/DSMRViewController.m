@@ -502,17 +502,36 @@
 
 - (IBAction)pressedShare:(id)sender
 {
+    NSString *latestVideoPath = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
+    
+    CGRect attachRect = CGRectMake(696, 435, 1, 1);
+    
     UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:nil];
     
     [actionSheet addButtonWithTitle:@"Export To Video" handler:^(void) { [self beginExport]; }];
     
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"]])
+    if ([[NSFileManager defaultManager] fileExistsAtPath:latestVideoPath])
     {
-        [actionSheet addButtonWithTitle:@"View Latest Video"  handler:^(void) { [self playLatestMovie]; }];
-        [actionSheet addButtonWithTitle:@"Email Latest Video" handler:^(void) { [self emailLatestMovie]; }];
+        [actionSheet addButtonWithTitle:@"View Latest Video"       handler:^(void) { [self playLatestMovie]; }];
+        [actionSheet addButtonWithTitle:@"Email Latest Video"      handler:^(void) { [self emailLatestMovie]; }];
+        
+        [actionSheet addButtonWithTitle:@"Open Latest Video In..." handler:^(void)
+        {
+            UIDocumentInteractionController *docOpener = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:latestVideoPath]];
+        
+            if ( ! [docOpener presentOpenInMenuFromRect:attachRect inView:self.view animated:YES])
+            {
+                UIAlertView *alert = [UIAlertView alertViewWithTitle:@"No Compatible Apps" 
+                                                             message:@"You don't have any apps installed that are able to open external videos."];
+                
+                [alert addButtonWithTitle:@"OK"];
+                
+                [alert show];
+            }
+        }];
     }
     
-    [actionSheet showFromRect:CGRectMake(696, 435, 1, 1) inView:self.view animated:YES];
+    [actionSheet showFromRect:attachRect inView:self.view animated:YES];
 }
 
 - (void)playLatestMovie
