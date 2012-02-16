@@ -39,6 +39,8 @@
 		DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E59C14E5B463000F611E /* libBlocksKit.a */; };
 		DDC6E5A814E5B5F6000F611E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E5A714E5B5F6000F611E /* MessageUI.framework */; };
 		DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */; };
+		DDE382F614ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE382F414ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m */; };
+		DDE382F714ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */; };
 		DDE3D6E514E9EF9000B71543 /* curl.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E414E9EF9000B71543 /* curl.png */; };
 		DDE3D6E714E9F10900B71543 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E614E9F10900B71543 /* loading.png */; };
 		DDE3D6E914EAE6E000B71543 /* fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E814EAE6E000B71543 /* fullscreen.png */; };
@@ -165,6 +167,9 @@
 		DDC6E5A714E5B5F6000F611E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DDC6E5AA14E5BA4E000F611E /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = Externals/MBProgressHUD/MBProgressHUD.h; sourceTree = SOURCE_ROOT; };
 		DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = Externals/MBProgressHUD/MBProgressHUD.m; sourceTree = SOURCE_ROOT; };
+		DDE382F314ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRDrawingPaletteViewController.h; sourceTree = "<group>"; };
+		DDE382F414ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRDrawingPaletteViewController.m; sourceTree = "<group>"; };
+		DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRDrawingPaletteViewController.xib; sourceTree = "<group>"; };
 		DDE3D6E414E9EF9000B71543 /* curl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = curl.png; sourceTree = "<group>"; };
 		DDE3D6E614E9F10900B71543 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		DDE3D6E814EAE6E000B71543 /* fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullscreen.png; sourceTree = "<group>"; };
@@ -318,6 +323,9 @@
 				DD777A6114EC98BC002089D0 /* DSMRAudioRecorderView.h */,
 				DD777A6214EC98BC002089D0 /* DSMRAudioRecorderView.m */,
 				DD777A5F14EC976A002089D0 /* DSMRAudioRecorderView.xib */,
+				DDE382F314ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.h */,
+				DDE382F414ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m */,
+				DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */,
 			);
 			name = "Main UI";
 			sourceTree = "<group>";
@@ -510,6 +518,7 @@
 				DD7779DE14EB2D54002089D0 /* back.png in Resources */,
 				DD7779E214EB32D6002089D0 /* DSMRExportModalView.xib in Resources */,
 				DD777A6014EC976A002089D0 /* DSMRAudioRecorderView.xib in Resources */,
+				DDE382F714ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -530,6 +539,7 @@
 				DD4312FC14D8B1C500697249 /* DSMRWrapperController.m in Sources */,
 				DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */,
 				DD777A6314EC98BC002089D0 /* DSMRAudioRecorderView.m in Sources */,
+				DDE382F614ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

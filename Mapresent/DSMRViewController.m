@@ -12,6 +12,7 @@
 #import "DSMRWrapperController.h"
 #import "DSMRThemePicker.h"
 #import "DSMRAudioRecorderView.h"
+#import "DSMRDrawingPaletteViewController.h"
 
 #import "RMMapView.h"
 #import "RMScrollView.h"
@@ -56,6 +57,7 @@
 - (IBAction)pressedShare:(id)sender;
 - (IBAction)pressedFullScreen:(id)sender;
 - (IBAction)pressedBack:(id)sender;
+- (IBAction)pressedDraw:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
 - (NSString *)documentsFolderPath;
@@ -1014,6 +1016,28 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     }
 
     [self refresh];
+}
+
+- (IBAction)pressedDraw:(id)sender
+{
+    UINavigationController *wrapper = [[UINavigationController alloc] init];
+    
+    UIPopoverController *drawingPopover = [[UIPopoverController alloc] initWithContentViewController:wrapper];
+    
+    DSMRDrawingPaletteViewController *drawingPalette = [[DSMRDrawingPaletteViewController alloc] initWithNibName:nil bundle:nil];
+
+    drawingPalette.navigationItem.title = @"Draw";
+    drawingPalette.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                                    handler:^(id sender) { [drawingPopover dismissPopoverAnimated:YES]; }];
+    
+    wrapper.viewControllers = [NSArray arrayWithObject:drawingPalette];
+    
+    drawingPopover.popoverContentSize = CGSizeMake(drawingPalette.view.bounds.size.width, drawingPalette.view.bounds.size.height + drawingPalette.navigationController.navigationBar.frame.size.height);
+    
+    [drawingPopover presentPopoverFromRect:[self.view convertRect:[(UIView *)sender frame] fromView:self.inspectorView] 
+                                    inView:self.view 
+                  permittedArrowDirections:UIPopoverArrowDirectionUp 
+                                  animated:YES];
 }
 
 #pragma mark -
