@@ -13,3 +13,36 @@ The sort of thing you'd get out of this would be, say, a YouTube-uploaded HD vid
  * Map zooms back out to 3D Blue Marble, then in to US World Light, fading in Energy Dept. layer of alternative fueling stations nationwide.
 
 Additionally, this app could, when used live instead of watched via exported video, have the audio track muted, with a live presenter instead, who can grab and adjust the intermediary points to explore or focus in more depth. At any point, the play button can be hit again and the next "waypoint" in the presentation is moved to, picking up where it left off before the interruption. 
+
+### Complete
+
+This stuff is working, albeit roughly. 
+
+ * Capture of map center & zoom transitions. 
+ * Addition of audio bits to presentation. 
+ * Basic map theme changes. 
+ * Saving presentation work on edits and when backgrounding app. 
+ * Able to retrieve copy of presentation from app via iTunes file sharing. 
+ * Playback automatically stops at end of presentation. 
+ * Export to video on disk. 
+ * Viewing, emailing, and opening exported video in other apps. 
+ * Fullscreen map playback. 
+ * Modal, cancellable export screen. 
+ * Button for rewinding to beginning. 
+ * Unlimited-length scrolling timeline. 
+ * Device is prevented from auto-sleep when exporting (for now). 
+
+### Todo
+
+Pipe dreams of future functionality & things that need to happen. 
+
+ * Overall code cleanup. Fast & loose right now. 
+ * Fix crash when zooming too far into maps with Alpstein. 
+ * Fix lag UI stutter when beginning each audio clip during playback. 
+ * Bookmark favorite [MapBox Hosting](http://tiles.mapbox.com/) themes for easier access. 
+ * Improve theme switch transition performance. 
+ * Replace use of private API `UIGetScreenImage()` with successive calls to Alpstein's `-[RMMapView takeSnapshot]`. This will require that we manually animate timing-curve-based transitions so as to be able to catch them in-progress for video frames. But this will also improve performance as we will be able to snap each frame as soon as it is ready. This will also remove the need for `NSTimer`-based export, which will allow running even when the device goes to sleep. 
+ * Improve tile caching. No real reason to expire remote tiles unless the user wants to do so manually. 
+ * Experiment with 3D transitions using [WhirlyGlobe MBTiles support](http://code.google.com/p/whirlyglobe/issues/detail?id=1). Will require use of local tiles. 
+ * Allow for points & lines to be added to the presentation screen. 
+ * Allow embedding of audio, video, and photo media into presentation. 
