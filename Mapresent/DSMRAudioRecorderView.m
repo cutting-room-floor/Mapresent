@@ -108,8 +108,6 @@
     float averageScale = log10f((self.averageLevel) / -160.0) / -1.5; // first 0.0-1.0 represents good levels, 1.0+ bad
     float peakScale    = log10f((self.peakLevel)    / -160.0) / -1.5;
     
-    NSLog(@"%f (%f)", averageScale, peakScale);
-    
     CGContextRef c = UIGraphicsGetCurrentContext();
     
     // black background
