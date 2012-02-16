@@ -13,6 +13,7 @@
 #import "DSMRThemePicker.h"
 #import "DSMRAudioRecorderView.h"
 #import "DSMRDrawingPaletteViewController.h"
+#import "DSMRDrawingSurfaceView.h"
 
 #import "RMMapView.h"
 #import "RMScrollView.h"
@@ -1034,10 +1035,43 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     drawingPopover.popoverContentSize = CGSizeMake(drawingPalette.view.bounds.size.width, drawingPalette.view.bounds.size.height + drawingPalette.navigationController.navigationBar.frame.size.height);
     
+    drawingPopover.delegate = self;
+    
     [drawingPopover presentPopoverFromRect:[self.view convertRect:[(UIView *)sender frame] fromView:self.inspectorView] 
                                     inView:self.view 
                   permittedArrowDirections:UIPopoverArrowDirectionUp 
                                   animated:YES];
+    
+    DSMRDrawingSurfaceView *drawingView = [[DSMRDrawingSurfaceView alloc] initWithFrame:self.mapView.frame];
+
+    drawingView.tag = 9;
+    
+    drawingPopover.passthroughViews = [NSArray arrayWithObject:drawingView];
+    
+    [self.view addSubview:drawingView];
+    
+    [UIView animateWithDuration:0.25 animations:^(void) { drawingView.alpha = 1.0; }];
+}
+
+- (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
+{
+    // dismissed draw palette
+    //
+    UIView *drawingView = [self.view viewWithTag:9];
+    
+    [UIView animateWithDuration:0.25 
+                     animations:^(void)
+                     {
+                         drawingView.alpha = 0.0;
+                     }
+                     completion:^(BOOL finished)
+                     {
+                         [drawingView removeFromSuperview];
+                     }];
+    
+    // FIXME: actually save drawing data
+    
+    return YES;
 }
 
 #pragma mark -

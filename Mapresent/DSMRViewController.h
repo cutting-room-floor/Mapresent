@@ -14,6 +14,6 @@
 
 #import <MessageUI/MessageUI.h>
 
-@interface DSMRViewController : UIViewController <RMMapViewDelegate, UITableViewDataSource, UITableViewDelegate, DSMRTimelineViewDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate, MFMailComposeViewControllerDelegate>
+@interface DSMRViewController : UIViewController <RMMapViewDelegate, UITableViewDataSource, UITableViewDelegate, DSMRTimelineViewDelegate, UIPageViewControllerDataSource, UIPageViewControllerDelegate, MFMailComposeViewControllerDelegate, UIPopoverControllerDelegate>
 
 @end
