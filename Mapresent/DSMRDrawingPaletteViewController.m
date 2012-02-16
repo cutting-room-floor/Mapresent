@@ -134,4 +134,16 @@
     self.lineWidth = selectedButton.tag;
 }
 
+#pragma mark -
+
+- (UIColor *)lineColorForDrawingView:(DSMRDrawingSurfaceView *)drawingView
+{
+    return self.lineColor;
+}
+
+- (NSUInteger)lineWidthForDrawingView:(DSMRDrawingSurfaceView *)drawingView
+{
+    return self.lineWidth;
+}
+
 @end

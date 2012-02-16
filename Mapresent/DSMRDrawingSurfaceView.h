@@ -8,6 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class DSMRDrawingSurfaceView;
+
+@protocol DSMRDrawingSurfaceDelegate <NSObject>
+
+- (UIColor *)lineColorForDrawingView:(DSMRDrawingSurfaceView *)drawingView;
+- (NSUInteger)lineWidthForDrawingView:(DSMRDrawingSurfaceView *)drawingView;
+
+@end
+
+#pragma mark -
+
 @interface DSMRDrawingSurfaceView : UIView
+
+@property (nonatomic, weak) id <DSMRDrawingSurfaceDelegate>delegate;
 
 @end

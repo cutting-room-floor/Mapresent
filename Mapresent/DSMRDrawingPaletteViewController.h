@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DSMRDrawingPaletteViewController : UIViewController
+#import "DSMRDrawingSurfaceView.h"
+
+@interface DSMRDrawingPaletteViewController : UIViewController <DSMRDrawingSurfaceDelegate>
 
 @property (nonatomic, readonly, strong) UIColor *lineColor;
 @property (nonatomic, readonly, assign) NSUInteger lineWidth;

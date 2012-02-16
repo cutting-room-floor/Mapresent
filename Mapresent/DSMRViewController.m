@@ -1029,7 +1029,11 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 
     drawingPalette.navigationItem.title = @"Draw";
     drawingPalette.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                                    handler:^(id sender) { [drawingPopover dismissPopoverAnimated:YES]; }];
+                                                                                                    handler:^(id sender)
+                                                                                                    {
+                                                                                                        [self popoverControllerShouldDismissPopover:drawingPopover];
+                                                                                                        [drawingPopover dismissPopoverAnimated:YES];
+                                                                                                    }];
     
     wrapper.viewControllers = [NSArray arrayWithObject:drawingPalette];
     
@@ -1044,6 +1048,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     DSMRDrawingSurfaceView *drawingView = [[DSMRDrawingSurfaceView alloc] initWithFrame:self.mapView.frame];
 
+    drawingView.delegate = drawingPalette;
     drawingView.tag = 9;
     
     drawingPopover.passthroughViews = [NSArray arrayWithObject:drawingView];
