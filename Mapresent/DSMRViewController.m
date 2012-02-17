@@ -115,8 +115,10 @@
 
     markers = [NSMutableArray array];
 
-    if ([[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"])
-        for (NSData *savedMarker in [[NSUserDefaults standardUserDefaults] arrayForKey:@"markers"])
+    NSString *saveFilePath = [[self documentsFolderPath] stringByAppendingPathComponent:@"Document.mapresent"];
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:saveFilePath])
+        for (NSData *savedMarker in [[NSDictionary dictionaryWithContentsOfFile:saveFilePath] objectForKey:@"markers"])
             [markers addObject:[NSKeyedUnarchiver unarchiveObjectWithData:savedMarker]];
     
     self.timelineView.delegate = self;
@@ -189,10 +191,9 @@
     for (DSMRTimelineMarker *marker in self.markers)
         [savedMarkers addObject:[NSKeyedArchiver archivedDataWithRootObject:marker]];
     
-    [[NSUserDefaults standardUserDefaults] setObject:savedMarkers forKey:@"markers"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    NSString *saveFilePath = [[self documentsFolderPath] stringByAppendingPathComponent:@"Document.mapresent"];
     
-    [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:[[self documentsFolderPath] stringByAppendingPathComponent:@"Document.mapresent"]
+    [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:saveFilePath
                                                                          atomically:YES];
 }
 
