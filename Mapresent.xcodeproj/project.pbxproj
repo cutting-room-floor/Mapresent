@@ -381,10 +381,10 @@
 		DDD948ED14EE309B0042C9E0 /* Timeline & Markers */ = {
 			isa = PBXGroup;
 			children = (
-				DD9607C714D34CA900FA2CBA /* DSMRTimelineMarker.h */,
-				DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */,
 				DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */,
 				DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */,
+				DD9607C714D34CA900FA2CBA /* DSMRTimelineMarker.h */,
+				DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */,
 				DDE3831714EDE34F001D5D45 /* DSMRTimelineMarkerView.h */,
 				DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */,
 				DDD948F014EE312E0042C9E0 /* Resources */,
