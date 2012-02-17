@@ -57,7 +57,7 @@
 - (IBAction)pressedPlayFullscreen:(id)sender;
 - (IBAction)pressedShare:(id)sender;
 - (IBAction)pressedFullScreen:(id)sender;
-- (IBAction)pressedBack:(id)sender;
+- (IBAction)pressedRewind:(id)sender;
 - (IBAction)pressedDraw:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
@@ -201,11 +201,13 @@
 #pragma mark -
 #pragma mark Presentation Controls
 
-- (IBAction)pressedBack:(id)sender
+- (IBAction)pressedRewind:(id)sender
 {
     [[self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     [self.timelineView rewindToBeginning];
+    
+    self.timeLabel.text = @"0.000000";
 }
 
 - (IBAction)pressedPlayFullscreen:(id)sender
