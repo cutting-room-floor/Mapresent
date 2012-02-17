@@ -1193,13 +1193,13 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         
         [self.mapView addSubview:drawing];
         
-        [UIView animateWithDuration:0.25 animations:^(void) { drawing.alpha = 1.0; }];
+        [UIView animateWithDuration:(self.timelineView.isExporting ? 2.0 : 0.25) animations:^(void) { drawing.alpha = 1.0; }];
     }
     else if (marker.markerType == DSMRTimelineMarkerTypeDrawingClear)
     {
         for (UIImageView *drawingView in [self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }])
         {
-            [UIView animateWithDuration:0.25
+            [UIView animateWithDuration:(self.timelineView.isExporting ? 2.0 : 0.25)
                              animations:^(void)
                              {
                                  drawingView.alpha = 0.0;
