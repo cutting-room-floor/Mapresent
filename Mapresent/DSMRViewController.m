@@ -606,14 +606,8 @@
     else if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
     {
         for (DSMRTimelineMarker *marker in self.markers)
-        {
             if (marker.timeOffset == [self.timeLabel.text doubleValue])
-            {
                 [self fireMarkerAtIndex:[self.markers indexOfObject:marker]];
-                
-                break;
-            }
-        }
     }
 }
 
