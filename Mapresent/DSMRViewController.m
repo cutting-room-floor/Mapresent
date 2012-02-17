@@ -49,7 +49,7 @@
 @property (nonatomic, strong) NSMutableArray *themes;
 @property (nonatomic, strong) NSDictionary *chosenThemeInfo;
 @property (nonatomic, strong) UIPageViewController *themePager;
-@property (nonatomic, assign) dispatch_queue_t processingQueue;
+@property (nonatomic, assign) dispatch_queue_t serialQueue;
 @property (nonatomic, assign) NSTimeInterval presentationDuration;
 @property (nonatomic, readonly, assign) BOOL isFullScreen;
 
@@ -93,7 +93,7 @@
 @synthesize themes;
 @synthesize chosenThemeInfo;
 @synthesize themePager;
-@synthesize processingQueue;
+@synthesize serialQueue;
 @synthesize presentationDuration;
 
 #pragma mark -
@@ -103,6 +103,8 @@
 {
     [super viewDidLoad];
     
+    serialQueue = dispatch_queue_create("com.mapbox.mapresent", DISPATCH_QUEUE_SERIAL);
+
     self.mapView.delegate = self;
     
     self.mapView.backgroundColor = [UIColor blackColor];
@@ -129,8 +131,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playToggled:)    name:DSMRTimelineViewPlayToggled               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:) name:DSMRTimelineViewPlayProgressed            object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveState:)      name:UIApplicationWillResignActiveNotification object:nil];
-    
-    processingQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -182,20 +182,25 @@
     
     [self.timelineView redrawMarkers];
     
-    [self saveState:self];
+    // avoid an ever-growing lag by doing this async
+    //
+    dispatch_async(self.serialQueue, ^(void) { [self saveState:self]; });
 }
 
 - (void)saveState:(id)sender
 {
-    NSMutableArray *savedMarkers = [NSMutableArray array];
-    
-    for (DSMRTimelineMarker *marker in self.markers)
-        [savedMarkers addObject:[NSKeyedArchiver archivedDataWithRootObject:marker]];
-    
-    NSString *saveFilePath = [[self documentsFolderPath] stringByAppendingPathComponent:@"Document.mapresent"];
-    
-    [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:saveFilePath
-                                                                         atomically:YES];
+    @synchronized(self)
+    {
+        NSMutableArray *savedMarkers = [NSMutableArray array];
+        
+        for (DSMRTimelineMarker *marker in self.markers)
+            [savedMarkers addObject:[NSKeyedArchiver archivedDataWithRootObject:marker]];
+        
+        NSString *saveFilePath = [[self documentsFolderPath] stringByAppendingPathComponent:@"Document.mapresent"];
+        
+        [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:saveFilePath
+                                                                             atomically:YES];
+    }
 }
 
 #pragma mark -
@@ -265,10 +270,6 @@
             {
                 if ([imageFile hasPrefix:@"snap_"] && [imageFile hasSuffix:@".png"])
                 {
-                    //                    dispatch_async(self.processingQueue, ^(void)
-                    //                    {
-                    //                        // these are not thread-safe, but that doesn't matter (much) for now
-                    //                        //
                     UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
                     UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 192, 480, 640)];
                     UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
@@ -276,7 +277,6 @@
                     [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile] atomically:YES];
                     
                     NSLog(@"processed %@", imageFile);
-                    //                    });
                 }
             }
             
@@ -765,10 +765,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     CGImageRef image = UIGetScreenImage();
     
-//    dispatch_async(self.processingQueue, ^(void)
-//    {
-        [UIImagePNGRepresentation([UIImage imageWithCGImage:image]) writeToFile:filename atomically:YES];
-//    });
+    [UIImagePNGRepresentation([UIImage imageWithCGImage:image]) writeToFile:filename atomically:YES];
     
     CGImageRelease(image);
     
@@ -848,27 +845,30 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 
 - (void)addMarker:(DSMRTimelineMarker *)marker refreshingInterface:(BOOL)shouldRefresh
 {
-    if ([self.markers count])
+    dispatch_sync(self.serialQueue, ^(void)
     {
-        int startCount = [self.markers count];
-        
-        for (DSMRTimelineMarker *otherMarker in [self.markers copy])
+        if ([self.markers count])
         {
-            if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
+            int startCount = [self.markers count];
+            
+            for (DSMRTimelineMarker *otherMarker in [self.markers copy])
             {
-                [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
-                
-                break;
+                if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
+                {
+                    [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
+                    
+                    break;
+                }
             }
+            
+            if ([self.markers count] == startCount)
+                [self.markers addObject:marker];
         }
-        
-        if ([self.markers count] == startCount)
+        else
+        {
             [self.markers addObject:marker];
-    }
-    else
-    {
-        [self.markers addObject:marker];
-    }
+        }
+    });
     
     if (shouldRefresh)
         [self refresh];
