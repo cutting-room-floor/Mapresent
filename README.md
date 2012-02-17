@@ -50,6 +50,8 @@ Pipe dreams of future functionality & things that need to happen.
  * Improve tile caching. No real reason to expire remote tiles unless the user wants to do so manually. 
  * Experiment with 3D transitions using [WhirlyGlobe MBTiles support](http://code.google.com/p/whirlyglobe/issues/detail?id=1). Will require use of local tiles. 
  * Allow for points, shapes, and other annotations to be added to the presentation screen. 
+ * Allow for animated annotations to the map. 
+ * Allow for drawings to be played back as drawn, not all at once. 
  * Allow embedding of audio, video, and photo media into presentation. 
  * Allow dragging of timeline items directly to rearrange. 
  * Palette UI for editing fine details of selected timeline item (duration, timing curve, volume, etc.)
