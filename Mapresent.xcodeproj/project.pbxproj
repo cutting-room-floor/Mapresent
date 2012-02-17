@@ -253,7 +253,11 @@
 			isa = PBXGroup;
 			children = (
 				DD7779DF14EB3280002089D0 /* Main UI */,
-				DD7779E014EB3288002089D0 /* Theme Picker */,
+				DDD948ED14EE309B0042C9E0 /* Timeline & Markers */,
+				DDD948EF14EE30E50042C9E0 /* Audio Recording */,
+				DD7779E014EB3288002089D0 /* Themes */,
+				DDE382FB14EDB015001D5D45 /* Drawing */,
+				DDD948EE14EE30D90042C9E0 /* Video Export */,
 				DD2B334714CF75AE008DE8CB /* Supporting Files */,
 			);
 			path = Mapresent;
@@ -304,16 +308,6 @@
 			children = (
 				DD2B375814CF822C008DE8CB /* geography-class.mbtiles */,
 				DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */,
-				DD43131214D8D26800697249 /* needle.png */,
-				DDE3D6E414E9EF9000B71543 /* curl.png */,
-				DDE3D6E614E9F10900B71543 /* loading.png */,
-				DDE3D6E814EAE6E000B71543 /* fullscreen.png */,
-				DDE3D6ED14EB1AFD00B71543 /* pause.png */,
-				DDE3D6EE14EB1AFD00B71543 /* play.png */,
-				DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */,
-				DD7779DD14EB2D54002089D0 /* back.png */,
-				DDE3831A14EDEE27001D5D45 /* waveform.png */,
-				DDE3833514EDFA66001D5D45 /* clear.png */,
 			);
 			name = Resources;
 			path = Mapresent;
@@ -327,22 +321,12 @@
 				DD2B335214CF75AE008DE8CB /* DSMRViewController.h */,
 				DD2B335314CF75AE008DE8CB /* DSMRViewController.m */,
 				DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */,
-				DD9607C714D34CA900FA2CBA /* DSMRTimelineMarker.h */,
-				DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */,
-				DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */,
-				DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */,
-				DDE3831714EDE34F001D5D45 /* DSMRTimelineMarkerView.h */,
-				DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */,
-				DD7779E114EB32D6002089D0 /* DSMRExportModalView.xib */,
-				DD777A6114EC98BC002089D0 /* DSMRAudioRecorderView.h */,
-				DD777A6214EC98BC002089D0 /* DSMRAudioRecorderView.m */,
-				DD777A5F14EC976A002089D0 /* DSMRAudioRecorderView.xib */,
-				DDE382FB14EDB015001D5D45 /* Drawing */,
+				DDD948F214EE31580042C9E0 /* Resources */,
 			);
 			name = "Main UI";
 			sourceTree = "<group>";
 		};
-		DD7779E014EB3288002089D0 /* Theme Picker */ = {
+		DD7779E014EB3288002089D0 /* Themes */ = {
 			isa = PBXGroup;
 			children = (
 				DD4312FA14D8B1C500697249 /* DSMRWrapperController.h */,
@@ -350,8 +334,9 @@
 				DD4312F514D8AACA00697249 /* DSMRThemePicker.h */,
 				DD4312F614D8AACA00697249 /* DSMRThemePicker.m */,
 				DD4312F714D8AACA00697249 /* DSMRThemePicker.xib */,
+				DDD948F114EE313D0042C9E0 /* Resources */,
 			);
-			name = "Theme Picker";
+			name = Themes;
 			sourceTree = "<group>";
 		};
 		DD96079014D32C2D00FA2CBA /* UIImage-Extensions */ = {
@@ -391,6 +376,69 @@
 				DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */,
 			);
 			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		DDD948ED14EE309B0042C9E0 /* Timeline & Markers */ = {
+			isa = PBXGroup;
+			children = (
+				DD9607C714D34CA900FA2CBA /* DSMRTimelineMarker.h */,
+				DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */,
+				DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */,
+				DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */,
+				DDE3831714EDE34F001D5D45 /* DSMRTimelineMarkerView.h */,
+				DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */,
+				DDD948F014EE312E0042C9E0 /* Resources */,
+			);
+			name = "Timeline & Markers";
+			sourceTree = "<group>";
+		};
+		DDD948EE14EE30D90042C9E0 /* Video Export */ = {
+			isa = PBXGroup;
+			children = (
+				DD7779E114EB32D6002089D0 /* DSMRExportModalView.xib */,
+			);
+			name = "Video Export";
+			sourceTree = "<group>";
+		};
+		DDD948EF14EE30E50042C9E0 /* Audio Recording */ = {
+			isa = PBXGroup;
+			children = (
+				DD777A6114EC98BC002089D0 /* DSMRAudioRecorderView.h */,
+				DD777A6214EC98BC002089D0 /* DSMRAudioRecorderView.m */,
+				DD777A5F14EC976A002089D0 /* DSMRAudioRecorderView.xib */,
+			);
+			name = "Audio Recording";
+			sourceTree = "<group>";
+		};
+		DDD948F014EE312E0042C9E0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DD43131214D8D26800697249 /* needle.png */,
+				DDE3831A14EDEE27001D5D45 /* waveform.png */,
+				DDE3833514EDFA66001D5D45 /* clear.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		DDD948F114EE313D0042C9E0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DDE3D6E414E9EF9000B71543 /* curl.png */,
+				DDE3D6E614E9F10900B71543 /* loading.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		DDD948F214EE31580042C9E0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DDE3D6ED14EB1AFD00B71543 /* pause.png */,
+				DDE3D6EE14EB1AFD00B71543 /* play.png */,
+				DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */,
+				DD7779DD14EB2D54002089D0 /* back.png */,
+				DDE3D6E814EAE6E000B71543 /* fullscreen.png */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		DDE382FB14EDB015001D5D45 /* Drawing */ = {
