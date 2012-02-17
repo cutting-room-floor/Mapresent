@@ -19,6 +19,7 @@
 
 @interface DSMRTimelineView ()
 
+@property (nonatomic, assign, getter=isPlaying) BOOL playing;
 @property (nonatomic, strong) UIScrollView *scroller;
 @property (nonatomic, strong) DSMRTimeLineViewTimeline *timeline;
 @property (nonatomic, strong) NSTimer *playTimer;
@@ -30,6 +31,7 @@
 @implementation DSMRTimelineView
 
 @synthesize delegate;
+@synthesize playing;
 @synthesize exporting;
 @synthesize scroller;
 @synthesize timeline;
@@ -66,11 +68,21 @@
     {
         [self.playTimer invalidate];
         
+        self.playing = NO;
+        
         if (self.isExporting)
             self.exporting = NO;
     }
     else
-        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 / (self.isExporting ? 8.0 : 64.0)) target:self selector:@selector(firePlayTimer:) userInfo:nil repeats:YES];
+    {
+        self.playing = YES;
+        
+        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 / (self.isExporting ? 8.0 : 64.0)) 
+                                                          target:self 
+                                                        selector:@selector(firePlayTimer:) 
+                                                        userInfo:nil 
+                                                         repeats:YES];
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayToggled object:self];
 }
@@ -98,6 +110,18 @@
     for (DSMRTimelineMarker *marker in [self.delegate timelineMarkers])
     {
         DSMRTimelineMarkerView *markerView = [[DSMRTimelineMarkerView alloc] initWithMarker:marker];
+        
+        UITapGestureRecognizer *markerTap = [[UITapGestureRecognizer alloc] initWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location)
+        {
+            if (state == UIGestureRecognizerStateEnded)
+            {
+                DSMRTimelineMarkerView *markerView = ((DSMRTimelineMarkerView *)((UIGestureRecognizer *)sender).view);
+                
+                [self.delegate timelineMarkerTapped:markerView.marker];
+            }
+        }];
+        
+        [markerView addGestureRecognizer:markerTap];
         
         CGFloat placement;
         

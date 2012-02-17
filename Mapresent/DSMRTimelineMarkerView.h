@@ -12,6 +12,8 @@
 
 @interface DSMRTimelineMarkerView : UIView
 
+@property (nonatomic, readonly, strong) DSMRTimelineMarker *marker;
+
 - (id)initWithMarker:(DSMRTimelineMarker *)marker;
 
 @end

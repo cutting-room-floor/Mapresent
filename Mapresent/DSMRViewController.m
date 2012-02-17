@@ -1296,4 +1296,10 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     return [NSArray arrayWithArray:self.markers];
 }
 
+- (void)timelineMarkerTapped:(DSMRTimelineMarker *)marker
+{
+    if ( ! self.timelineView.isPlaying)
+        [self fireMarkerAtIndex:[self.markers indexOfObject:marker]];
+}
+
 @end
