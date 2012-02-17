@@ -1,5 +1,5 @@
 //
-//  DSMRThemePicker.h
+//  DSMRThemePickerController.h
 //  Mapresent
 //
 //  Created by Justin Miller on 1/31/12.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DSMRThemePicker : UIViewController
+@interface DSMRThemePickerController : UIViewController
 
 @property (nonatomic, strong) NSDictionary *info;
 @property (nonatomic, assign) BOOL transitioning;

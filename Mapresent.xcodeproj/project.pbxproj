@@ -21,8 +21,8 @@
 		DD2B373E14CF7BFB008DE8CB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */; };
 		DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = DD2B375814CF822C008DE8CB /* geography-class.mbtiles */; };
 		DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */; };
-		DD4312F814D8AACA00697249 /* DSMRThemePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4312F614D8AACA00697249 /* DSMRThemePicker.m */; };
-		DD4312F914D8AACA00697249 /* DSMRThemePicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD4312F714D8AACA00697249 /* DSMRThemePicker.xib */; };
+		DD4312F814D8AACA00697249 /* DSMRThemePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4312F614D8AACA00697249 /* DSMRThemePickerController.m */; };
+		DD4312F914D8AACA00697249 /* DSMRThemePickerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD4312F714D8AACA00697249 /* DSMRThemePickerController.xib */; };
 		DD4312FC14D8B1C500697249 /* DSMRWrapperController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */; };
 		DD43131314D8D26800697249 /* needle.png in Resources */ = {isa = PBXBuildFile; fileRef = DD43131214D8D26800697249 /* needle.png */; };
 		DD7779DE14EB2D54002089D0 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = DD7779DD14EB2D54002089D0 /* back.png */; };
@@ -147,9 +147,9 @@
 		DD2B375814CF822C008DE8CB /* geography-class.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class.mbtiles"; sourceTree = "<group>"; };
 		DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineView.h; sourceTree = "<group>"; };
 		DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineView.m; sourceTree = "<group>"; };
-		DD4312F514D8AACA00697249 /* DSMRThemePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRThemePicker.h; sourceTree = "<group>"; };
-		DD4312F614D8AACA00697249 /* DSMRThemePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRThemePicker.m; sourceTree = "<group>"; };
-		DD4312F714D8AACA00697249 /* DSMRThemePicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRThemePicker.xib; sourceTree = "<group>"; };
+		DD4312F514D8AACA00697249 /* DSMRThemePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DSMRThemePickerController.h; sourceTree = "<group>"; };
+		DD4312F614D8AACA00697249 /* DSMRThemePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRThemePickerController.m; sourceTree = "<group>"; };
+		DD4312F714D8AACA00697249 /* DSMRThemePickerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRThemePickerController.xib; sourceTree = "<group>"; };
 		DD4312FA14D8B1C500697249 /* DSMRWrapperController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRWrapperController.h; sourceTree = "<group>"; };
 		DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRWrapperController.m; sourceTree = "<group>"; };
 		DD43131214D8D26800697249 /* needle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = needle.png; sourceTree = "<group>"; };
@@ -331,9 +331,9 @@
 			children = (
 				DD4312FA14D8B1C500697249 /* DSMRWrapperController.h */,
 				DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */,
-				DD4312F514D8AACA00697249 /* DSMRThemePicker.h */,
-				DD4312F614D8AACA00697249 /* DSMRThemePicker.m */,
-				DD4312F714D8AACA00697249 /* DSMRThemePicker.xib */,
+				DD4312F514D8AACA00697249 /* DSMRThemePickerController.h */,
+				DD4312F614D8AACA00697249 /* DSMRThemePickerController.m */,
+				DD4312F714D8AACA00697249 /* DSMRThemePickerController.xib */,
 				DDD948F114EE313D0042C9E0 /* Resources */,
 			);
 			name = Themes;
@@ -579,7 +579,7 @@
 				DD2B335714CF75AE008DE8CB /* DSMRViewController.xib in Resources */,
 				DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */,
 				DD98B6FE14D76C090092882F /* mapbox.geography-class.plist in Resources */,
-				DD4312F914D8AACA00697249 /* DSMRThemePicker.xib in Resources */,
+				DD4312F914D8AACA00697249 /* DSMRThemePickerController.xib in Resources */,
 				DD43131314D8D26800697249 /* needle.png in Resources */,
 				DDE3D6E514E9EF9000B71543 /* curl.png in Resources */,
 				DDE3D6E714E9F10900B71543 /* loading.png in Resources */,
@@ -609,7 +609,7 @@
 				DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */,
 				DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */,
 				DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */,
-				DD4312F814D8AACA00697249 /* DSMRThemePicker.m in Sources */,
+				DD4312F814D8AACA00697249 /* DSMRThemePickerController.m in Sources */,
 				DD4312FC14D8B1C500697249 /* DSMRWrapperController.m in Sources */,
 				DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */,
 				DD777A6314EC98BC002089D0 /* DSMRAudioRecorderView.m in Sources */,

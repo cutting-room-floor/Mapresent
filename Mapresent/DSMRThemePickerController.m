@@ -1,19 +1,19 @@
 //
-//  DSMRThemePicker.m
+//  DSMRThemePickerController.m
 //  Mapresent
 //
 //  Created by Justin Miller on 1/31/12.
 //  Copyright (c) 2012 Development Seed. All rights reserved.
 //
 
-#import "DSMRThemePicker.h"
+#import "DSMRThemePickerController.h"
 
 #import "RMMapView.h"
 #import "RMTileStreamSource.h"
 
 #import <QuartzCore/QuartzCore.h>
 
-@interface DSMRThemePicker ()
+@interface DSMRThemePickerController ()
 
 @property (nonatomic, strong) IBOutlet RMMapView *mapView;
 @property (nonatomic, strong) IBOutlet UILabel *label;
@@ -24,7 +24,7 @@
 
 #pragma mark -
 
-@implementation DSMRThemePicker
+@implementation DSMRThemePickerController
 
 @synthesize info;
 @synthesize transitioning;

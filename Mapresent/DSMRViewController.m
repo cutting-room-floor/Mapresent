@@ -10,7 +10,7 @@
 
 #import "DSMRTimelineMarker.h"
 #import "DSMRWrapperController.h"
-#import "DSMRThemePicker.h"
+#import "DSMRThemePickerController.h"
 #import "DSMRAudioRecorderView.h"
 #import "DSMRDrawingPaletteViewController.h"
 #import "DSMRDrawingSurfaceView.h"
@@ -980,63 +980,62 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
                                        queue:[NSOperationQueue mainQueue]
                            completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error)
                            {
-                               self.themes = [NSMutableArray array];
-                               
-                               for (NSMutableDictionary *tileset in [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil])
+                               if ( ! error)
                                {
-                                   RMTileStreamSource *source = [[RMTileStreamSource alloc] initWithInfo:tileset];
+                                   self.themes = [NSMutableArray array];
                                    
-                                   if ([source coversFullWorld])
+                                   for (NSMutableDictionary *tileset in [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil])
                                    {
-                                       [tileset setObject:[NSString stringWithFormat:@"%i", ([self.themes count] + 1)] forKey:@"pageNumber"];
+                                       RMTileStreamSource *source = [[RMTileStreamSource alloc] initWithInfo:tileset];
                                        
-                                       [self.themes addObject:tileset];
+                                       if ([source coversFullWorld])
+                                       {
+                                           [tileset setObject:[NSString stringWithFormat:@"%i", ([self.themes count] + 1)] forKey:@"pageNumber"];
+                                           
+                                           [self.themes addObject:tileset];
+                                       }
                                    }
-                               }
-                               
-                               self.themePager = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
-                                                                                 navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
-                                                                                               options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMin] forKey:UIPageViewControllerOptionSpineLocationKey]];
-                               
-                               [self.themePager setViewControllers:[NSArray arrayWithObject:[[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:0]]]
-                                                         direction:UIPageViewControllerNavigationDirectionForward 
-                                                          animated:NO 
-                                                        completion:nil];
-                               
-                               ((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).transitioning = NO;
-                               
-                               [(UIPanGestureRecognizer *)[[self.themePager.gestureRecognizers filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF isKindOfClass:%@", [UIPanGestureRecognizer class]]] lastObject] addTarget:self action:@selector(handlePagerPan:)];
-                               
-                               self.themePager.dataSource = self;
-                               self.themePager.delegate   = self;
-                               
-                               DSMRWrapperController *wrapper = [[DSMRWrapperController alloc] initWithRootViewController:self.themePager];
+                                   
+                                   self.themePager = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+                                                                                     navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                                                                                   options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMin] forKey:UIPageViewControllerOptionSpineLocationKey]];
+                                   
+                                   [self.themePager setViewControllers:[NSArray arrayWithObject:[[DSMRThemePickerController alloc] initWithInfo:[self.themes objectAtIndex:0]]]
+                                                             direction:UIPageViewControllerNavigationDirectionForward 
+                                                              animated:NO 
+                                                            completion:nil];
+                                   
+                                   ((DSMRThemePickerController *)[self.themePager.viewControllers objectAtIndex:0]).transitioning = NO;
+                                   
+                                   [(UIPanGestureRecognizer *)[[self.themePager.gestureRecognizers filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF isKindOfClass:%@", [UIPanGestureRecognizer class]]] lastObject] addTarget:self action:@selector(handlePagerPan:)];
+                                   
+                                   self.themePager.dataSource = self;
+                                   self.themePager.delegate   = self;
+                                   
+                                   DSMRWrapperController *wrapper = [[DSMRWrapperController alloc] initWithRootViewController:self.themePager];
 
-                               wrapper.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-                               
-                               wrapper.modalPresentationStyle = UIModalPresentationFullScreen;
-                               wrapper.modalTransitionStyle   = UIModalTransitionStyleCrossDissolve;
-                               
-                               self.themePager.navigationItem.title = @"Choose Theme";
-                               
-                               self.themePager.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                                                                target:self
-                                                                                                                                action:@selector(dismissModalViewControllerAnimated:)];
-                               
-                               self.themePager.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Choose"
-                                                                                                                    style:UIBarButtonItemStyleDone
-                                                                                                                   target:self
-                                                                                                                   action:@selector(addThemeTransition:)];
-                               
-                               NSMutableDictionary *themeInfo = [NSMutableDictionary dictionaryWithDictionary:[self.themes objectAtIndex:0]];
-                               
-                               [themeInfo setObject:((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).snapshot forKey:@"snapshot"];
-                               
-                               self.chosenThemeInfo = [NSDictionary dictionaryWithDictionary:themeInfo];
-                               
-                               [self presentModalViewController:wrapper animated:YES];
-                               
-                               [MBProgressHUD hideHUDForView:self.view.window animated:YES];
+                                   wrapper.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+                                   
+                                   wrapper.modalPresentationStyle = UIModalPresentationFullScreen;
+                                   wrapper.modalTransitionStyle   = UIModalTransitionStyleCrossDissolve;
+                                   
+                                   self.themePager.navigationItem.title = @"Choose Theme";
+                                   
+                                   self.themePager.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                                                                    target:self
+                                                                                                                                    action:@selector(dismissModalViewControllerAnimated:)];
+                                   
+                                   self.themePager.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Choose"
+                                                                                                                        style:UIBarButtonItemStyleDone
+                                                                                                                       target:self
+                                                                                                                       action:@selector(addThemeTransition:)];
+                                   
+                                   self.chosenThemeInfo = [self.themes objectAtIndex:0];
+                                   
+                                   [self presentModalViewController:wrapper animated:YES];
+                                   
+                                   [MBProgressHUD hideHUDForView:self.view.window animated:YES];
+                               }
                            }];
 }
 
@@ -1108,7 +1107,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 
 - (void)updateThemePages
 {
-    DSMRThemePicker *currentThemePicker = (DSMRThemePicker *)[self.themePager.viewControllers lastObject];
+    DSMRThemePickerController *currentThemePicker = (DSMRThemePickerController *)[self.themePager.viewControllers lastObject];
     
     if ([self pageViewController:self.themePager viewControllerAfterViewController:currentThemePicker])
         currentThemePicker.transitioning = NO;
@@ -1117,11 +1116,15 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 - (void)handlePagerPan:(UIGestureRecognizer *)gesture
 {
     if (gesture.state == UIGestureRecognizerStateBegan)
-        ((DSMRThemePicker *)[self.themePager.viewControllers lastObject]).transitioning = YES;
+        ((DSMRThemePickerController *)[self.themePager.viewControllers lastObject]).transitioning = YES;
 }
 
 - (void)addThemeTransition:(id)sender
 {
+    DSMRWrapperController *wrapper    = (DSMRWrapperController *)self.modalViewController;
+    UIPageViewController *pager       = (UIPageViewController *)wrapper.topViewController;
+    DSMRThemePickerController *picker = (DSMRThemePickerController *)[pager.viewControllers lastObject];
+    
     [self dismissModalViewControllerAnimated:YES];
     
     DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
@@ -1129,7 +1132,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     marker.markerType     = DSMRTimelineMarkerTypeTheme;
     marker.timeOffset     = [self.timeLabel.text doubleValue];
     marker.tileSourceInfo = self.chosenThemeInfo;
-    marker.snapshot       = [self.chosenThemeInfo objectForKey:@"snapshot"];
+    marker.snapshot       = picker.snapshot;
     
     [self addMarker:marker refreshingInterface:YES];
 }
@@ -1139,33 +1142,29 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
 {
-    int index = [self.themes indexOfObject:((DSMRThemePicker *)viewController).info];
+    int index = [self.themes indexOfObject:((DSMRThemePickerController *)viewController).info];
     
     if (index > 0)
-        return [[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:(index - 1)]];
+        return [[DSMRThemePickerController alloc] initWithInfo:[self.themes objectAtIndex:(index - 1)]];
         
     return nil;
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
-    int index = [self.themes indexOfObject:((DSMRThemePicker *)viewController).info];
+    int index = [self.themes indexOfObject:((DSMRThemePickerController *)viewController).info];
     
     if (index < [self.themes count] - 1)
-        return [[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:(index + 1)]];
+        return [[DSMRThemePickerController alloc] initWithInfo:[self.themes objectAtIndex:(index + 1)]];
     
     return nil;
 }
 
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
 {
-    int index = [self.themes indexOfObject:((DSMRThemePicker *)[pageViewController.viewControllers lastObject]).info];
+    int index = [self.themes indexOfObject:((DSMRThemePickerController *)[pageViewController.viewControllers lastObject]).info];
 
-    NSMutableDictionary *themeInfo = [NSMutableDictionary dictionaryWithDictionary:[self.themes objectAtIndex:index]];
-    
-    [themeInfo setObject:((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).snapshot forKey:@"snapshot"];
-    
-    self.chosenThemeInfo = [NSDictionary dictionaryWithDictionary:themeInfo];
+    self.chosenThemeInfo = [self.themes objectAtIndex:index];
     
     if (finished)
         [self performSelector:@selector(updateThemePages) withObject:nil afterDelay:0.0];
