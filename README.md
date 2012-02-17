@@ -32,6 +32,8 @@ This stuff is working, albeit roughly.
  * Unlimited-length scrolling timeline. 
  * Device is prevented from auto-sleep when exporting (for now). 
  * Nice-looking audio record interface. 
+ * Drawing variable color & width lines on map and having them appear at points in the presentation.
+ * Clearing all drawings from the map at points in the presentation. 
 
 ### Todo
 
@@ -46,7 +48,7 @@ Pipe dreams of future functionality & things that need to happen.
  * System for tracking requests & completions for tile fetches. This will help speed up the above. 
  * Improve tile caching. No real reason to expire remote tiles unless the user wants to do so manually. 
  * Experiment with 3D transitions using [WhirlyGlobe MBTiles support](http://code.google.com/p/whirlyglobe/issues/detail?id=1). Will require use of local tiles. 
- * Allow for points & lines to be added to the presentation screen. 
+ * Allow for points, shapes, and other annotations to be added to the presentation screen. 
  * Allow embedding of audio, video, and photo media into presentation. 
  * Allow dragging of timeline items directly to rearrange. 
  * Palette UI for editing fine details of selected timeline item (duration, timing curve, volume, etc.)
