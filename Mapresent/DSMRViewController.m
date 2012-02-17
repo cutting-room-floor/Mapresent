@@ -143,6 +143,8 @@
 
 - (IBAction)pressedBack:(id)sender
 {
+    [[self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
     [self.timelineView rewindToBeginning];
 }
 
@@ -423,7 +425,11 @@
         });
     }
     else
+    {
         [self.timelineView togglePlay];
+        
+        [[self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    }
 }
 
 - (NSString *)documentsFolderPath
@@ -1163,19 +1169,46 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 {
     DSMRTimelineMarker *marker = [self.markers objectAtIndex:index];
     
-    if (marker.sourceName)
+    if (marker.markerType == DSMRTimelineMarkerTypeLocation)
     {
         [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:marker.southWest northEast:marker.northEast animated:YES];
     }
-    else if (marker.recording && ! self.timelineView.isExporting) // don't play audio live when exporting
+    else if (marker.markerType == DSMRTimelineMarkerTypeAudio && ! self.timelineView.isExporting) // don't play audio live when exporting
     {
         self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
     
         [self.player play];
     }
-    else if (marker.tileSourceInfo)
+    else if (marker.markerType == DSMRTimelineMarkerTypeTheme)
     {
         [self.mapView performSelector:@selector(setTileSource:) withObject:[[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo] afterDelay:0.0];
+    }
+    else if (marker.markerType == DSMRTimelineMarkerTypeDrawing)
+    {
+        UIImageView *drawing = [[UIImageView alloc] initWithFrame:self.mapView.bounds];
+        
+        drawing.image = marker.drawingImage;
+        
+        drawing.alpha = 0.0;
+        
+        [self.mapView addSubview:drawing];
+        
+        [UIView animateWithDuration:0.25 animations:^(void) { drawing.alpha = 1.0; }];
+    }
+    else if (marker.markerType == DSMRTimelineMarkerTypeDrawingClear)
+    {
+        for (UIImageView *drawingView in [self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }])
+        {
+            [UIView animateWithDuration:0.25
+                             animations:^(void)
+                             {
+                                 drawingView.alpha = 0.0;
+                             }
+                             completion:^(BOOL finished)
+                             {
+                                 [drawingView removeFromSuperview];
+                             }];
+        }
     }
 }
 
@@ -1209,7 +1242,6 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         if (self.isFullScreen)
             [self pressedFullScreen:self];
     }
-    
     else if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
     {
         for (DSMRTimelineMarker *marker in self.markers)
