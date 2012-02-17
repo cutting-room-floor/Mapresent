@@ -69,6 +69,7 @@
 - (void)beginExport;
 - (void)cleanupExportUIWithSuccess:(BOOL)flag;
 - (void)pressedExportCancel:(id)sender;
+- (void)addMarker:(DSMRTimelineMarker *)marker refreshingInterface:(BOOL)shouldRefresh;
 
 @end
 
@@ -843,18 +844,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 #pragma mark -
 #pragma mark Timeline Editing
 
-- (IBAction)pressedMarker:(id)sender
+- (void)addMarker:(DSMRTimelineMarker *)marker refreshingInterface:(BOOL)shouldRefresh
 {
-    DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
-    
-    marker.markerType = DSMRTimelineMarkerTypeLocation;
-    marker.southWest  = self.mapView.latitudeLongitudeBoundingBox.southWest;
-    marker.northEast  = self.mapView.latitudeLongitudeBoundingBox.northEast;
-    marker.center     = self.mapView.centerCoordinate;
-    marker.timeOffset = [self.timeLabel.text doubleValue];
-    marker.sourceName = [self.mapView.tileSource shortName];
-    marker.snapshot   = [self.mapView takeSnapshot];;
-    
     if ([self.markers count])
     {
         int startCount = [self.markers count];
@@ -876,8 +867,24 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     {
         [self.markers addObject:marker];
     }
+    
+    if (shouldRefresh)
+        [self refresh];
+}
 
-    [self refresh];
+- (IBAction)pressedPlace:(id)sender
+{
+    DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
+    
+    marker.markerType = DSMRTimelineMarkerTypeLocation;
+    marker.southWest  = self.mapView.latitudeLongitudeBoundingBox.southWest;
+    marker.northEast  = self.mapView.latitudeLongitudeBoundingBox.northEast;
+    marker.center     = self.mapView.centerCoordinate;
+    marker.timeOffset = [self.timeLabel.text doubleValue];
+    marker.sourceName = [self.mapView.tileSource shortName];
+    marker.snapshot   = [self.mapView takeSnapshot];;
+    
+    [self addMarker:marker refreshingInterface:YES];
 }
 
 - (IBAction)pressedAudio:(id)sender
@@ -949,29 +956,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         
         [[NSFileManager defaultManager] removeItemAtURL:self.recorder.url error:nil];
         
-        if ([self.markers count])
-        {
-            int startCount = [self.markers count];
-            
-            for (DSMRTimelineMarker *otherMarker in [self.markers copy])
-            {
-                if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
-                {
-                    [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
-                    
-                    break;
-                }
-            }
-            
-            if ([self.markers count] == startCount)
-                [self.markers addObject:marker];
-        }
-        else
-        {
-            [self.markers addObject:marker];
-        }
-        
-        [self refresh];
+        [self addMarker:marker refreshingInterface:YES];
     }
 }
 
@@ -1070,29 +1055,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
                                                                                          marker.markerType = DSMRTimelineMarkerTypeDrawingClear;
                                                                                          marker.timeOffset = [self.timeLabel.text doubleValue];
                                                                                      
-                                                                                         if ([self.markers count])
-                                                                                         {
-                                                                                             int startCount = [self.markers count];
-                                                                                             
-                                                                                             for (DSMRTimelineMarker *otherMarker in [self.markers copy])
-                                                                                             {
-                                                                                                 if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
-                                                                                                 {
-                                                                                                     [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
-                                                                                                     
-                                                                                                     break;
-                                                                                                 }
-                                                                                             }
-                                                                                             
-                                                                                             if ([self.markers count] == startCount)
-                                                                                                 [self.markers addObject:marker];
-                                                                                         }
-                                                                                         else
-                                                                                         {
-                                                                                             [self.markers addObject:marker];
-                                                                                         }
-                                                                                         
-                                                                                         // refresh is called implicitly upon dismissal
+                                                                                         [self addMarker:marker refreshingInterface:NO];
                                                                                          
                                                                                          // dismiss drawing palette
                                                                                          //
@@ -1156,29 +1119,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     marker.tileSourceInfo = self.chosenThemeInfo;
     marker.snapshot       = [self.chosenThemeInfo objectForKey:@"snapshot"];
     
-    if ([self.markers count])
-    {
-        int startCount = [self.markers count];
-        
-        for (DSMRTimelineMarker *otherMarker in [self.markers copy])
-        {
-            if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
-            {
-                [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
-                
-                break;
-            }
-        }
-        
-        if ([self.markers count] == startCount)
-            [self.markers addObject:marker];
-    }
-    else
-    {
-        [self.markers addObject:marker];
-    }
-    
-    [self refresh];
+    [self addMarker:marker refreshingInterface:YES];
 }
 
 #pragma mark -
@@ -1249,29 +1190,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         marker.timeOffset = [self.timeLabel.text doubleValue];
         marker.snapshot   = drawingImage;
         
-        // FIXME: this should be abstracted
-        //
-        if ([self.markers count])
-        {
-            int startCount = [self.markers count];
-            
-            for (DSMRTimelineMarker *otherMarker in [self.markers copy])
-            {
-                if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
-                {
-                    [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
-                    
-                    break;
-                }
-            }
-            
-            if ([self.markers count] == startCount)
-                [self.markers addObject:marker];
-        }
-        else
-        {
-            [self.markers addObject:marker];
-        }
+        [self addMarker:marker refreshingInterface:NO];
     }
 
     [self refresh];
