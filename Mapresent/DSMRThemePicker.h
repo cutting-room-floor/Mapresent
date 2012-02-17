@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) NSDictionary *info;
 @property (nonatomic, assign) BOOL transitioning;
+@property (nonatomic, readonly, strong) UIImage *snapshot;
 
 - (id)initWithInfo:(NSDictionary *)info;
 

@@ -734,7 +734,11 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 {
     int index = [self.themes indexOfObject:((DSMRThemePicker *)[pageViewController.viewControllers lastObject]).info];
 
-    self.chosenThemeInfo = [self.themes objectAtIndex:index];
+    NSMutableDictionary *themeInfo = [NSMutableDictionary dictionaryWithDictionary:[self.themes objectAtIndex:index]];
+    
+    [themeInfo setObject:((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).snapshot forKey:@"snapshot"];
+    
+    self.chosenThemeInfo = [NSDictionary dictionaryWithDictionary:themeInfo];
     
     if (finished)
         [self performSelector:@selector(updateThemePages) withObject:nil afterDelay:0.0];
@@ -804,7 +808,11 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
                                                                                                                    target:self
                                                                                                                    action:@selector(addThemeTransition:)];
                                
-                               self.chosenThemeInfo = [self.themes objectAtIndex:0];
+                               NSMutableDictionary *themeInfo = [NSMutableDictionary dictionaryWithDictionary:[self.themes objectAtIndex:0]];
+                               
+                               [themeInfo setObject:((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).snapshot forKey:@"snapshot"];
+                               
+                               self.chosenThemeInfo = [NSDictionary dictionaryWithDictionary:themeInfo];
                                
                                [self presentModalViewController:wrapper animated:YES];
                                
@@ -827,6 +835,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     marker.markerType     = DSMRTimelineMarkerTypeTheme;
     marker.timeOffset     = [self.timeLabel.text doubleValue];
     marker.tileSourceInfo = self.chosenThemeInfo;
+    marker.snapshot       = [self.chosenThemeInfo objectForKey:@"snapshot"];
     
     if ([self.markers count])
     {
@@ -1121,9 +1130,9 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         //
         DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
         
-        marker.markerType   = DSMRTimelineMarkerTypeDrawing;
-        marker.timeOffset   = [self.timeLabel.text doubleValue];
-        marker.drawingImage = drawingImage;
+        marker.markerType = DSMRTimelineMarkerTypeDrawing;
+        marker.timeOffset = [self.timeLabel.text doubleValue];
+        marker.snapshot   = drawingImage;
         
         // FIXME: this should be abstracted
         //
@@ -1179,7 +1188,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     {
         UIImageView *drawing = [[UIImageView alloc] initWithFrame:self.mapView.bounds];
         
-        drawing.image = marker.drawingImage;
+        drawing.image = marker.snapshot;
         
         drawing.alpha = 0.0;
         

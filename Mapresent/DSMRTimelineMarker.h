@@ -30,6 +30,5 @@ typedef enum {
 @property (nonatomic, strong) NSData *recording;
 @property (nonatomic, assign) NSTimeInterval duration;
 @property (nonatomic, strong) NSDictionary *tileSourceInfo;
-@property (nonatomic, strong) UIImage *drawingImage;
 
 @end

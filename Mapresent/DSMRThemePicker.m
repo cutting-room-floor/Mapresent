@@ -70,6 +70,11 @@
 
 #pragma mark -
 
+- (UIImage *)snapshot
+{
+    return [self.mapView takeSnapshot];
+}
+
 - (void)setTransitioning:(BOOL)flag
 {
     transitioning = flag;

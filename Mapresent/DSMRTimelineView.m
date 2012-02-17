@@ -105,7 +105,7 @@
         {
             case DSMRTimelineMarkerTypeLocation:
             {
-                placement = 100;
+                placement = 85;
                 break;
             }
             case DSMRTimelineMarkerTypeAudio:
@@ -115,13 +115,13 @@
             }
             case DSMRTimelineMarkerTypeTheme:
             {
-                placement = 160;
+                placement = 175;
                 break;
             }
             case DSMRTimelineMarkerTypeDrawing:
             case DSMRTimelineMarkerTypeDrawingClear:
             {
-                placement = 190;
+                placement = 220;
                 break;
             }
         }
