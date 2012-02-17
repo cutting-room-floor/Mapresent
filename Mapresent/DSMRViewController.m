@@ -95,6 +95,9 @@
 @synthesize processingQueue;
 @synthesize presentationDuration;
 
+#pragma mark -
+#pragma mark Lifecycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -140,6 +143,61 @@
 }
 
 #pragma mark -
+#pragma mark Miscellaneous
+
+- (BOOL)isFullScreen
+{
+    return (self.mapView.bounds.size.width == self.view.bounds.size.width);
+}
+
+- (NSString *)documentsFolderPath
+{
+    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+}
+
+- (void)refresh
+{
+    NSTimeInterval endBumperDuration = 5.0;
+    
+    DSMRTimelineMarker *lastMarker = [self.markers lastObject];
+    
+    switch (lastMarker.markerType)
+    {
+        case DSMRTimelineMarkerTypeAudio:
+        {
+            self.presentationDuration = lastMarker.timeOffset = lastMarker.duration + endBumperDuration;
+            break;
+        }
+        default:
+        {
+            self.presentationDuration = lastMarker.timeOffset + endBumperDuration;
+            break;
+        }
+    }
+    
+    [self.markerTableView reloadData];
+    
+    [self.timelineView redrawMarkers];
+    
+    [self saveState:self];
+}
+
+- (void)saveState:(id)sender
+{
+    NSMutableArray *savedMarkers = [NSMutableArray array];
+    
+    for (DSMRTimelineMarker *marker in self.markers)
+        [savedMarkers addObject:[NSKeyedArchiver archivedDataWithRootObject:marker]];
+    
+    [[NSUserDefaults standardUserDefaults] setObject:savedMarkers forKey:@"markers"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:[[self documentsFolderPath] stringByAppendingPathComponent:@"Document.mapresent"]
+                                                                         atomically:YES];
+}
+
+#pragma mark -
+#pragma mark Presentation Controls
 
 - (IBAction)pressedBack:(id)sender
 {
@@ -153,11 +211,6 @@
     [self pressedFullScreen:self];
     
     [self performSelector:@selector(pressedPlay:) withObject:self afterDelay:1.0];
-}
-
-- (BOOL)isFullScreen
-{
-    return (self.mapView.bounds.size.width == self.view.bounds.size.width);
 }
 
 - (void)pressedExportCancel:(id)sender
@@ -432,16 +485,6 @@
     }
 }
 
-- (NSString *)documentsFolderPath
-{
-    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-}
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
-{
-    [self dismissModalViewControllerAnimated:YES];
-}
-
 - (IBAction)pressedFullScreen:(id)sender
 {
     CGFloat inspectorTranslation;
@@ -480,6 +523,89 @@
                      completion:nil];
 }
 
+#pragma mark -
+#pragma mark Playback
+
+- (void)fireMarkerAtIndex:(NSInteger)index
+{
+    DSMRTimelineMarker *marker = [self.markers objectAtIndex:index];
+    
+    if (marker.markerType == DSMRTimelineMarkerTypeLocation)
+    {
+        [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:marker.southWest northEast:marker.northEast animated:YES];
+    }
+    else if (marker.markerType == DSMRTimelineMarkerTypeAudio && ! self.timelineView.isExporting) // don't play audio live when exporting
+    {
+        self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
+        
+        [self.player play];
+    }
+    else if (marker.markerType == DSMRTimelineMarkerTypeTheme)
+    {
+        [self.mapView performSelector:@selector(setTileSource:) withObject:[[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo] afterDelay:0.0];
+    }
+    else if (marker.markerType == DSMRTimelineMarkerTypeDrawing)
+    {
+        UIImageView *drawing = [[UIImageView alloc] initWithFrame:self.mapView.bounds];
+        
+        drawing.image = marker.snapshot;
+        
+        drawing.alpha = 0.0;
+        
+        [self.mapView addSubview:drawing];
+        
+        [UIView animateWithDuration:(self.timelineView.isExporting ? 2.0 : 0.25) animations:^(void) { drawing.alpha = 1.0; }];
+    }
+    else if (marker.markerType == DSMRTimelineMarkerTypeDrawingClear)
+    {
+        for (UIImageView *drawingView in [self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }])
+        {
+            [UIView animateWithDuration:(self.timelineView.isExporting ? 2.0 : 0.25)
+                             animations:^(void)
+             {
+                 drawingView.alpha = 0.0;
+             }
+                             completion:^(BOOL finished)
+             {
+                 [drawingView removeFromSuperview];
+             }];
+        }
+    }
+}
+
+- (void)playToggled:(NSNotification *)notification
+{
+    [self.playButton setImage:[UIImage imageNamed:([self.playButton.currentImage isEqual:[UIImage imageNamed:@"play.png"]] ? @"pause.png" : @"play.png")] forState:UIControlStateNormal];
+}
+
+- (void)playProgressed:(NSNotification *)notification
+{
+    self.timeLabel.text = [NSString stringWithFormat:@"%f", [((NSNumber *)[notification object]) floatValue] / 64];
+    
+    if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [self.timeLabel.text intValue] >= self.presentationDuration)
+    {
+        [self pressedPlay:self];
+        
+        if (self.isFullScreen)
+            [self pressedFullScreen:self];
+    }
+    else if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
+    {
+        for (DSMRTimelineMarker *marker in self.markers)
+        {
+            if (marker.timeOffset == [self.timeLabel.text doubleValue])
+            {
+                [self fireMarkerAtIndex:[self.markers indexOfObject:marker]];
+                
+                break;
+            }
+        }
+    }
+}
+
+#pragma mark -
+#pragma mark Video Export
+
 - (CVPixelBufferRef )pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
 {
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -507,71 +633,6 @@
     CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
     
     return pxbuffer;
-}
-
-- (IBAction)pressedShare:(id)sender
-{
-    NSString *latestVideoPath = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
-    
-    CGRect attachRect = CGRectMake(696, 435, 1, 1);
-    
-    UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:nil];
-    
-    [actionSheet addButtonWithTitle:@"Export To Video" handler:^(void) { [self beginExport]; }];
-    
-    if ([[NSFileManager defaultManager] fileExistsAtPath:latestVideoPath])
-    {
-        [actionSheet addButtonWithTitle:@"View Latest Video"       handler:^(void) { [self playLatestMovie]; }];
-        [actionSheet addButtonWithTitle:@"Email Latest Video"      handler:^(void) { [self emailLatestMovie]; }];
-        
-        [actionSheet addButtonWithTitle:@"Open Latest Video In..." handler:^(void)
-        {
-            UIDocumentInteractionController *docOpener = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:latestVideoPath]];
-        
-            if ( ! [docOpener presentOpenInMenuFromRect:attachRect inView:self.view animated:YES])
-            {
-                UIAlertView *alert = [UIAlertView alertViewWithTitle:@"No Compatible Apps" 
-                                                             message:@"You don't have any apps installed that are able to open external videos."];
-                
-                [alert addButtonWithTitle:@"OK"];
-                
-                [alert show];
-            }
-        }];
-    }
-    
-    [actionSheet showFromRect:attachRect inView:self.view animated:YES];
-}
-
-- (void)playLatestMovie
-{
-    NSURL *movieURL = [NSURL fileURLWithPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"]];
-    
-    MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
-    
-    moviePresenter.moviePlayer.shouldAutoplay = NO;
-    
-    [self presentMoviePlayerViewControllerAnimated:moviePresenter];
-}
-
-- (void)emailLatestMovie
-{
-    NSString *movieFile = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
-
-    MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
-    
-    [mailer setSubject:@"Mapresent!"];
-    [mailer setMessageBody:@"<p>&nbsp;</p><p>Powered by <a href=\"http://mapbox.com\">MapBox</a></p>" 
-                    isHTML:YES];
-    [mailer addAttachmentData:[NSData dataWithContentsOfFile:movieFile]
-                     mimeType:@"video/mp4"
-                     fileName:[movieFile lastPathComponent]];
-    
-    mailer.modalPresentationStyle = UIModalPresentationPageSheet;
-    
-    mailer.mailComposeDelegate = self;
-    
-    [self presentModalViewController:mailer animated:YES];
 }
 
 - (void)beginExport
@@ -710,132 +771,88 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     i++;
 }
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
+#pragma mark -
+#pragma mark Sharing
+
+- (IBAction)pressedShare:(id)sender
 {
-    int index = [self.themes indexOfObject:((DSMRThemePicker *)viewController).info];
+    NSString *latestVideoPath = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
     
-    if (index > 0)
-        return [[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:(index - 1)]];
+    CGRect attachRect = CGRectMake(696, 435, 1, 1);
+    
+    UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:nil];
+    
+    [actionSheet addButtonWithTitle:@"Export To Video" handler:^(void) { [self beginExport]; }];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:latestVideoPath])
+    {
+        [actionSheet addButtonWithTitle:@"View Latest Video"       handler:^(void) { [self playLatestMovie]; }];
+        [actionSheet addButtonWithTitle:@"Email Latest Video"      handler:^(void) { [self emailLatestMovie]; }];
         
-    return nil;
+        [actionSheet addButtonWithTitle:@"Open Latest Video In..." handler:^(void)
+        {
+            UIDocumentInteractionController *docOpener = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:latestVideoPath]];
+        
+            if ( ! [docOpener presentOpenInMenuFromRect:attachRect inView:self.view animated:YES])
+            {
+                UIAlertView *alert = [UIAlertView alertViewWithTitle:@"No Compatible Apps" 
+                                                             message:@"You don't have any apps installed that are able to open external videos."];
+                
+                [alert addButtonWithTitle:@"OK"];
+                
+                [alert show];
+            }
+        }];
+    }
+    
+    [actionSheet showFromRect:attachRect inView:self.view animated:YES];
 }
 
-- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
+- (void)playLatestMovie
 {
-    int index = [self.themes indexOfObject:((DSMRThemePicker *)viewController).info];
+    NSURL *movieURL = [NSURL fileURLWithPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"]];
     
-    if (index < [self.themes count] - 1)
-        return [[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:(index + 1)]];
+    MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
     
-    return nil;
+    moviePresenter.moviePlayer.shouldAutoplay = NO;
+    
+    [self presentMoviePlayerViewControllerAnimated:moviePresenter];
 }
 
-- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
+- (void)emailLatestMovie
 {
-    int index = [self.themes indexOfObject:((DSMRThemePicker *)[pageViewController.viewControllers lastObject]).info];
+    NSString *movieFile = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
 
-    NSMutableDictionary *themeInfo = [NSMutableDictionary dictionaryWithDictionary:[self.themes objectAtIndex:index]];
+    MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
     
-    [themeInfo setObject:((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).snapshot forKey:@"snapshot"];
+    [mailer setSubject:@"Mapresent!"];
+    [mailer setMessageBody:@"<p>&nbsp;</p><p>Powered by <a href=\"http://mapbox.com\">MapBox</a></p>" 
+                    isHTML:YES];
+    [mailer addAttachmentData:[NSData dataWithContentsOfFile:movieFile]
+                     mimeType:@"video/mp4"
+                     fileName:[movieFile lastPathComponent]];
     
-    self.chosenThemeInfo = [NSDictionary dictionaryWithDictionary:themeInfo];
+    mailer.modalPresentationStyle = UIModalPresentationPageSheet;
     
-    if (finished)
-        [self performSelector:@selector(updateThemePages) withObject:nil afterDelay:0.0];
+    mailer.mailComposeDelegate = self;
+    
+    [self presentModalViewController:mailer animated:YES];
 }
 
-- (void)updateThemePages
-{
-    DSMRThemePicker *currentThemePicker = (DSMRThemePicker *)[self.themePager.viewControllers lastObject];
-    
-    if ([self pageViewController:self.themePager viewControllerAfterViewController:currentThemePicker])
-        currentThemePicker.transitioning = NO;
-}
+#pragma mark -
+#pragma mark Timeline Editing
 
-- (IBAction)pressedTheme:(id)sender
+- (IBAction)pressedMarker:(id)sender
 {
-    [MBProgressHUD showHUDAddedTo:self.view.window animated:YES].labelText = @"Loading themes...";
-    
-    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://api.tiles.mapbox.com/v1/mapbox/tilesets.json"]]
-                                       queue:[NSOperationQueue mainQueue]
-                           completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error)
-                           {
-                               self.themes = [NSMutableArray array];
-                               
-                               for (NSMutableDictionary *tileset in [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil])
-                               {
-                                   RMTileStreamSource *source = [[RMTileStreamSource alloc] initWithInfo:tileset];
-                                   
-                                   if ([source coversFullWorld])
-                                   {
-                                       [tileset setObject:[NSString stringWithFormat:@"%i", ([self.themes count] + 1)] forKey:@"pageNumber"];
-                                       
-                                       [self.themes addObject:tileset];
-                                   }
-                               }
-                               
-                               self.themePager = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
-                                                                                 navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
-                                                                                               options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMin] forKey:UIPageViewControllerOptionSpineLocationKey]];
-                               
-                               [self.themePager setViewControllers:[NSArray arrayWithObject:[[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:0]]]
-                                                         direction:UIPageViewControllerNavigationDirectionForward 
-                                                          animated:NO 
-                                                        completion:nil];
-                               
-                               ((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).transitioning = NO;
-                               
-                               [(UIPanGestureRecognizer *)[[self.themePager.gestureRecognizers filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF isKindOfClass:%@", [UIPanGestureRecognizer class]]] lastObject] addTarget:self action:@selector(handlePagerPan:)];
-                               
-                               self.themePager.dataSource = self;
-                               self.themePager.delegate   = self;
-                               
-                               DSMRWrapperController *wrapper = [[DSMRWrapperController alloc] initWithRootViewController:self.themePager];
-
-                               wrapper.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-                               
-                               wrapper.modalPresentationStyle = UIModalPresentationFullScreen;
-                               wrapper.modalTransitionStyle   = UIModalTransitionStyleCrossDissolve;
-                               
-                               self.themePager.navigationItem.title = @"Choose Theme";
-                               
-                               self.themePager.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                                                                target:self
-                                                                                                                                action:@selector(dismissModalViewControllerAnimated:)];
-                               
-                               self.themePager.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Choose"
-                                                                                                                    style:UIBarButtonItemStyleDone
-                                                                                                                   target:self
-                                                                                                                   action:@selector(addThemeTransition:)];
-                               
-                               NSMutableDictionary *themeInfo = [NSMutableDictionary dictionaryWithDictionary:[self.themes objectAtIndex:0]];
-                               
-                               [themeInfo setObject:((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).snapshot forKey:@"snapshot"];
-                               
-                               self.chosenThemeInfo = [NSDictionary dictionaryWithDictionary:themeInfo];
-                               
-                               [self presentModalViewController:wrapper animated:YES];
-                               
-                               [MBProgressHUD hideHUDForView:self.view.window animated:YES];
-                           }];
-}
-
-- (void)handlePagerPan:(UIGestureRecognizer *)gesture
-{
-    if (gesture.state == UIGestureRecognizerStateBegan)
-        ((DSMRThemePicker *)[self.themePager.viewControllers lastObject]).transitioning = YES;
-}
-
-- (void)addThemeTransition:(id)sender
-{
-    [self dismissModalViewControllerAnimated:YES];
-    
     DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
     
-    marker.markerType     = DSMRTimelineMarkerTypeTheme;
-    marker.timeOffset     = [self.timeLabel.text doubleValue];
-    marker.tileSourceInfo = self.chosenThemeInfo;
-    marker.snapshot       = [self.chosenThemeInfo objectForKey:@"snapshot"];
+    marker.markerType = DSMRTimelineMarkerTypeLocation;
+    marker.southWest  = self.mapView.latitudeLongitudeBoundingBox.southWest;
+    marker.northEast  = self.mapView.latitudeLongitudeBoundingBox.northEast;
+    marker.center     = self.mapView.centerCoordinate;
+    marker.timeOffset = [self.timeLabel.text doubleValue];
+    marker.sourceName = [self.mapView.tileSource shortName];
+    marker.snapshot   = [self.mapView takeSnapshot];;
     
     if ([self.markers count])
     {
@@ -858,35 +875,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     {
         [self.markers addObject:marker];
     }
-    
-    [self refresh];
-}
 
-- (void)refresh
-{
-    NSTimeInterval endBumperDuration = 5.0;
-    
-    DSMRTimelineMarker *lastMarker = [self.markers lastObject];
-    
-    switch (lastMarker.markerType)
-    {
-        case DSMRTimelineMarkerTypeAudio:
-        {
-            self.presentationDuration = lastMarker.timeOffset = lastMarker.duration + endBumperDuration;
-            break;
-        }
-        default:
-        {
-            self.presentationDuration = lastMarker.timeOffset + endBumperDuration;
-            break;
-        }
-    }
-    
-    [self.markerTableView reloadData];
-    
-    [self.timelineView redrawMarkers];
-    
-    [self saveState:self];
+    [self refresh];
 }
 
 - (IBAction)pressedAudio:(id)sender
@@ -984,41 +974,72 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     }
 }
 
-- (IBAction)pressedMarker:(id)sender
+- (IBAction)pressedTheme:(id)sender
 {
-    DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
+    [MBProgressHUD showHUDAddedTo:self.view.window animated:YES].labelText = @"Loading themes...";
     
-    marker.markerType = DSMRTimelineMarkerTypeLocation;
-    marker.southWest  = self.mapView.latitudeLongitudeBoundingBox.southWest;
-    marker.northEast  = self.mapView.latitudeLongitudeBoundingBox.northEast;
-    marker.center     = self.mapView.centerCoordinate;
-    marker.timeOffset = [self.timeLabel.text doubleValue];
-    marker.sourceName = [self.mapView.tileSource shortName];
-    marker.snapshot   = [self.mapView takeSnapshot];;
-    
-    if ([self.markers count])
-    {
-        int startCount = [self.markers count];
-        
-        for (DSMRTimelineMarker *otherMarker in [self.markers copy])
-        {
-            if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
-            {
-                [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
-                
-                break;
-            }
-        }
-        
-        if ([self.markers count] == startCount)
-            [self.markers addObject:marker];
-    }
-    else
-    {
-        [self.markers addObject:marker];
-    }
+    [NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://api.tiles.mapbox.com/v1/mapbox/tilesets.json"]]
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error)
+                           {
+                               self.themes = [NSMutableArray array];
+                               
+                               for (NSMutableDictionary *tileset in [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil])
+                               {
+                                   RMTileStreamSource *source = [[RMTileStreamSource alloc] initWithInfo:tileset];
+                                   
+                                   if ([source coversFullWorld])
+                                   {
+                                       [tileset setObject:[NSString stringWithFormat:@"%i", ([self.themes count] + 1)] forKey:@"pageNumber"];
+                                       
+                                       [self.themes addObject:tileset];
+                                   }
+                               }
+                               
+                               self.themePager = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl
+                                                                                 navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
+                                                                                               options:[NSDictionary dictionaryWithObject:[NSNumber numberWithInteger:UIPageViewControllerSpineLocationMin] forKey:UIPageViewControllerOptionSpineLocationKey]];
+                               
+                               [self.themePager setViewControllers:[NSArray arrayWithObject:[[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:0]]]
+                                                         direction:UIPageViewControllerNavigationDirectionForward 
+                                                          animated:NO 
+                                                        completion:nil];
+                               
+                               ((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).transitioning = NO;
+                               
+                               [(UIPanGestureRecognizer *)[[self.themePager.gestureRecognizers filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF isKindOfClass:%@", [UIPanGestureRecognizer class]]] lastObject] addTarget:self action:@selector(handlePagerPan:)];
+                               
+                               self.themePager.dataSource = self;
+                               self.themePager.delegate   = self;
+                               
+                               DSMRWrapperController *wrapper = [[DSMRWrapperController alloc] initWithRootViewController:self.themePager];
 
-    [self refresh];
+                               wrapper.navigationBar.barStyle = UIBarStyleBlackTranslucent;
+                               
+                               wrapper.modalPresentationStyle = UIModalPresentationFullScreen;
+                               wrapper.modalTransitionStyle   = UIModalTransitionStyleCrossDissolve;
+                               
+                               self.themePager.navigationItem.title = @"Choose Theme";
+                               
+                               self.themePager.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                                                                                target:self
+                                                                                                                                action:@selector(dismissModalViewControllerAnimated:)];
+                               
+                               self.themePager.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Choose"
+                                                                                                                    style:UIBarButtonItemStyleDone
+                                                                                                                   target:self
+                                                                                                                   action:@selector(addThemeTransition:)];
+                               
+                               NSMutableDictionary *themeInfo = [NSMutableDictionary dictionaryWithDictionary:[self.themes objectAtIndex:0]];
+                               
+                               [themeInfo setObject:((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).snapshot forKey:@"snapshot"];
+                               
+                               self.chosenThemeInfo = [NSDictionary dictionaryWithDictionary:themeInfo];
+                               
+                               [self presentModalViewController:wrapper animated:YES];
+                               
+                               [MBProgressHUD hideHUDForView:self.view.window animated:YES];
+                           }];
 }
 
 - (IBAction)pressedDraw:(id)sender
@@ -1106,6 +1127,99 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     [UIView animateWithDuration:0.25 animations:^(void) { drawingView.alpha = 1.0; }];
 }
 
+#pragma mark -
+#pragma mark Theme Picking
+
+- (void)updateThemePages
+{
+    DSMRThemePicker *currentThemePicker = (DSMRThemePicker *)[self.themePager.viewControllers lastObject];
+    
+    if ([self pageViewController:self.themePager viewControllerAfterViewController:currentThemePicker])
+        currentThemePicker.transitioning = NO;
+}
+
+- (void)handlePagerPan:(UIGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateBegan)
+        ((DSMRThemePicker *)[self.themePager.viewControllers lastObject]).transitioning = YES;
+}
+
+- (void)addThemeTransition:(id)sender
+{
+    [self dismissModalViewControllerAnimated:YES];
+    
+    DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
+    
+    marker.markerType     = DSMRTimelineMarkerTypeTheme;
+    marker.timeOffset     = [self.timeLabel.text doubleValue];
+    marker.tileSourceInfo = self.chosenThemeInfo;
+    marker.snapshot       = [self.chosenThemeInfo objectForKey:@"snapshot"];
+    
+    if ([self.markers count])
+    {
+        int startCount = [self.markers count];
+        
+        for (DSMRTimelineMarker *otherMarker in [self.markers copy])
+        {
+            if ([self.timeLabel.text doubleValue] < otherMarker.timeOffset)
+            {
+                [self.markers insertObject:marker atIndex:[self.markers indexOfObject:otherMarker]];
+                
+                break;
+            }
+        }
+        
+        if ([self.markers count] == startCount)
+            [self.markers addObject:marker];
+    }
+    else
+    {
+        [self.markers addObject:marker];
+    }
+    
+    [self refresh];
+}
+
+#pragma mark -
+#pragma mark UIPageViewControllerDelegate
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController
+{
+    int index = [self.themes indexOfObject:((DSMRThemePicker *)viewController).info];
+    
+    if (index > 0)
+        return [[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:(index - 1)]];
+        
+    return nil;
+}
+
+- (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
+{
+    int index = [self.themes indexOfObject:((DSMRThemePicker *)viewController).info];
+    
+    if (index < [self.themes count] - 1)
+        return [[DSMRThemePicker alloc] initWithInfo:[self.themes objectAtIndex:(index + 1)]];
+    
+    return nil;
+}
+
+- (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed
+{
+    int index = [self.themes indexOfObject:((DSMRThemePicker *)[pageViewController.viewControllers lastObject]).info];
+
+    NSMutableDictionary *themeInfo = [NSMutableDictionary dictionaryWithDictionary:[self.themes objectAtIndex:index]];
+    
+    [themeInfo setObject:((DSMRThemePicker *)[self.themePager.viewControllers objectAtIndex:0]).snapshot forKey:@"snapshot"];
+    
+    self.chosenThemeInfo = [NSDictionary dictionaryWithDictionary:themeInfo];
+    
+    if (finished)
+        [self performSelector:@selector(updateThemePages) withObject:nil afterDelay:0.0];
+}
+
+#pragma mark -
+#pragma mark UIPopoverControllerDelegate
+
 - (BOOL)popoverControllerShouldDismissPopover:(UIPopoverController *)popoverController
 {
     // dismissed draw palette
@@ -1165,99 +1279,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 }
 
 #pragma mark -
-
-- (void)fireMarkerAtIndex:(NSInteger)index
-{
-    DSMRTimelineMarker *marker = [self.markers objectAtIndex:index];
-    
-    if (marker.markerType == DSMRTimelineMarkerTypeLocation)
-    {
-        [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:marker.southWest northEast:marker.northEast animated:YES];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeAudio && ! self.timelineView.isExporting) // don't play audio live when exporting
-    {
-        self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
-    
-        [self.player play];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeTheme)
-    {
-        [self.mapView performSelector:@selector(setTileSource:) withObject:[[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo] afterDelay:0.0];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeDrawing)
-    {
-        UIImageView *drawing = [[UIImageView alloc] initWithFrame:self.mapView.bounds];
-        
-        drawing.image = marker.snapshot;
-        
-        drawing.alpha = 0.0;
-        
-        [self.mapView addSubview:drawing];
-        
-        [UIView animateWithDuration:(self.timelineView.isExporting ? 2.0 : 0.25) animations:^(void) { drawing.alpha = 1.0; }];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeDrawingClear)
-    {
-        for (UIImageView *drawingView in [self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }])
-        {
-            [UIView animateWithDuration:(self.timelineView.isExporting ? 2.0 : 0.25)
-                             animations:^(void)
-                             {
-                                 drawingView.alpha = 0.0;
-                             }
-                             completion:^(BOOL finished)
-                             {
-                                 [drawingView removeFromSuperview];
-                             }];
-        }
-    }
-}
-
-- (void)saveState:(id)sender
-{
-    NSMutableArray *savedMarkers = [NSMutableArray array];
-    
-    for (DSMRTimelineMarker *marker in self.markers)
-        [savedMarkers addObject:[NSKeyedArchiver archivedDataWithRootObject:marker]];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:savedMarkers forKey:@"markers"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:[[self documentsFolderPath] stringByAppendingPathComponent:@"Document.mapresent"]
-                                                                         atomically:YES];
-}
-
-- (void)playToggled:(NSNotification *)notification
-{
-    [self.playButton setImage:[UIImage imageNamed:([self.playButton.currentImage isEqual:[UIImage imageNamed:@"play.png"]] ? @"pause.png" : @"play.png")] forState:UIControlStateNormal];
-}
-
-- (void)playProgressed:(NSNotification *)notification
-{
-    self.timeLabel.text = [NSString stringWithFormat:@"%f", [((NSNumber *)[notification object]) floatValue] / 64];
-    
-    if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [self.timeLabel.text intValue] >= self.presentationDuration)
-    {
-        [self pressedPlay:self];
-        
-        if (self.isFullScreen)
-            [self pressedFullScreen:self];
-    }
-    else if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
-    {
-        for (DSMRTimelineMarker *marker in self.markers)
-        {
-            if (marker.timeOffset == [self.timeLabel.text doubleValue])
-            {
-                [self fireMarkerAtIndex:[self.markers indexOfObject:marker]];
-                
-                break;
-            }
-        }
-    }
-}
-
-#pragma mark -
+#pragma mark RMMapViewDelegate
 
 - (void)mapViewRegionDidChange:(RMMapView *)mapView
 {
@@ -1265,6 +1287,15 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 }
 
 #pragma mark -
+#pragma mark MFMailComposeViewControllerDelegate
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+#pragma mark -
+#pragma mark UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -1326,6 +1357,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 }
 
 #pragma mark -
+#pragma mark UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1335,6 +1367,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 }
 
 #pragma mark -
+#pragma mark DSMRTimelineViewDelegate
 
 - (NSArray *)timelineMarkers
 {
