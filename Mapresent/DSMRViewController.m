@@ -162,13 +162,23 @@
 {
     NSTimeInterval endBumperDuration = 5.0;
     
-    DSMRTimelineMarker *lastMarker = [self.markers lastObject];
+    NSArray *sortedMarkers = [self.markers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2)
+    {
+        if ([[obj1 valueForKey:@"timeOffset"] doubleValue] > [[obj2 valueForKey:@"timeOffset"] doubleValue])
+            return NSOrderedDescending;
+        if ([[obj1 valueForKey:@"timeOffset"] doubleValue] < [[obj2 valueForKey:@"timeOffset"] doubleValue])
+            return NSOrderedAscending;
+        
+        return NSOrderedSame;
+    }];
+
+    DSMRTimelineMarker *lastMarker = [sortedMarkers lastObject];
     
     switch (lastMarker.markerType)
     {
         case DSMRTimelineMarkerTypeAudio:
         {
-            self.presentationDuration = lastMarker.timeOffset = lastMarker.duration + endBumperDuration;
+            self.presentationDuration = lastMarker.timeOffset + lastMarker.duration + endBumperDuration;
             break;
         }
         default:
