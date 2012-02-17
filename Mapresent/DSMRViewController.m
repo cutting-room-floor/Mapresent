@@ -896,10 +896,10 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         [[AVAudioSession sharedInstance] setActive:YES error:nil];
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
         
-        NSURL *recordURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@.rec", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]]];
+        NSURL *recordURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@.dat", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]]];
         
         NSDictionary *settings = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  [NSNumber numberWithFloat:8000.0],                  AVSampleRateKey,
+                                  [NSNumber numberWithFloat:16000.0],                 AVSampleRateKey,
                                   [NSNumber numberWithInt:kAudioFormatAppleLossless], AVFormatIDKey,
                                   [NSNumber numberWithInt:1],                         AVNumberOfChannelsKey,
                                   [NSNumber numberWithInt:AVAudioQualityMax],         AVEncoderAudioQualityKey,
