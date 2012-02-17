@@ -977,14 +977,6 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 
 - (IBAction)pressedMarker:(id)sender
 {
-    UIGraphicsBeginImageContext(self.mapView.bounds.size);
-    
-    [self.mapView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    UIImage *snapshot = UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
-    
     DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
     
     marker.markerType = DSMRTimelineMarkerTypeLocation;
@@ -993,7 +985,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     marker.center     = self.mapView.centerCoordinate;
     marker.timeOffset = [self.timeLabel.text doubleValue];
     marker.sourceName = [self.mapView.tileSource shortName];
-    marker.snapshot   = snapshot;
+    marker.snapshot   = [self.mapView takeSnapshot];;
     
     if ([self.markers count])
     {

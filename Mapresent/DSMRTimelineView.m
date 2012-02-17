@@ -9,8 +9,7 @@
 #import "DSMRTimelineView.h"
 
 #import "DSMRTimelineMarker.h"
-
-#import "UIImage-Extensions.h"
+#import "DSMRTimelineMarkerView.h"
 
 @interface DSMRTimeLineViewTimeline : UIView
 
@@ -98,46 +97,36 @@
     
     for (DSMRTimelineMarker *marker in [self.delegate timelineMarkers])
     {
-        UIView *markerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 20)];
+        DSMRTimelineMarkerView *markerView = [[DSMRTimelineMarkerView alloc] initWithMarker:marker];
         
-        CGFloat placement, width;
+        CGFloat placement;
         
-        if (marker.markerType == DSMRTimelineMarkerTypeLocation)
+        switch (marker.markerType)
         {
-            markerView.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2];
-            
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[marker.snapshot imageByScalingProportionallyToSize:CGSizeMake(18, 18)]];
-            
-            imageView.center = CGPointMake(11, 11);
-            
-            [markerView addSubview:imageView];
-            
-            placement = 100;
-            width     = markerView.frame.size.width;
-        }
-        else if (marker.markerType == DSMRTimelineMarkerTypeAudio)
-        {
-            markerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.2];
-            
-            placement = 130;
-            width     = marker.duration * 64.0;
-        }
-        else if (marker.markerType == DSMRTimelineMarkerTypeTheme)
-        {
-            markerView.backgroundColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.2];
-            
-            placement = 160;
-            width     = markerView.frame.size.width;
-        }
-        else if (marker.markerType == DSMRTimelineMarkerTypeDrawing || marker.markerType == DSMRTimelineMarkerTypeDrawingClear)
-        {
-            markerView.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:1.0 alpha:0.2];
-            
-            placement = 190;
-            width     = markerView.frame.size.width;
+            case DSMRTimelineMarkerTypeLocation:
+            {
+                placement = 100;
+                break;
+            }
+            case DSMRTimelineMarkerTypeAudio:
+            {
+                placement = 130;
+                break;
+            }
+            case DSMRTimelineMarkerTypeTheme:
+            {
+                placement = 160;
+                break;
+            }
+            case DSMRTimelineMarkerTypeDrawing:
+            case DSMRTimelineMarkerTypeDrawingClear:
+            {
+                placement = 190;
+                break;
+            }
         }
         
-        markerView.frame = CGRectMake((marker.timeOffset * 64.0) + 512.0, placement, width, markerView.frame.size.height);
+        markerView.frame = CGRectMake((marker.timeOffset * 64.0) + 512.0, placement, markerView.frame.size.width, markerView.frame.size.height);
         
         [self.timeline addSubview:markerView];
     }

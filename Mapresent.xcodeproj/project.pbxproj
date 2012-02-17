@@ -42,6 +42,7 @@
 		DDE382F614ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE382F414ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m */; };
 		DDE382F714ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */; };
 		DDE382FA14EDB008001D5D45 /* DSMRDrawingSurfaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE382F914EDB008001D5D45 /* DSMRDrawingSurfaceView.m */; };
+		DDE3831914EDE34F001D5D45 /* DSMRTimelineMarkerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */; };
 		DDE3D6E514E9EF9000B71543 /* curl.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E414E9EF9000B71543 /* curl.png */; };
 		DDE3D6E714E9F10900B71543 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E614E9F10900B71543 /* loading.png */; };
 		DDE3D6E914EAE6E000B71543 /* fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E814EAE6E000B71543 /* fullscreen.png */; };
@@ -173,6 +174,8 @@
 		DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRDrawingPaletteViewController.xib; sourceTree = "<group>"; };
 		DDE382F814EDB008001D5D45 /* DSMRDrawingSurfaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRDrawingSurfaceView.h; sourceTree = "<group>"; };
 		DDE382F914EDB008001D5D45 /* DSMRDrawingSurfaceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRDrawingSurfaceView.m; sourceTree = "<group>"; };
+		DDE3831714EDE34F001D5D45 /* DSMRTimelineMarkerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineMarkerView.h; sourceTree = "<group>"; };
+		DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineMarkerView.m; sourceTree = "<group>"; };
 		DDE3D6E414E9EF9000B71543 /* curl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = curl.png; sourceTree = "<group>"; };
 		DDE3D6E614E9F10900B71543 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		DDE3D6E814EAE6E000B71543 /* fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullscreen.png; sourceTree = "<group>"; };
@@ -322,6 +325,8 @@
 				DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */,
 				DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */,
 				DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */,
+				DDE3831714EDE34F001D5D45 /* DSMRTimelineMarkerView.h */,
+				DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */,
 				DD7779E114EB32D6002089D0 /* DSMRExportModalView.xib */,
 				DD777A6114EC98BC002089D0 /* DSMRAudioRecorderView.h */,
 				DD777A6214EC98BC002089D0 /* DSMRAudioRecorderView.m */,
@@ -554,6 +559,7 @@
 				DD777A6314EC98BC002089D0 /* DSMRAudioRecorderView.m in Sources */,
 				DDE382F614ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m in Sources */,
 				DDE382FA14EDB008001D5D45 /* DSMRDrawingSurfaceView.m in Sources */,
+				DDE3831914EDE34F001D5D45 /* DSMRTimelineMarkerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
