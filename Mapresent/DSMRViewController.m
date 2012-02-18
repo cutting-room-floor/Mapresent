@@ -230,6 +230,8 @@
     [self pressedFullScreen:self];
     
     [self performSelector:@selector(pressedPlay:) withObject:self afterDelay:1.0];
+    
+    [TestFlight passCheckpoint:@"played fullscreen"];
 }
 
 - (void)pressedExportCancel:(id)sender
@@ -244,6 +246,8 @@
     [self.timelineView togglePlay];
     
     [self cleanupExportUIWithSuccess:NO];
+    
+    [TestFlight passCheckpoint:@"cancelled export"];
 }
 
 - (IBAction)pressedPlay:(id)sender
@@ -475,6 +479,8 @@
                          
                          [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
                          
+                         [TestFlight passCheckpoint:@"completed video export"];
+                         
                          break;
                      }
                      case AVAssetExportSessionStatusFailed:
@@ -539,6 +545,8 @@
                          self.mapView.centerCoordinate = mapCenter;
                      }
                      completion:nil];
+    
+    [TestFlight passCheckpoint:@"toggled fullscreen mode"];
 }
 
 #pragma mark -
@@ -606,6 +614,8 @@
         
         if (self.isFullScreen)
             [self pressedFullScreen:self];
+        
+        [TestFlight passCheckpoint:@"played presentation to completion"];
     }
     else if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
     {
@@ -651,6 +661,8 @@
 {
     if ( ! self.timelineView.isExporting)
     {
+        [TestFlight passCheckpoint:@"began video export"];
+        
         [UIApplication sharedApplication].idleTimerDisabled = YES;
         
         UIView *exportModal = [[[NSBundle mainBundle] loadNibNamed:@"DSMRExportModalView" owner:self options:nil] lastObject];
@@ -811,10 +823,14 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
                 
                 [alert show];
             }
+            
+            [TestFlight passCheckpoint:@"tried to open video in external apps"];
         }];
     }
     
     [actionSheet showFromRect:attachRect inView:self.view animated:YES];
+    
+    [TestFlight passCheckpoint:@"opened share menu"];
 }
 
 - (void)playLatestMovie
@@ -826,6 +842,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     moviePresenter.moviePlayer.shouldAutoplay = NO;
     
     [self presentMoviePlayerViewControllerAnimated:moviePresenter];
+    
+    [TestFlight passCheckpoint:@"played video in app"];
 }
 
 - (void)emailLatestMovie
@@ -846,6 +864,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     mailer.mailComposeDelegate = self;
     
     [self presentModalViewController:mailer animated:YES];
+    
+    [TestFlight passCheckpoint:@"emailed video"];
 }
 
 #pragma mark -
@@ -895,6 +915,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     marker.snapshot   = [self.mapView takeSnapshot];;
     
     [self addMarker:marker refreshingInterface:YES];
+    
+    [TestFlight passCheckpoint:@"added place marker"];
 }
 
 - (IBAction)pressedAudio:(id)sender
@@ -967,6 +989,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         [[NSFileManager defaultManager] removeItemAtURL:self.recorder.url error:nil];
         
         [self addMarker:marker refreshingInterface:YES];
+        
+        [TestFlight passCheckpoint:@"added audio marker"];
     }
 }
 
@@ -1033,6 +1057,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
                                    [self presentModalViewController:wrapper animated:YES];
                                    
                                    [MBProgressHUD hideHUDForView:self.view.window animated:YES];
+                                   
+                                   [TestFlight passCheckpoint:@"browsed themes"];
                                }
                            }];
 }
@@ -1070,6 +1096,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
                                                                                          //
                                                                                          [self popoverControllerShouldDismissPopover:drawingPopover];
                                                                                          [drawingPopover dismissPopoverAnimated:YES];
+                                                                                         
+                                                                                         [TestFlight passCheckpoint:@"added drawing clear marker"];
                                                                                      }];
     
     drawingPalette.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
@@ -1138,7 +1166,9 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         marker.snapshot = picker.snapshot;
        
         [self refresh];
-    });    
+    });
+    
+    [TestFlight passCheckpoint:@"added theme marker"];
 }
 
 #pragma mark -
@@ -1172,6 +1202,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     
     if (finished)
         [self performSelector:@selector(updateThemePages) withObject:nil afterDelay:0.0];
+    
+    [TestFlight passCheckpoint:@"turned theme page"];
 }
 
 #pragma mark -
@@ -1206,6 +1238,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
         marker.snapshot   = drawingImage;
         
         [self addMarker:marker refreshingInterface:NO];
+        
+        [TestFlight passCheckpoint:@"added drawing marker"];
     }
 
     [self refresh];
@@ -1289,6 +1323,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     
     [self refresh];
+    
+    [TestFlight passCheckpoint:@"deleted timeline marker"];
 }
 
 #pragma mark -
@@ -1299,6 +1335,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     [self fireMarkerAtIndex:indexPath.row];
+    
+    [TestFlight passCheckpoint:@"tapped palette table marker"];
 }
 
 #pragma mark -
@@ -1313,6 +1351,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
 {
     if ( ! self.timelineView.isPlaying)
         [self fireMarkerAtIndex:[self.markers indexOfObject:marker]];
+    
+    [TestFlight passCheckpoint:@"tapped timeline marker"];
 }
 
 @end

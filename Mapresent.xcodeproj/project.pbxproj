@@ -284,10 +284,10 @@
 		DD2B336214CF79BF008DE8CB /* Externals */ = {
 			isa = PBXGroup;
 			children = (
-				DD9607CC14D36FDE00FA2CBA /* TestFlight SDK */,
 				DD2B373514CF79F2008DE8CB /* Alpstein Route-Me */,
 				DDC6E5A314E5B467000F611E /* BlocksKit */,
 				DDC6E5A914E5BA2E000F611E /* MBProgressHUD */,
+				DD9607CC14D36FDE00FA2CBA /* TestFlight SDK */,
 				DD96079014D32C2D00FA2CBA /* UIImage-Extensions */,
 			);
 			name = Externals;
