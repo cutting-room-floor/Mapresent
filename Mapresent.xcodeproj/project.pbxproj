@@ -799,6 +799,10 @@
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Externals/BlocksKit\"/**",
+					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
+				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
