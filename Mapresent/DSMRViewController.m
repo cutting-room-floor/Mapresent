@@ -276,18 +276,20 @@
         {
             // clean up capture frames
             //
-            for (NSString *imageFile in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil])
+            NSArray *snapshotFiles = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:nil] select:^BOOL(id obj)
             {
-                if ([imageFile hasPrefix:@"snap_"] && [imageFile hasSuffix:@".png"])
-                {
-                    UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
-                    UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 192, 480, 640)];
-                    UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
-                    
-                    [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile] atomically:YES];
-                    
-                    NSLog(@"processed %@", imageFile);
-                }
+                return ([obj hasPrefix:@"snap_"] && [obj hasSuffix:@".png"]);
+            }];
+            
+            for (NSString *imageFile in snapshotFiles)
+            {
+                UIImage *originalImage = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile]];
+                UIImage *croppedImage  = [originalImage imageAtRect:CGRectMake(20, 192, 480, 640)];
+                UIImage *rotatedImage  = [croppedImage imageRotatedByDegrees:90.0];
+                
+                [UIImagePNGRepresentation(rotatedImage) writeToFile:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), imageFile] atomically:YES];
+                
+                NSLog(@"processed %@", imageFile);
             }
             
             NSLog(@"processed all screenshots... assembling into video");
@@ -399,7 +401,7 @@
                 AVMutableCompositionTrack *compositionAudioTrack;
                 BOOL hasAudio;
                 
-                if (marker.recording)
+                if (marker.markerType == DSMRTimelineMarkerTypeAudio)
                 {
                     if ( ! hasAudio)
                     {
@@ -413,7 +415,7 @@
                     
                     // write marker audio data to temp file
                     //
-                    NSString *tempFile = [NSString stringWithFormat:@"%@/%@.aiff", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]];
+                    NSString *tempFile = [NSString stringWithFormat:@"%@/%@.dat", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]];
                     
                     [marker.recording writeToFile:tempFile atomically:YES];
                     
