@@ -1122,17 +1122,23 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     DSMRWrapperController *wrapper    = (DSMRWrapperController *)self.modalViewController;
     UIPageViewController *pager       = (UIPageViewController *)wrapper.topViewController;
     DSMRThemePickerController *picker = (DSMRThemePickerController *)[pager.viewControllers lastObject];
-    
+
     [self dismissModalViewControllerAnimated:YES];
-    
+
     DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
-    
+
     marker.markerType     = DSMRTimelineMarkerTypeTheme;
     marker.timeOffset     = [self.timeLabel.text doubleValue];
     marker.tileSourceInfo = self.chosenThemeInfo;
-    marker.snapshot       = picker.snapshot;
     
     [self addMarker:marker refreshingInterface:YES];
+
+    dispatch_async(self.serialQueue, ^(void)
+    {
+        marker.snapshot = picker.snapshot;
+       
+        [self refresh];
+    });    
 }
 
 #pragma mark -
