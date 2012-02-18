@@ -290,6 +290,8 @@
                 }
             }
             
+            NSLog(@"processed all screenshots... assembling into video");
+            
             // make the video
             //
             // write images out to video track
