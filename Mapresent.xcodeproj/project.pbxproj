@@ -21,11 +21,38 @@
 		DD2B373E14CF7BFB008DE8CB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */; };
 		DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = DD2B375814CF822C008DE8CB /* geography-class.mbtiles */; };
 		DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */; };
+		DD4312F814D8AACA00697249 /* DSMRThemePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4312F614D8AACA00697249 /* DSMRThemePickerController.m */; };
+		DD4312F914D8AACA00697249 /* DSMRThemePickerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD4312F714D8AACA00697249 /* DSMRThemePickerController.xib */; };
+		DD4312FC14D8B1C500697249 /* DSMRWrapperController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */; };
+		DD43131314D8D26800697249 /* needle.png in Resources */ = {isa = PBXBuildFile; fileRef = DD43131214D8D26800697249 /* needle.png */; };
+		DD7779DE14EB2D54002089D0 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = DD7779DD14EB2D54002089D0 /* back.png */; };
+		DD7779E214EB32D6002089D0 /* DSMRExportModalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD7779E114EB32D6002089D0 /* DSMRExportModalView.xib */; };
+		DD777A6014EC976A002089D0 /* DSMRAudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD777A5F14EC976A002089D0 /* DSMRAudioRecorderView.xib */; };
+		DD777A6314EC98BC002089D0 /* DSMRAudioRecorderView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD777A6214EC98BC002089D0 /* DSMRAudioRecorderView.m */; };
+		DD8B4ED314E4A6FA00D15AF9 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8B4ED214E4A6FA00D15AF9 /* CoreVideo.framework */; };
+		DD8B4ED514E4A73200D15AF9 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8B4ED414E4A73200D15AF9 /* CoreMedia.framework */; };
+		DD8B4F1714E50C2800D15AF9 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD8B4F1614E50C2800D15AF9 /* MediaPlayer.framework */; };
 		DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD9607C614D33E5D00FA2CBA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */; };
 		DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */; };
 		DD9607D114D36FDE00FA2CBA /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607CD14D36FDE00FA2CBA /* libTestFlight.a */; };
 		DD9607D514D371FC00FA2CBA /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD9607D414D371FC00FA2CBA /* Entitlements.plist */; };
+		DD98B6FE14D76C090092882F /* mapbox.geography-class.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */; };
+		DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E59C14E5B463000F611E /* libBlocksKit.a */; };
+		DDC6E5A814E5B5F6000F611E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E5A714E5B5F6000F611E /* MessageUI.framework */; };
+		DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */; };
+		DDE382F614ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE382F414ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m */; };
+		DDE382F714ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */; };
+		DDE382FA14EDB008001D5D45 /* DSMRDrawingSurfaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE382F914EDB008001D5D45 /* DSMRDrawingSurfaceView.m */; };
+		DDE3831914EDE34F001D5D45 /* DSMRTimelineMarkerView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */; };
+		DDE3831B14EDEE27001D5D45 /* waveform.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3831A14EDEE27001D5D45 /* waveform.png */; };
+		DDE3833614EDFA66001D5D45 /* clear.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3833514EDFA66001D5D45 /* clear.png */; };
+		DDE3D6E514E9EF9000B71543 /* curl.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E414E9EF9000B71543 /* curl.png */; };
+		DDE3D6E714E9F10900B71543 /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E614E9F10900B71543 /* loading.png */; };
+		DDE3D6E914EAE6E000B71543 /* fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E814EAE6E000B71543 /* fullscreen.png */; };
+		DDE3D6F014EB1AFD00B71543 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6ED14EB1AFD00B71543 /* pause.png */; };
+		DDE3D6F114EB1AFD00B71543 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EE14EB1AFD00B71543 /* play.png */; };
+		DDE3D6F214EB1AFD00B71543 /* play_fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +77,55 @@
 			remoteGlobalIDString = B8C974130E8A19B2007D16AD;
 			remoteInfo = MapView;
 		};
+		DDC6E59714E5B463000F611E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6CC40A2A1447B58600E47595;
+			remoteInfo = "iOS Framework";
+		};
+		DDC6E59914E5B463000F611E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6CC40A751447BB1400E47595;
+			remoteInfo = "OS X Framework";
+		};
+		DDC6E59B14E5B463000F611E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6C3DBF8D1382F1BA00E6C9AA;
+			remoteInfo = "iOS Library";
+		};
+		DDC6E59D14E5B463000F611E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6CC08FCE1385555D00DDEABB;
+			remoteInfo = "OS X Library";
+		};
+		DDC6E59F14E5B463000F611E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6CC0900913855CAE00DDEABB;
+			remoteInfo = "Chameleon Library";
+		};
+		DDC6E5A114E5B463000F611E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 60FF000713C023CB004A1394;
+			remoteInfo = "iOS Tests";
+		};
+		DDC6E5A414E5B481000F611E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6C3DBF8C1382F1BA00E6C9AA;
+			remoteInfo = "iOS Library";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +149,20 @@
 		DD2B375814CF822C008DE8CB /* geography-class.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class.mbtiles"; sourceTree = "<group>"; };
 		DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineView.h; sourceTree = "<group>"; };
 		DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineView.m; sourceTree = "<group>"; };
+		DD4312F514D8AACA00697249 /* DSMRThemePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRThemePickerController.h; sourceTree = "<group>"; };
+		DD4312F614D8AACA00697249 /* DSMRThemePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRThemePickerController.m; sourceTree = "<group>"; };
+		DD4312F714D8AACA00697249 /* DSMRThemePickerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRThemePickerController.xib; sourceTree = "<group>"; };
+		DD4312FA14D8B1C500697249 /* DSMRWrapperController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRWrapperController.h; sourceTree = "<group>"; };
+		DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRWrapperController.m; sourceTree = "<group>"; };
+		DD43131214D8D26800697249 /* needle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = needle.png; sourceTree = "<group>"; };
+		DD7779DD14EB2D54002089D0 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
+		DD7779E114EB32D6002089D0 /* DSMRExportModalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRExportModalView.xib; sourceTree = "<group>"; };
+		DD777A5F14EC976A002089D0 /* DSMRAudioRecorderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRAudioRecorderView.xib; sourceTree = "<group>"; };
+		DD777A6114EC98BC002089D0 /* DSMRAudioRecorderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRAudioRecorderView.h; sourceTree = "<group>"; };
+		DD777A6214EC98BC002089D0 /* DSMRAudioRecorderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRAudioRecorderView.m; sourceTree = "<group>"; };
+		DD8B4ED214E4A6FA00D15AF9 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		DD8B4ED414E4A73200D15AF9 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		DD8B4F1614E50C2800D15AF9 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		DD96078D14D32C2800FA2CBA /* UIImage-Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage-Extensions.h"; path = "Externals/UIImage-Extensions/UIImage-Extensions.h"; sourceTree = SOURCE_ROOT; };
 		DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage-Extensions.m"; path = "Externals/UIImage-Extensions/UIImage-Extensions.m"; sourceTree = SOURCE_ROOT; };
 		DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -81,6 +171,26 @@
 		DD9607CD14D36FDE00FA2CBA /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
 		DD9607D014D36FDE00FA2CBA /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		DD9607D414D371FC00FA2CBA /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = SOURCE_ROOT; };
+		DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mapbox.geography-class.plist"; sourceTree = "<group>"; };
+		DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BlocksKit.xcodeproj; path = Externals/BlocksKit/BlocksKit.xcodeproj; sourceTree = SOURCE_ROOT; };
+		DDC6E5A714E5B5F6000F611E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		DDC6E5AA14E5BA4E000F611E /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = Externals/MBProgressHUD/MBProgressHUD.h; sourceTree = SOURCE_ROOT; };
+		DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = Externals/MBProgressHUD/MBProgressHUD.m; sourceTree = SOURCE_ROOT; };
+		DDE382F314ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRDrawingPaletteViewController.h; sourceTree = "<group>"; };
+		DDE382F414ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRDrawingPaletteViewController.m; sourceTree = "<group>"; };
+		DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRDrawingPaletteViewController.xib; sourceTree = "<group>"; };
+		DDE382F814EDB008001D5D45 /* DSMRDrawingSurfaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRDrawingSurfaceView.h; sourceTree = "<group>"; };
+		DDE382F914EDB008001D5D45 /* DSMRDrawingSurfaceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRDrawingSurfaceView.m; sourceTree = "<group>"; };
+		DDE3831714EDE34F001D5D45 /* DSMRTimelineMarkerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineMarkerView.h; sourceTree = "<group>"; };
+		DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineMarkerView.m; sourceTree = "<group>"; };
+		DDE3831A14EDEE27001D5D45 /* waveform.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = waveform.png; sourceTree = "<group>"; };
+		DDE3833514EDFA66001D5D45 /* clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear.png; sourceTree = "<group>"; };
+		DDE3D6E414E9EF9000B71543 /* curl.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = curl.png; sourceTree = "<group>"; };
+		DDE3D6E614E9F10900B71543 /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
+		DDE3D6E814EAE6E000B71543 /* fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullscreen.png; sourceTree = "<group>"; };
+		DDE3D6ED14EB1AFD00B71543 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
+		DDE3D6EE14EB1AFD00B71543 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
+		DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_fullscreen.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,9 +201,14 @@
 				DD9607C614D33E5D00FA2CBA /* AVFoundation.framework in Frameworks */,
 				DD2B334514CF75AE008DE8CB /* CoreGraphics.framework in Frameworks */,
 				DD2B373E14CF7BFB008DE8CB /* CoreLocation.framework in Frameworks */,
+				DD8B4ED514E4A73200D15AF9 /* CoreMedia.framework in Frameworks */,
+				DD8B4ED314E4A6FA00D15AF9 /* CoreVideo.framework in Frameworks */,
 				DD2B334314CF75AE008DE8CB /* Foundation.framework in Frameworks */,
+				DD8B4F1714E50C2800D15AF9 /* MediaPlayer.framework in Frameworks */,
+				DDC6E5A814E5B5F6000F611E /* MessageUI.framework in Frameworks */,
 				DD2B373C14CF7AC7008DE8CB /* QuartzCore.framework in Frameworks */,
 				DD2B334114CF75AE008DE8CB /* UIKit.framework in Frameworks */,
+				DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */,
 				DD2B373814CF7A4D008DE8CB /* libMapView.a in Frameworks */,
 				DD2B373A14CF7AAB008DE8CB /* libsqlite3.dylib in Frameworks */,
 				DD9607D114D36FDE00FA2CBA /* libTestFlight.a in Frameworks */,
@@ -128,7 +243,11 @@
 				DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */,
 				DD2B334414CF75AE008DE8CB /* CoreGraphics.framework */,
 				DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */,
+				DD8B4ED414E4A73200D15AF9 /* CoreMedia.framework */,
+				DD8B4ED214E4A6FA00D15AF9 /* CoreVideo.framework */,
 				DD2B334214CF75AE008DE8CB /* Foundation.framework */,
+				DD8B4F1614E50C2800D15AF9 /* MediaPlayer.framework */,
+				DDC6E5A714E5B5F6000F611E /* MessageUI.framework */,
 				DD2B373B14CF7AC7008DE8CB /* QuartzCore.framework */,
 				DD2B334014CF75AE008DE8CB /* UIKit.framework */,
 				DD2B373914CF7AAB008DE8CB /* libsqlite3.dylib */,
@@ -139,15 +258,12 @@
 		DD2B334614CF75AE008DE8CB /* Mapresent */ = {
 			isa = PBXGroup;
 			children = (
-				DD2B334F14CF75AE008DE8CB /* DSMRAppDelegate.h */,
-				DD2B335014CF75AE008DE8CB /* DSMRAppDelegate.m */,
-				DD2B335214CF75AE008DE8CB /* DSMRViewController.h */,
-				DD2B335314CF75AE008DE8CB /* DSMRViewController.m */,
-				DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */,
-				DD9607C714D34CA900FA2CBA /* DSMRTimelineMarker.h */,
-				DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */,
-				DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */,
-				DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */,
+				DD7779DF14EB3280002089D0 /* Main UI */,
+				DDD948ED14EE309B0042C9E0 /* Timeline & Markers */,
+				DDD948EF14EE30E50042C9E0 /* Audio Recording */,
+				DD7779E014EB3288002089D0 /* Themes */,
+				DDE382FB14EDB015001D5D45 /* Drawing */,
+				DDD948EE14EE30D90042C9E0 /* Video Export */,
 				DD2B334714CF75AE008DE8CB /* Supporting Files */,
 			);
 			path = Mapresent;
@@ -168,8 +284,10 @@
 		DD2B336214CF79BF008DE8CB /* Externals */ = {
 			isa = PBXGroup;
 			children = (
-				DD2B373514CF79F2008DE8CB /* alpstein-route-me */,
 				DD9607CC14D36FDE00FA2CBA /* TestFlight SDK */,
+				DD2B373514CF79F2008DE8CB /* Alpstein Route-Me */,
+				DDC6E5A314E5B467000F611E /* BlocksKit */,
+				DDC6E5A914E5BA2E000F611E /* MBProgressHUD */,
 				DD96079014D32C2D00FA2CBA /* UIImage-Extensions */,
 			);
 			name = Externals;
@@ -185,21 +303,48 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DD2B373514CF79F2008DE8CB /* alpstein-route-me */ = {
+		DD2B373514CF79F2008DE8CB /* Alpstein Route-Me */ = {
 			isa = PBXGroup;
 			children = (
 				DD2B372114CF79ED008DE8CB /* MapView.xcodeproj */,
 			);
-			name = "alpstein-route-me";
+			name = "Alpstein Route-Me";
 			sourceTree = "<group>";
 		};
 		DD2B375714CF81F1008DE8CB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				DD2B375814CF822C008DE8CB /* geography-class.mbtiles */,
+				DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */,
 			);
 			name = Resources;
 			path = Mapresent;
+			sourceTree = "<group>";
+		};
+		DD7779DF14EB3280002089D0 /* Main UI */ = {
+			isa = PBXGroup;
+			children = (
+				DD2B334F14CF75AE008DE8CB /* DSMRAppDelegate.h */,
+				DD2B335014CF75AE008DE8CB /* DSMRAppDelegate.m */,
+				DD2B335214CF75AE008DE8CB /* DSMRViewController.h */,
+				DD2B335314CF75AE008DE8CB /* DSMRViewController.m */,
+				DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */,
+				DDD948F214EE31580042C9E0 /* Resources */,
+			);
+			name = "Main UI";
+			sourceTree = "<group>";
+		};
+		DD7779E014EB3288002089D0 /* Themes */ = {
+			isa = PBXGroup;
+			children = (
+				DD4312FA14D8B1C500697249 /* DSMRWrapperController.h */,
+				DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */,
+				DD4312F514D8AACA00697249 /* DSMRThemePickerController.h */,
+				DD4312F614D8AACA00697249 /* DSMRThemePickerController.m */,
+				DD4312F714D8AACA00697249 /* DSMRThemePickerController.xib */,
+				DDD948F114EE313D0042C9E0 /* Resources */,
+			);
+			name = Themes;
 			sourceTree = "<group>";
 		};
 		DD96079014D32C2D00FA2CBA /* UIImage-Extensions */ = {
@@ -221,6 +366,111 @@
 			path = "Externals/TestFlight SDK";
 			sourceTree = SOURCE_ROOT;
 		};
+		DDC6E58B14E5B463000F611E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DDC6E59814E5B463000F611E /* BlocksKit.framework */,
+				DDC6E59A14E5B463000F611E /* BlocksKit.framework */,
+				DDC6E59C14E5B463000F611E /* libBlocksKit.a */,
+				DDC6E59E14E5B463000F611E /* BlocksKit.dylib */,
+				DDC6E5A014E5B463000F611E /* BlocksKit_Chameleon.dylib */,
+				DDC6E5A214E5B463000F611E /* iOS Tests.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DDC6E5A314E5B467000F611E /* BlocksKit */ = {
+			isa = PBXGroup;
+			children = (
+				DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */,
+			);
+			name = BlocksKit;
+			sourceTree = "<group>";
+		};
+		DDC6E5A914E5BA2E000F611E /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				DDC6E5AA14E5BA4E000F611E /* MBProgressHUD.h */,
+				DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
+		DDD948ED14EE309B0042C9E0 /* Timeline & Markers */ = {
+			isa = PBXGroup;
+			children = (
+				DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */,
+				DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */,
+				DD9607C714D34CA900FA2CBA /* DSMRTimelineMarker.h */,
+				DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */,
+				DDE3831714EDE34F001D5D45 /* DSMRTimelineMarkerView.h */,
+				DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */,
+				DDD948F014EE312E0042C9E0 /* Resources */,
+			);
+			name = "Timeline & Markers";
+			sourceTree = "<group>";
+		};
+		DDD948EE14EE30D90042C9E0 /* Video Export */ = {
+			isa = PBXGroup;
+			children = (
+				DD7779E114EB32D6002089D0 /* DSMRExportModalView.xib */,
+			);
+			name = "Video Export";
+			sourceTree = "<group>";
+		};
+		DDD948EF14EE30E50042C9E0 /* Audio Recording */ = {
+			isa = PBXGroup;
+			children = (
+				DD777A6114EC98BC002089D0 /* DSMRAudioRecorderView.h */,
+				DD777A6214EC98BC002089D0 /* DSMRAudioRecorderView.m */,
+				DD777A5F14EC976A002089D0 /* DSMRAudioRecorderView.xib */,
+			);
+			name = "Audio Recording";
+			sourceTree = "<group>";
+		};
+		DDD948F014EE312E0042C9E0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DD43131214D8D26800697249 /* needle.png */,
+				DDE3831A14EDEE27001D5D45 /* waveform.png */,
+				DDE3833514EDFA66001D5D45 /* clear.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		DDD948F114EE313D0042C9E0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DDE3D6E414E9EF9000B71543 /* curl.png */,
+				DDE3D6E614E9F10900B71543 /* loading.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		DDD948F214EE31580042C9E0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				DDE3D6ED14EB1AFD00B71543 /* pause.png */,
+				DDE3D6EE14EB1AFD00B71543 /* play.png */,
+				DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */,
+				DD7779DD14EB2D54002089D0 /* back.png */,
+				DDE3D6E814EAE6E000B71543 /* fullscreen.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		DDE382FB14EDB015001D5D45 /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				DDE382F314ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.h */,
+				DDE382F414ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m */,
+				DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */,
+				DDE382F814EDB008001D5D45 /* DSMRDrawingSurfaceView.h */,
+				DDE382F914EDB008001D5D45 /* DSMRDrawingSurfaceView.m */,
+			);
+			name = Drawing;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -235,6 +485,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DDC6E5A514E5B481000F611E /* PBXTargetDependency */,
 				DD2B373714CF7A08008DE8CB /* PBXTargetDependency */,
 			);
 			name = Mapresent;
@@ -263,6 +514,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = DDC6E58B14E5B463000F611E /* Products */;
+					ProjectRef = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
+				},
+				{
 					ProductGroup = DD2B372214CF79ED008DE8CB /* Products */;
 					ProjectRef = DD2B372114CF79ED008DE8CB /* MapView.xcodeproj */;
 				},
@@ -289,6 +544,48 @@
 			remoteRef = DD2B373214CF79ED008DE8CB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		DDC6E59814E5B463000F611E /* BlocksKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = BlocksKit.framework;
+			remoteRef = DDC6E59714E5B463000F611E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DDC6E59A14E5B463000F611E /* BlocksKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = BlocksKit.framework;
+			remoteRef = DDC6E59914E5B463000F611E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DDC6E59C14E5B463000F611E /* libBlocksKit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBlocksKit.a;
+			remoteRef = DDC6E59B14E5B463000F611E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DDC6E59E14E5B463000F611E /* BlocksKit.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = BlocksKit.dylib;
+			remoteRef = DDC6E59D14E5B463000F611E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DDC6E5A014E5B463000F611E /* BlocksKit_Chameleon.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = BlocksKit_Chameleon.dylib;
+			remoteRef = DDC6E59F14E5B463000F611E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DDC6E5A214E5B463000F611E /* iOS Tests.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "iOS Tests.app";
+			remoteRef = DDC6E5A114E5B463000F611E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -300,6 +597,21 @@
 				DD2B335714CF75AE008DE8CB /* DSMRViewController.xib in Resources */,
 				DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */,
 				DD9607D514D371FC00FA2CBA /* Entitlements.plist in Resources */,
+				DD98B6FE14D76C090092882F /* mapbox.geography-class.plist in Resources */,
+				DD4312F914D8AACA00697249 /* DSMRThemePickerController.xib in Resources */,
+				DD43131314D8D26800697249 /* needle.png in Resources */,
+				DDE3D6E514E9EF9000B71543 /* curl.png in Resources */,
+				DDE3D6E714E9F10900B71543 /* loading.png in Resources */,
+				DDE3D6E914EAE6E000B71543 /* fullscreen.png in Resources */,
+				DDE3D6F014EB1AFD00B71543 /* pause.png in Resources */,
+				DDE3D6F114EB1AFD00B71543 /* play.png in Resources */,
+				DDE3D6F214EB1AFD00B71543 /* play_fullscreen.png in Resources */,
+				DD7779DE14EB2D54002089D0 /* back.png in Resources */,
+				DD7779E214EB32D6002089D0 /* DSMRExportModalView.xib in Resources */,
+				DD777A6014EC976A002089D0 /* DSMRAudioRecorderView.xib in Resources */,
+				DDE382F714ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib in Resources */,
+				DDE3831B14EDEE27001D5D45 /* waveform.png in Resources */,
+				DDE3833614EDFA66001D5D45 /* clear.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +628,13 @@
 				DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */,
 				DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */,
 				DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */,
+				DD4312F814D8AACA00697249 /* DSMRThemePickerController.m in Sources */,
+				DD4312FC14D8B1C500697249 /* DSMRWrapperController.m in Sources */,
+				DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */,
+				DD777A6314EC98BC002089D0 /* DSMRAudioRecorderView.m in Sources */,
+				DDE382F614ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m in Sources */,
+				DDE382FA14EDB008001D5D45 /* DSMRDrawingSurfaceView.m in Sources */,
+				DDE3831914EDE34F001D5D45 /* DSMRTimelineMarkerView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +645,11 @@
 			isa = PBXTargetDependency;
 			name = MapView;
 			targetProxy = DD2B373614CF7A08008DE8CB /* PBXContainerItemProxy */;
+		};
+		DDC6E5A514E5B481000F611E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "iOS Library";
+			targetProxy = DDC6E5A414E5B481000F611E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -404,10 +728,18 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Externals/BlocksKit\"/**",
+					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
+				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Externals/TestFlight SDK\"",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -419,10 +751,18 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Externals/BlocksKit\"/**",
+					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
+				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Externals/TestFlight SDK\"",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

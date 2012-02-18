@@ -9,10 +9,9 @@
 #import "DSMRTimelineView.h"
 
 #import "DSMRTimelineMarker.h"
+#import "DSMRTimelineMarkerView.h"
 
-#import "UIImage-Extensions.h"
-
-@interface DSMRTileLineViewTimeline : UIView
+@interface DSMRTimeLineViewTimeline : UIView
 
 @end
 
@@ -20,8 +19,9 @@
 
 @interface DSMRTimelineView ()
 
+@property (nonatomic, assign, getter=isPlaying) BOOL playing;
 @property (nonatomic, strong) UIScrollView *scroller;
-@property (nonatomic, strong) DSMRTileLineViewTimeline *timeline;
+@property (nonatomic, strong) DSMRTimeLineViewTimeline *timeline;
 @property (nonatomic, strong) NSTimer *playTimer;
 
 @end
@@ -31,6 +31,8 @@
 @implementation DSMRTimelineView
 
 @synthesize delegate;
+@synthesize playing;
+@synthesize exporting;
 @synthesize scroller;
 @synthesize timeline;
 @synthesize playTimer;
@@ -41,13 +43,13 @@
 
     if (self)
     {
-        [self setBackgroundColor:[UIColor darkGrayColor]];
+        [self setBackgroundColor:[UIColor blackColor]];
         
         scroller = [[UIScrollView alloc] initWithFrame:[self bounds]];
         
-        [self addSubview:scroller];
+        [self insertSubview:scroller atIndex:0];
         
-        timeline = [[DSMRTileLineViewTimeline alloc] initWithFrame:CGRectMake(0, 0, [self bounds].size.width * 3, [self bounds].size.height)];
+        timeline = [[DSMRTimeLineViewTimeline alloc] initWithFrame:CGRectMake(0, 0, [self bounds].size.width * 3, [self bounds].size.height)];
         
         [scroller addSubview:timeline];
 
@@ -63,9 +65,24 @@
 - (void)togglePlay
 {
     if ([self.playTimer isValid])
+    {
         [self.playTimer invalidate];
+        
+        self.playing = NO;
+        
+        if (self.isExporting)
+            self.exporting = NO;
+    }
     else
-        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 / 64.0) target:self selector:@selector(firePlayTimer:) userInfo:nil repeats:YES];
+    {
+        self.playing = YES;
+        
+        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 / (self.isExporting ? 8.0 : 64.0)) 
+                                                          target:self 
+                                                        selector:@selector(firePlayTimer:) 
+                                                        userInfo:nil 
+                                                         repeats:YES];
+    }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayToggled object:self];
 }
@@ -92,35 +109,56 @@
     
     for (DSMRTimelineMarker *marker in [self.delegate timelineMarkers])
     {
-        UIView *markerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 64, 20)];
+        DSMRTimelineMarkerView *markerView = [[DSMRTimelineMarkerView alloc] initWithMarker:marker];
         
-        CGFloat placement, width;
-        
-        if (marker.sourceName)
+        UITapGestureRecognizer *markerTap = [[UITapGestureRecognizer alloc] initWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location)
         {
-            markerView.backgroundColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.2];
-            
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[marker.snapshot imageByScalingProportionallyToSize:CGSizeMake(18, 18)]];
-            
-            imageView.center = CGPointMake(11, 11);
-            
-            [markerView addSubview:imageView];
-            
-            placement = 100;
-            width     = markerView.frame.size.width;
-        }
-        else if (marker.recording)
+            if (state == UIGestureRecognizerStateEnded)
+            {
+                DSMRTimelineMarkerView *markerView = ((DSMRTimelineMarkerView *)((UIGestureRecognizer *)sender).view);
+                
+                [self.delegate timelineMarkerTapped:markerView.marker];
+            }
+        }];
+        
+        [markerView addGestureRecognizer:markerTap];
+        
+        CGFloat placement;
+        
+        switch (marker.markerType)
         {
-            markerView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.2];
-            
-            placement = 130;
-            width     = marker.duration * 64.0;
+            case DSMRTimelineMarkerTypeLocation:
+            {
+                placement = 85;
+                break;
+            }
+            case DSMRTimelineMarkerTypeAudio:
+            {
+                placement = 130;
+                break;
+            }
+            case DSMRTimelineMarkerTypeTheme:
+            {
+                placement = 175;
+                break;
+            }
+            case DSMRTimelineMarkerTypeDrawing:
+            case DSMRTimelineMarkerTypeDrawingClear:
+            {
+                placement = 220;
+                break;
+            }
         }
         
-        markerView.frame = CGRectMake((marker.timeOffset * 64.0) + 512.0, placement, width, markerView.frame.size.height);
+        markerView.frame = CGRectMake((marker.timeOffset * 64.0) + 512.0, placement, markerView.frame.size.width, markerView.frame.size.height);
         
         [self.timeline addSubview:markerView];
     }
+}
+
+- (void)rewindToBeginning
+{
+    [self.scroller setContentOffset:CGPointMake(0, 0) animated:YES];
 }
 
 #pragma mark -
@@ -135,6 +173,21 @@
 {
     if (scrollView.dragging && scrollView.contentOffset.x >= 0 && scrollView.contentOffset.x <= (self.timeline.bounds.size.width - self.scroller.bounds.size.width))
         [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:scroller.contentOffset.x]];
+    
+    if (scrollView.contentOffset.x > scrollView.contentSize.width - scrollView.bounds.size.width)
+    {
+        self.timeline.frame = CGRectMake(self.timeline.frame.origin.x, 
+                                         self.timeline.frame.origin.y, 
+                                         self.timeline.frame.size.width + scrollView.bounds.size.width, 
+                                         self.timeline.frame.size.height);
+        
+        scrollView.contentSize = self.timeline.frame.size;
+        
+        [self.timeline setNeedsDisplayInRect:CGRectMake(self.timeline.frame.size.width - scrollView.bounds.size.width, 
+                                                        self.timeline.frame.origin.y, 
+                                                        scrollView.bounds.size.width, 
+                                                        self.timeline.frame.size.height)];
+    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -146,25 +199,35 @@
 
 #pragma mark -
 
-@implementation DSMRTileLineViewTimeline
+@implementation DSMRTimeLineViewTimeline
 
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef c = UIGraphicsGetCurrentContext();
-
+    
+    // lay down base color
+    //
     CGContextSetFillColorWithColor(c, [[UIColor darkGrayColor] CGColor]);
     CGContextFillRect(c, rect);
 
-    CGContextSetFillColorWithColor(c, [[UIColor colorWithWhite:0.0 alpha:0.5] CGColor]);
-    CGContextFillRect(c, CGRectMake(0, 0, 512.0, 250.0));
-    CGContextFillRect(c, CGRectMake(self.bounds.size.width - 512.0, 0, 512.0, 250.0));
+    // draw darker start of timeline
+    //
+    if (rect.origin.x == 0 && rect.size.width >= 512.0)
+    {
+        CGContextSetFillColorWithColor(c, [[UIColor colorWithWhite:0.0 alpha:0.5] CGColor]);
+        CGContextFillRect(c, CGRectMake(0, 0, 512.0, rect.size.height));
+    }
 
+    // draw time hatches
+    //
     CGContextSetStrokeColorWithColor(c, [[UIColor colorWithWhite:1.0 alpha:0.25] CGColor]);
     CGContextSetFillColorWithColor(c, [[UIColor colorWithWhite:1.0 alpha:0.25] CGColor]);
 
     CGContextSetLineWidth(c, 2);
+
+    int start = ((rect.origin.x == 0 && rect.size.width > 512.0) ? 512.0 : rect.origin.x);
     
-    for (float i = 512.0; i < self.bounds.size.width - 512.0; i = i + 8.0)
+    for (float i = start; i < rect.size.width; i = i + 8.0)
     {
         CGContextBeginPath(c);
         
@@ -172,12 +235,16 @@
         
         if (fmodf(i, 64.0) == 0.0)
         {
+            // big, labeled hatch
+            //
             [[NSString stringWithFormat:@"%i", (int)(i - 512.0) / 64] drawAtPoint:CGPointMake(i + 4.0, 65.0) withFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
 
             y = 75.0;
         }
         else
         {
+            // intermediate hatch
+            //
             y = 50.0;
         }
         
@@ -186,12 +253,6 @@
         
         CGContextStrokePath(c);
     }
-    
-    CGContextSetLineWidth(c, 2.0);
-    CGContextBeginPath(c);    
-    CGContextMoveToPoint(c, self.bounds.size.width - 512.0, 0.0);
-    CGContextAddLineToPoint(c, self.bounds.size.width - 512.0, 75.0);
-    CGContextStrokePath(c);
 }
 
 @end
