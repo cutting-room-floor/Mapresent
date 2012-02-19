@@ -808,6 +808,10 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Externals/TestFlight SDK\"",
 				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
