@@ -131,6 +131,25 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playToggled:)    name:DSMRTimelineViewPlayToggled               object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:) name:DSMRTimelineViewPlayProgressed            object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveState:)      name:UIApplicationWillResignActiveNotification object:nil];
+    
+    // add beta tester feedback button
+    //
+    UIImage *testFlightImage = [UIImage imageNamed:@"testflight.png"];
+    
+    UIButton *feedbackButton = [[UIButton alloc] initWithFrame:CGRectMake(10,
+                                                                          self.view.bounds.size.height - testFlightImage.size.height - 10, 
+                                                                          testFlightImage.size.width, 
+                                                                          testFlightImage.size.height)];
+    
+    [feedbackButton setImage:testFlightImage forState:UIControlStateNormal];
+    
+    [feedbackButton addTarget:[TestFlight class] action:@selector(openFeedbackView) forControlEvents:UIControlEventTouchUpInside];
+    
+    feedbackButton.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin;
+    
+    feedbackButton.alpha = 0.25;
+    
+    [self.view addSubview:feedbackButton];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
