@@ -33,6 +33,10 @@
     
     [self.window makeKeyAndVisible];
     
+#ifdef ADHOC
+    #include "../TestFlight.txt"
+#endif
+
     return YES;
 }
 

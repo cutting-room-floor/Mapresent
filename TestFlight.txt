@@ -1,0 +1,3 @@
+    // alter & uncomment this to include your TestFlight token:
+    //
+    // [TestFlight takeOff:@"<token>"];

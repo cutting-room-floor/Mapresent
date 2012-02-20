@@ -21,6 +21,7 @@
 		DD2B373E14CF7BFB008DE8CB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373D14CF7BFB008DE8CB /* CoreLocation.framework */; };
 		DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = DD2B375814CF822C008DE8CB /* geography-class.mbtiles */; };
 		DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */; };
+		DD353ADC14F07B5400BF89F4 /* testflight.png in Resources */ = {isa = PBXBuildFile; fileRef = DD353ADB14F07B5400BF89F4 /* testflight.png */; };
 		DD4312F814D8AACA00697249 /* DSMRThemePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4312F614D8AACA00697249 /* DSMRThemePickerController.m */; };
 		DD4312F914D8AACA00697249 /* DSMRThemePickerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD4312F714D8AACA00697249 /* DSMRThemePickerController.xib */; };
 		DD4312FC14D8B1C500697249 /* DSMRWrapperController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */; };
@@ -35,6 +36,8 @@
 		DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD96078E14D32C2800FA2CBA /* UIImage-Extensions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DD9607C614D33E5D00FA2CBA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */; };
 		DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */; };
+		DD9607D114D36FDE00FA2CBA /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607CD14D36FDE00FA2CBA /* libTestFlight.a */; };
+		DD9607D514D371FC00FA2CBA /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD9607D414D371FC00FA2CBA /* Entitlements.plist */; };
 		DD98B6FE14D76C090092882F /* mapbox.geography-class.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */; };
 		DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E59C14E5B463000F611E /* libBlocksKit.a */; };
 		DDC6E5A814E5B5F6000F611E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E5A714E5B5F6000F611E /* MessageUI.framework */; };
@@ -51,6 +54,7 @@
 		DDE3D6F014EB1AFD00B71543 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6ED14EB1AFD00B71543 /* pause.png */; };
 		DDE3D6F114EB1AFD00B71543 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EE14EB1AFD00B71543 /* play.png */; };
 		DDE3D6F214EB1AFD00B71543 /* play_fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */; };
+		DDFC945014F306E40094E791 /* TestFlight.txt in Resources */ = {isa = PBXBuildFile; fileRef = DDFC944F14F306E40094E791 /* TestFlight.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -147,7 +151,8 @@
 		DD2B375814CF822C008DE8CB /* geography-class.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class.mbtiles"; sourceTree = "<group>"; };
 		DD2B375D14CF9156008DE8CB /* DSMRTimelineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineView.h; sourceTree = "<group>"; };
 		DD2B375E14CF9156008DE8CB /* DSMRTimelineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineView.m; sourceTree = "<group>"; };
-		DD4312F514D8AACA00697249 /* DSMRThemePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DSMRThemePickerController.h; sourceTree = "<group>"; };
+		DD353ADB14F07B5400BF89F4 /* testflight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testflight.png; sourceTree = "<group>"; };
+		DD4312F514D8AACA00697249 /* DSMRThemePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRThemePickerController.h; sourceTree = "<group>"; };
 		DD4312F614D8AACA00697249 /* DSMRThemePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRThemePickerController.m; sourceTree = "<group>"; };
 		DD4312F714D8AACA00697249 /* DSMRThemePickerController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRThemePickerController.xib; sourceTree = "<group>"; };
 		DD4312FA14D8B1C500697249 /* DSMRWrapperController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRWrapperController.h; sourceTree = "<group>"; };
@@ -166,6 +171,9 @@
 		DD9607C514D33E5D00FA2CBA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DD9607C714D34CA900FA2CBA /* DSMRTimelineMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineMarker.h; sourceTree = "<group>"; };
 		DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineMarker.m; sourceTree = "<group>"; };
+		DD9607CD14D36FDE00FA2CBA /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		DD9607D014D36FDE00FA2CBA /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
+		DD9607D414D371FC00FA2CBA /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = SOURCE_ROOT; };
 		DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mapbox.geography-class.plist"; sourceTree = "<group>"; };
 		DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BlocksKit.xcodeproj; path = Externals/BlocksKit/BlocksKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		DDC6E5A714E5B5F6000F611E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -186,6 +194,7 @@
 		DDE3D6ED14EB1AFD00B71543 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 		DDE3D6EE14EB1AFD00B71543 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_fullscreen.png; sourceTree = "<group>"; };
+		DDFC944F14F306E40094E791 /* TestFlight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestFlight.txt; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,6 +215,7 @@
 				DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */,
 				DD2B373814CF7A4D008DE8CB /* libMapView.a in Frameworks */,
 				DD2B373A14CF7AAB008DE8CB /* libsqlite3.dylib in Frameworks */,
+				DD9607D114D36FDE00FA2CBA /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +280,7 @@
 				DD2B334914CF75AE008DE8CB /* InfoPlist.strings */,
 				DD2B334C14CF75AE008DE8CB /* main.m */,
 				DD2B334E14CF75AE008DE8CB /* Mapresent-Prefix.pch */,
+				DD9607D414D371FC00FA2CBA /* Entitlements.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -280,6 +291,7 @@
 				DD2B373514CF79F2008DE8CB /* Alpstein Route-Me */,
 				DDC6E5A314E5B467000F611E /* BlocksKit */,
 				DDC6E5A914E5BA2E000F611E /* MBProgressHUD */,
+				DD9607CC14D36FDE00FA2CBA /* TestFlight SDK */,
 				DD96079014D32C2D00FA2CBA /* UIImage-Extensions */,
 			);
 			name = Externals;
@@ -347,6 +359,16 @@
 			);
 			name = "UIImage-Extensions";
 			sourceTree = "<group>";
+		};
+		DD9607CC14D36FDE00FA2CBA /* TestFlight SDK */ = {
+			isa = PBXGroup;
+			children = (
+				DD9607CD14D36FDE00FA2CBA /* libTestFlight.a */,
+				DD9607D014D36FDE00FA2CBA /* TestFlight.h */,
+			);
+			name = "TestFlight SDK";
+			path = "Externals/TestFlight SDK";
+			sourceTree = SOURCE_ROOT;
 		};
 		DDC6E58B14E5B463000F611E /* Products */ = {
 			isa = PBXGroup;
@@ -437,6 +459,8 @@
 				DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */,
 				DD7779DD14EB2D54002089D0 /* back.png */,
 				DDE3D6E814EAE6E000B71543 /* fullscreen.png */,
+				DD353ADB14F07B5400BF89F4 /* testflight.png */,
+				DDFC944F14F306E40094E791 /* TestFlight.txt */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -578,6 +602,7 @@
 				DD2B334B14CF75AE008DE8CB /* InfoPlist.strings in Resources */,
 				DD2B335714CF75AE008DE8CB /* DSMRViewController.xib in Resources */,
 				DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */,
+				DD9607D514D371FC00FA2CBA /* Entitlements.plist in Resources */,
 				DD98B6FE14D76C090092882F /* mapbox.geography-class.plist in Resources */,
 				DD4312F914D8AACA00697249 /* DSMRThemePickerController.xib in Resources */,
 				DD43131314D8D26800697249 /* needle.png in Resources */,
@@ -593,6 +618,8 @@
 				DDE382F714ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib in Resources */,
 				DDE3831B14EDEE27001D5D45 /* waveform.png in Resources */,
 				DDE3833614EDFA66001D5D45 /* clear.png in Resources */,
+				DD353ADC14F07B5400BF89F4 /* testflight.png in Resources */,
+				DDFC945014F306E40094E791 /* TestFlight.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -677,6 +704,7 @@
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map/**";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
@@ -690,6 +718,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -713,6 +742,10 @@
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
 				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Externals/TestFlight SDK\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -732,6 +765,10 @@
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
 				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Externals/TestFlight SDK\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-all_load",
@@ -741,6 +778,55 @@
 			};
 			name = Release;
 		};
+		DD9607CA14D36EEB00FA2CBA /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "ADHOC=1";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos;
+				STRIP_INSTALLED_PRODUCT = NO;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Ad Hoc";
+		};
+		DD9607CB14D36EEB00FA2CBA /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/Externals/BlocksKit\"/**",
+					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
+				);
+				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Externals/TestFlight SDK\"",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = "Ad Hoc";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -749,6 +835,7 @@
 			buildConfigurations = (
 				DD2B335814CF75AE008DE8CB /* Debug */,
 				DD2B335914CF75AE008DE8CB /* Release */,
+				DD9607CA14D36EEB00FA2CBA /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -758,6 +845,7 @@
 			buildConfigurations = (
 				DD2B335B14CF75AE008DE8CB /* Debug */,
 				DD2B335C14CF75AE008DE8CB /* Release */,
+				DD9607CB14D36EEB00FA2CBA /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
