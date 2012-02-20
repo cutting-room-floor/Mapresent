@@ -824,6 +824,7 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
     
     moviePresenter.moviePlayer.shouldAutoplay = NO;
+    moviePresenter.moviePlayer.allowsAirPlay  = YES;
     
     [self presentMoviePlayerViewControllerAnimated:moviePresenter];
 }
