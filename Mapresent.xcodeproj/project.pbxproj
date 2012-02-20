@@ -55,6 +55,7 @@
 		DDE3D6F114EB1AFD00B71543 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EE14EB1AFD00B71543 /* play.png */; };
 		DDE3D6F214EB1AFD00B71543 /* play_fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */; };
 		DDFC945014F306E40094E791 /* TestFlight.txt in Resources */ = {isa = PBXBuildFile; fileRef = DDFC944F14F306E40094E791 /* TestFlight.txt */; };
+		DDFC94A314F30CD60094E791 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFC94A214F30CD60094E791 /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,6 +196,7 @@
 		DDE3D6EE14EB1AFD00B71543 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_fullscreen.png; sourceTree = "<group>"; };
 		DDFC944F14F306E40094E791 /* TestFlight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestFlight.txt; sourceTree = SOURCE_ROOT; };
+		DDFC94A214F30CD60094E791 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -216,6 +218,7 @@
 				DD2B373814CF7A4D008DE8CB /* libMapView.a in Frameworks */,
 				DD2B373A14CF7AAB008DE8CB /* libsqlite3.dylib in Frameworks */,
 				DD9607D114D36FDE00FA2CBA /* libTestFlight.a in Frameworks */,
+				DDFC94A314F30CD60094E791 /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +258,7 @@
 				DD2B373B14CF7AC7008DE8CB /* QuartzCore.framework */,
 				DD2B334014CF75AE008DE8CB /* UIKit.framework */,
 				DD2B373914CF7AAB008DE8CB /* libsqlite3.dylib */,
+				DDFC94A214F30CD60094E791 /* libz.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
