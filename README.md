@@ -25,7 +25,7 @@ This stuff is working, albeit roughly.
  * Able to retrieve copy of presentation from app via iTunes file sharing. 
  * Playback automatically stops at end of presentation. 
  * Export to video on disk. 
- * Viewing, emailing, and opening exported video in other apps. 
+ * Viewing (including in AirPlay), emailing, and opening exported video in other apps. 
  * Fullscreen map playback. 
  * Modal, cancellable export screen. 
  * Button for rewinding to beginning. 
