@@ -11,9 +11,8 @@
 @implementation DSMRTimelineMarker
 
 @synthesize markerType;
-@synthesize southWest;
-@synthesize northEast;
 @synthesize center;
+@synthesize zoom;
 @synthesize timeOffset;
 @synthesize sourceName;
 @synthesize snapshot;
@@ -28,9 +27,8 @@
     if (self)
     {
         markerType     = [coder decodeIntForKey:@"markerType"];
-        southWest      = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"swLat"],     [coder decodeDoubleForKey:@"swLon"]);
-        northEast      = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"neLat"],     [coder decodeDoubleForKey:@"neLon"]);
         center         = CLLocationCoordinate2DMake([coder decodeDoubleForKey:@"centerLat"], [coder decodeDoubleForKey:@"centerLon"]);
+        zoom           = [coder decodeFloatForKey:@"zoom"];
         timeOffset     = [coder decodeDoubleForKey:@"timeOffset"];
         sourceName     = [coder decodeObjectForKey:@"sourceName"];
         snapshot       = [coder decodeObjectForKey:@"snapshot"];
@@ -45,12 +43,9 @@
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodeInt:markerType             forKey:@"markerType"];
-    [coder encodeDouble:southWest.latitude  forKey:@"swLat"];
-    [coder encodeDouble:southWest.longitude forKey:@"swLon"];
-    [coder encodeDouble:northEast.latitude  forKey:@"neLat"];
-    [coder encodeDouble:northEast.longitude forKey:@"neLon"];
     [coder encodeDouble:center.latitude     forKey:@"centerLat"];
     [coder encodeDouble:center.longitude    forKey:@"centerLon"];
+    [coder encodeFloat:zoom                 forKey:@"zoom"];
     [coder encodeDouble:timeOffset          forKey:@"timeOffset"];
     [coder encodeObject:sourceName          forKey:@"sourceName"];
     [coder encodeObject:snapshot            forKey:@"snapshot"];

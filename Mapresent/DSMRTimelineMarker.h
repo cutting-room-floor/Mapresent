@@ -21,9 +21,8 @@ typedef enum {
 @interface DSMRTimelineMarker : NSObject <NSCoding>
 
 @property (nonatomic, assign) DSMRTimelineMarkerType markerType;
-@property (nonatomic, assign) CLLocationCoordinate2D southWest;
-@property (nonatomic, assign) CLLocationCoordinate2D northEast;
 @property (nonatomic, assign) CLLocationCoordinate2D center;
+@property (nonatomic, assign) CGFloat zoom;
 @property (nonatomic, assign) NSTimeInterval timeOffset;
 @property (nonatomic, strong) NSString *sourceName;
 @property (nonatomic, strong) UIImage *snapshot;

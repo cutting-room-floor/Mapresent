@@ -16,7 +16,6 @@
 #import "DSMRDrawingSurfaceView.h"
 
 #import "RMMapView.h"
-#import "RMScrollView.h"
 #import "RMMBTilesTileSource.h"
 #import "RMTileStreamSource.h"
 
@@ -259,7 +258,7 @@
 {
     self.timelineView.exporting = NO;
     
-    ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
+//    ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
     
     self.fullScreenButton.hidden = NO;
     self.mapLabel.hidden = NO;
@@ -275,7 +274,7 @@
 {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     
-    ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
+//    ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 1.0;
     
     self.backButton.enabled           = ! self.backButton.enabled;
     self.playFullScreenButton.enabled = ! self.playFullScreenButton.enabled;
@@ -288,7 +287,7 @@
     {
         self.timelineView.exporting = NO;
         
-        ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
+//        ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 0.3;
         
         self.fullScreenButton.hidden = NO;
         self.mapLabel.hidden = NO;
@@ -579,7 +578,44 @@
     
     if (marker.markerType == DSMRTimelineMarkerTypeLocation)
     {
-        [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:marker.southWest northEast:marker.northEast animated:YES];
+        float targetZoom               = marker.zoom;
+        float roundedTargetZoom        = roundf(targetZoom);
+        float targetScaleFactor        = log2f(targetZoom);
+        float roundedTargetScaleFactor = log2f(roundf(roundedTargetZoom));
+        float zoomRatio                = targetScaleFactor / roundedTargetScaleFactor;
+        float tilesPerSide             = powf(2.0, roundedTargetZoom);
+        float pixelsPerSide            = (float)[self.mapView.tileSource tileSideLength] * tilesPerSide;
+        float scaledPixelsPerSide      = roundf(pixelsPerSide * zoomRatio);
+        float targetMetersPerPixel     = self.mapView.projection.planetBounds.size.width / scaledPixelsPerSide;
+        
+//        NSLog(@"target zoom: %f", targetZoom);
+//        NSLog(@"rounded target zoom: %f", roundedTargetZoom);
+//        NSLog(@"target scale factor: %f", targetScaleFactor);
+//        NSLog(@"rounded target scale factor: %f", roundedTargetScaleFactor);
+//        NSLog(@"zoom ratio: %f", zoomRatio);
+//        NSLog(@"tiles per side: %f", tilesPerSide);
+//        NSLog(@"pixels per side: %f", pixelsPerSide);
+//        NSLog(@"scaled pixels per side: %f", scaledPixelsPerSide);
+//        NSLog(@"target meters per pixel: %f", targetMetersPerPixel);
+        
+        RMProjectedPoint projectedCenter = [self.mapView.projection coordinateToProjectedPoint:marker.center];
+        
+        RMProjectedPoint bottomLeft      = RMProjectedPointMake(projectedCenter.x - ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
+                                                                projectedCenter.y - ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
+        
+        RMProjectedPoint topRight        = RMProjectedPointMake(projectedCenter.x + ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
+                                                                projectedCenter.y + ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
+        
+        [UIView animateWithDuration:1.0
+                              delay:0.0
+                            options:UIViewAnimationCurveLinear | UIViewAnimationOptionBeginFromCurrentState
+                         animations:^(void)
+                         {
+                             [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:[self.mapView.projection projectedPointToCoordinate:bottomLeft]
+                                                                          northEast:[self.mapView.projection projectedPointToCoordinate:topRight]
+                                                                           animated:NO];
+                         }
+                         completion:nil];
     }
     else if (marker.markerType == DSMRTimelineMarkerTypeAudio && ! self.timelineView.isExporting) // don't play audio live when exporting
     {
@@ -609,13 +645,13 @@
         {
             [UIView animateWithDuration:(self.timelineView.isExporting ? 2.0 : 0.25)
                              animations:^(void)
-             {
-                 drawingView.alpha = 0.0;
-             }
+                             {
+                                 drawingView.alpha = 0.0;
+                             }
                              completion:^(BOOL finished)
-             {
-                 [drawingView removeFromSuperview];
-             }];
+                             {
+                                 [drawingView removeFromSuperview];
+                             }];
         }
     }
 }
@@ -733,7 +769,7 @@
             if ([file hasPrefix:@"snap_"] && [file hasSuffix:@".png"])
                 [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/%@", NSTemporaryDirectory(), file] error:nil];
         
-        ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 8.0;
+//        ((RMScrollView *)[self.mapView.subviews objectAtIndex:1]).animationDuration = 8.0;
         
         self.fullScreenButton.hidden = YES;
         self.mapLabel.hidden = YES;
@@ -929,9 +965,8 @@ CGImageRef UIGetScreenImage(void); // um, FIXME
     DSMRTimelineMarker *marker = [[DSMRTimelineMarker alloc] init];
     
     marker.markerType = DSMRTimelineMarkerTypeLocation;
-    marker.southWest  = self.mapView.latitudeLongitudeBoundingBox.southWest;
-    marker.northEast  = self.mapView.latitudeLongitudeBoundingBox.northEast;
     marker.center     = self.mapView.centerCoordinate;
+    marker.zoom       = self.mapView.zoom;
     marker.timeOffset = [self.timeLabel.text doubleValue];
     marker.sourceName = [self.mapView.tileSource shortName];
     marker.snapshot   = [self.mapView takeSnapshot];;
