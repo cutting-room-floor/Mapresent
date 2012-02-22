@@ -588,23 +588,13 @@
         float scaledPixelsPerSide      = roundf(pixelsPerSide * zoomRatio);
         float targetMetersPerPixel     = self.mapView.projection.planetBounds.size.width / scaledPixelsPerSide;
         
-//        NSLog(@"target zoom: %f", targetZoom);
-//        NSLog(@"rounded target zoom: %f", roundedTargetZoom);
-//        NSLog(@"target scale factor: %f", targetScaleFactor);
-//        NSLog(@"rounded target scale factor: %f", roundedTargetScaleFactor);
-//        NSLog(@"zoom ratio: %f", zoomRatio);
-//        NSLog(@"tiles per side: %f", tilesPerSide);
-//        NSLog(@"pixels per side: %f", pixelsPerSide);
-//        NSLog(@"scaled pixels per side: %f", scaledPixelsPerSide);
-//        NSLog(@"target meters per pixel: %f", targetMetersPerPixel);
-        
         RMProjectedPoint projectedCenter = [self.mapView.projection coordinateToProjectedPoint:marker.center];
         
-        RMProjectedPoint bottomLeft      = RMProjectedPointMake(projectedCenter.x - ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
-                                                                projectedCenter.y - ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
+        RMProjectedPoint bottomLeft = RMProjectedPointMake(projectedCenter.x - ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
+                                                           projectedCenter.y - ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
         
-        RMProjectedPoint topRight        = RMProjectedPointMake(projectedCenter.x + ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
-                                                                projectedCenter.y + ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
+        RMProjectedPoint topRight   = RMProjectedPointMake(projectedCenter.x + ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
+                                                           projectedCenter.y + ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
         
         [UIView animateWithDuration:1.0
                               delay:0.0
