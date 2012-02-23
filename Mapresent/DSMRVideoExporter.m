@@ -118,10 +118,6 @@
             [videoWriter startWriting];
             [videoWriter startSessionAtSourceTime:kCMTimeZero];
 
-            // setup serial queue for frame processing
-            //
-//            dispatch_queue_t animationQueue = dispatch_queue_create("com.mapbox.mapresent.video", DISPATCH_QUEUE_SERIAL); // FIXME - release
-
             if (self.shouldCancel)
                 return;
             
@@ -135,44 +131,33 @@
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileOut:) name:RMTileRetrieved object:self.mapView.tileSource];
             });
 
-//            dispatch_async(animationQueue, ^(void)
-//            {
-                dispatch_sync(dispatch_get_main_queue(), ^(void)
-                {
-                    [self.delegate performSelector:@selector(resetMapView)]; // FIXME decouple
-                });
-//            });
+            dispatch_sync(dispatch_get_main_queue(), ^(void)
+            {
+                [self.delegate performSelector:@selector(resetMapView)]; // FIXME decouple
+            });
             
             // wait for all tiles to load
             //
-//            dispatch_async(animationQueue, ^(void)
-//            {
-                while ([self.trackedTiles count])
-                    [NSThread sleepForTimeInterval:0.5];
-//            });
+            while ([self.trackedTiles count])
+                [NSThread sleepForTimeInterval:0.5];
             
             // take snapshot & stop tracking tiles
             //
             __block UIImage *snapshot;
             
-//            dispatch_sync(animationQueue, ^(void)
-//            {
-                dispatch_sync(dispatch_get_main_queue(), ^(void)
-                {
-                    snapshot = [self.mapView takeSnapshot];
-                            
-                    [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
-                    [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
-                });
-//            });
+            dispatch_sync(dispatch_get_main_queue(), ^(void)
+            {
+                snapshot = [self.mapView takeSnapshot];
+                        
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
+                [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
+            });
             
             if (self.shouldCancel)
                 return;
 
             while ( ! [writerInput isReadyForMoreMediaData])
                 [NSThread sleepForTimeInterval:0.5];
-            
-            [UIImagePNGRepresentation(snapshot) writeToFile:@"/tmp/snap.png" atomically:YES];
             
             CVPixelBufferRef buffer = [self pixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
             
@@ -223,40 +208,31 @@
                         {
                             // adjust map position
                             //
-//                            dispatch_async(animationQueue, ^(void)
-//                            {
-                                dispatch_sync(dispatch_get_main_queue(), ^(void)
-                                {
-                                    [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.mapView.centerCoordinate.latitude  + latStep, 
-                                                                                                 self.mapView.centerCoordinate.longitude + lonStep) 
-                                                             animated:NO];
-                                                 
-                                    self.mapView.zoom = self.mapView.zoom + zoomStep;
-                                });
-//                            });
+                            dispatch_sync(dispatch_get_main_queue(), ^(void)
+                            {
+                                [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.mapView.centerCoordinate.latitude  + latStep, 
+                                                                                             self.mapView.centerCoordinate.longitude + lonStep) 
+                                                         animated:NO];
+                                             
+                                self.mapView.zoom = self.mapView.zoom + zoomStep;
+                            });
                             
                             // wait for all tiles to load
                             //
-//                            dispatch_async(animationQueue, ^(void)
-//                            {
-                                while ([self.trackedTiles count])
-                                    [NSThread sleepForTimeInterval:0.5];
-//                            });
+                            while ([self.trackedTiles count])
+                                [NSThread sleepForTimeInterval:0.5];
                             
                             // take snapshot & stop tracking tiles
                             //
                             __block UIImage *snapshot;
                             
-//                            dispatch_sync(animationQueue, ^(void)
-//                            {
-                                dispatch_sync(dispatch_get_main_queue(), ^(void)
-                                {
-                                    snapshot = [self.mapView takeSnapshot];
-                                                 
-                                    [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
-                                    [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
-                                });
-//                            });
+                            dispatch_sync(dispatch_get_main_queue(), ^(void)
+                            {
+                                snapshot = [self.mapView takeSnapshot];
+                                             
+                                [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
+                                [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
+                            });
 
                             while ( ! [writerInput isReadyForMoreMediaData])
                                 [NSThread sleepForTimeInterval:0.5];
