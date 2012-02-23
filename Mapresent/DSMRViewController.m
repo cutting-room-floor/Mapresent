@@ -334,7 +334,7 @@
         float scaledPixelsPerSide      = roundf(pixelsPerSide * zoomRatio);
         float targetMetersPerPixel     = self.mapView.projection.planetBounds.size.width / scaledPixelsPerSide;
         
-        RMProjectedPoint projectedCenter = [self.mapView.projection coordinateToProjectedPoint:marker.center];
+        RMProjectedPoint projectedCenter = [self.mapView coordinateToProjectedPoint:marker.center];
         
         RMProjectedPoint bottomLeft = RMProjectedPointMake(projectedCenter.x - ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
                                                            projectedCenter.y - ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
@@ -347,8 +347,8 @@
                             options:UIViewAnimationCurveLinear | UIViewAnimationOptionBeginFromCurrentState
                          animations:^(void)
                          {
-                             [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:[self.mapView.projection projectedPointToCoordinate:bottomLeft]
-                                                                          northEast:[self.mapView.projection projectedPointToCoordinate:topRight]
+                             [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:[self.mapView projectedPointToCoordinate:bottomLeft]
+                                                                          northEast:[self.mapView projectedPointToCoordinate:topRight]
                                                                            animated:NO];
                          }
                          completion:nil];
