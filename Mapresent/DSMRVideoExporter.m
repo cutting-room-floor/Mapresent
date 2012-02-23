@@ -21,7 +21,7 @@
 
 #define DSMRVideoExporterVideoWidth  640.0f
 #define DSMRVideoExporterVideoHeight 480.0f
-#define DSMRVideoExporterFrameRate    15.0f
+#define DSMRVideoExporterFrameRate    30.0f
 
 @interface DSMRVideoExporter ()
 
@@ -185,7 +185,7 @@
                         // setup frame stepping
                         //
                         float duration = 1.0; // this will vary in the future
-                        float steps    = duration * 2.0 * DSMRVideoExporterFrameRate;
+                        float steps    = duration * DSMRVideoExporterFrameRate;
                         
                         CLLocationCoordinate2D startCenter = self.mapView.centerCoordinate;
                         CLLocationCoordinate2D endCenter   = marker.center;
@@ -243,6 +243,8 @@
 
                             self.exportSnapshot = snapshot;
                             
+//                            [UIImagePNGRepresentation(snapshot) writeToFile:[NSString stringWithFormat:@"/tmp/snap_%@_%i.png", [marker hash], (int)step] atomically:YES];
+                            
                             while ( ! [writerInput isReadyForMoreMediaData])
                                 [NSThread sleepForTimeInterval:0.5];
                             
@@ -250,7 +252,7 @@
 
                             if (buffer)
                             {
-                                CMTime frameTime = CMTimeAdd(CMTimeMake(marker.timeOffset * 1000, 1000), CMTimeMake(step, steps));
+                                CMTime frameTime = CMTimeAdd(CMTimeMake(marker.timeOffset * 1000, 1000), CMTimeMake(step, DSMRVideoExporterFrameRate));
                                 
 //                                NSLog(@"outputting frame %f of %@ at %f", step, marker, CMTimeGetSeconds(frameTime));
                                 
