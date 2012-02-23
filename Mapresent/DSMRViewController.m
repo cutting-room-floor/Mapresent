@@ -264,6 +264,9 @@
 - (IBAction)pressedPlay:(id)sender
 {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+
+    if ([self.timeLabel.text floatValue] == 0)
+        [self resetMapView];
     
     for (UIView *toggleView in self.viewsDisabledDuringPlayback)
     {
@@ -507,7 +510,9 @@
     
     [UIView animateWithDuration:0.25
                      animations:^(void)
-                     {
+                     {                         
+                         [self resetMapView];
+                         
                          self.inspectorView.frame = CGRectMake(self.inspectorView.frame.origin.x - self.inspectorView.frame.size.width, 
                                                                self.inspectorView.frame.origin.y, 
                                                                self.inspectorView.frame.size.width, 

@@ -12,6 +12,7 @@
 
 #import "RMMapView.h"
 #import "RMTileSource.h"
+#import "RMTileStreamSource.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
@@ -33,6 +34,7 @@
 @property (strong) NSMutableArray *trackedTiles;
 @property (nonatomic, strong) AVAssetExportSession *assetExportSession;
 
+- (UIImage *)fullyLoadedSnapshotForMapActions:(void (^)(void))block;
 - (void)failExportingWithError:(NSError *)error;
 - (CVPixelBufferRef)createPixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
 - (void)tileIn:(NSNotification *)notification;
@@ -122,39 +124,15 @@
             if (self.shouldCancel)
                 return;
             
-            // capture initial frame of map
+            // capture initial reset frame of map
             //
-            self.trackedTiles = [NSMutableArray array];
-            
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileIn:)  name:RMTileRequested object:self.mapView.tileSource];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileOut:) name:RMTileRetrieved object:self.mapView.tileSource];
-
-            dispatch_sync(dispatch_get_main_queue(), ^(void)
+            UIImage *snapshot = [self fullyLoadedSnapshotForMapActions:^(void)
             {
                 [self.delegate performSelector:@selector(resetMapView)]; // FIXME decouple
-            });
-
-            // wait for all tiles to load
-            //
-            while ([self.trackedTiles count])
-                [NSThread sleepForTimeInterval:0.5];
-            
-            // clean up tile tracking
-            //
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
-            [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
+            }];
             
             if (self.shouldCancel)
                 return;
-
-            // take snapshot
-            //
-            __block UIImage *snapshot;
-            
-            dispatch_sync(dispatch_get_main_queue(), ^(void)
-            {
-                snapshot = [self.mapView takeSnapshot];
-            });
             
             self.exportSnapshot = snapshot;
             
@@ -201,49 +179,19 @@
                         //
                         for (float step = 1.0; step <= steps; step++)
                         {
-                            // setup tile tracking
-                            //
-                            self.trackedTiles = [NSMutableArray array];
-                            
-                            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileIn:)  name:RMTileRequested object:self.mapView.tileSource];
-                            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileOut:) name:RMTileRetrieved object:self.mapView.tileSource];
-                            
-                            // adjust map position
-                            //
-                            dispatch_sync(dispatch_get_main_queue(), ^(void)
+                            UIImage *snapshot = [self fullyLoadedSnapshotForMapActions:^(void)
                             {
                                 [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.mapView.centerCoordinate.latitude  + latStep, 
                                                                                              self.mapView.centerCoordinate.longitude + lonStep) 
                                                          animated:NO];
                                              
                                 self.mapView.zoom = self.mapView.zoom + zoomStep;
-                            });
+                            }];
                             
-                            // wait for all tiles to load
-                            //
-                            while ([self.trackedTiles count])
-                                [NSThread sleepForTimeInterval:0.5];
-                            
-                            // clean up tile tracking
-                            //
-                            [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
-                            [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
-
                             if (self.shouldCancel)
                                 return;
                             
-                            // take snapshot
-                            //
-                            __block UIImage *snapshot;
-                            
-                            dispatch_sync(dispatch_get_main_queue(), ^(void)
-                            {
-                                snapshot = [self.mapView takeSnapshot];
-                            });
-
                             self.exportSnapshot = snapshot;
-                            
-//                            [UIImagePNGRepresentation(snapshot) writeToFile:[NSString stringWithFormat:@"/tmp/snap_%@_%i.png", [marker hash], (int)step] atomically:YES];
                             
                             while ( ! [writerInput isReadyForMoreMediaData])
                                 [NSThread sleepForTimeInterval:0.5];
@@ -253,8 +201,6 @@
                             if (buffer)
                             {
                                 CMTime frameTime = CMTimeAdd(CMTimeMake(marker.timeOffset * 1000, 1000), CMTimeMake(step, DSMRVideoExporterFrameRate));
-                                
-//                                NSLog(@"outputting frame %f of %@ at %f", step, marker, CMTimeGetSeconds(frameTime));
                                 
                                 if( ! [adaptor appendPixelBuffer:buffer withPresentationTime:frameTime])
                                     [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1002 userInfo:nil]];
@@ -266,12 +212,47 @@
                         break;
                     }
                     case DSMRTimelineMarkerTypeAudio:
+                    {
+                        // audio markers get added in a second pass
+                        //
+                        break;
+                    }
                     case DSMRTimelineMarkerTypeTheme:
+                    {
+                        UIImage *snapshot = [self fullyLoadedSnapshotForMapActions:^(void)
+                        {
+                            [self.mapView removeAllCachedImages];
+                            
+                            self.mapView.tileSource = [[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo];
+                        }];
+                        
+                        if (self.shouldCancel)
+                            return;
+
+                        self.exportSnapshot = snapshot;
+                        
+                        while ( ! [writerInput isReadyForMoreMediaData])
+                            [NSThread sleepForTimeInterval:0.5];
+                        
+                        CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+                        
+                        if (buffer)
+                        {
+                            // FIXME: need fancy transitions like fade here
+                            
+                            if( ! [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
+                                [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1010 userInfo:nil]];
+                            
+                            CFRelease(buffer);
+                        }
+                        
+                        break;
+                    }
                     case DSMRTimelineMarkerTypeDrawing:
                     case DSMRTimelineMarkerTypeDrawingClear:
                     default:
                     {
-                        NSLog(@"skipping marker of type %i for now", marker.markerType); // FIXME
+                        NSLog(@"skipping unsupported marker of type %i for now", marker.markerType); // FIXME
                         
                         break;
                     }
@@ -316,50 +297,50 @@
             if (self.shouldCancel)
                 return;
             
-    //        // iterate & add audio markers
-    //        //
-    //        for (DSMRTimelineMarker *marker in self.markers)
-    //        {
-    //           AVMutableCompositionTrack *compositionAudioTrack;
-    //           BOOL hasAudio;
-    //           
-    //           if (marker.markerType == DSMRTimelineMarkerTypeAudio)
-    //           {
-    //               if ( ! hasAudio)
-    //               {
-    //                   // create audio track on target composition
-    //                   //
-    //                   compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio 
-    //                                                                    preferredTrackID:kCMPersistentTrackID_Invalid];
-    //                   
-    //                   hasAudio = YES;
-    //               }
-    //               
-    //               // write marker audio data to temp file
-    //               //
-    //               NSString *tempFile = [NSString stringWithFormat:@"%@/%@.dat", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]];
-    //               
-    //               [marker.recording writeToFile:tempFile atomically:YES];
-    //               
-    //               // get audio asset
-    //               //
-    //               AVURLAsset *audioAsset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:tempFile] 
-    //                                                            options:nil];
-    //               
-    //               // get its audio track
-    //               //
-    //               AVAssetTrack *audioAssetTrack = [[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0];
-    //               
-    //               // add marker audio track to target composition audio track
-    //               //
-    //               [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration) 
-    //                                              ofTrack:audioAssetTrack 
-    //                                               atTime:CMTimeMake(marker.timeOffset * 1000, 1000) 
-    //                                                error:nil];
-    //               
-    //               // FIXME: clean up
-    //           }
-    //        }
+            // iterate & add audio markers
+            //
+            for (DSMRTimelineMarker *marker in self.markers)
+            {
+               AVMutableCompositionTrack *compositionAudioTrack;
+               BOOL hasAudio;
+               
+               if (marker.markerType == DSMRTimelineMarkerTypeAudio)
+               {
+                   if ( ! hasAudio)
+                   {
+                       // create audio track on target composition
+                       //
+                       compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio 
+                                                                        preferredTrackID:kCMPersistentTrackID_Invalid];
+                       
+                       hasAudio = YES;
+                   }
+                   
+                   // write marker audio data to temp file
+                   //
+                   NSString *tempFile = [NSString stringWithFormat:@"%@/%@.dat", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]];
+                   
+                   [marker.recording writeToFile:tempFile atomically:YES];
+                   
+                   // get audio asset
+                   //
+                   AVURLAsset *audioAsset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:tempFile] 
+                                                                options:nil];
+                   
+                   // get its audio track
+                   //
+                   AVAssetTrack *audioAssetTrack = [[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0];
+                   
+                   // add marker audio track to target composition audio track
+                   //
+                   [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration) 
+                                                  ofTrack:audioAssetTrack 
+                                                   atTime:CMTimeMake(marker.timeOffset * 1000, 1000) 
+                                                    error:nil];
+                   
+                   // FIXME: clean up temp files
+               }
+            }
 
             // setup export session for composition
             //
@@ -429,6 +410,41 @@
 - (NSString *)documentsFolderPath // FIXME - dupe
 {
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+}
+
+- (UIImage *)fullyLoadedSnapshotForMapActions:(void (^)(void))block
+{
+    // start tracking tiles
+    //
+    self.trackedTiles = [NSMutableArray array];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileIn:)  name:RMTileRequested object:self.mapView.tileSource];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileOut:) name:RMTileRetrieved object:self.mapView.tileSource];
+    
+    // perform map action(s)
+    //
+    dispatch_sync(dispatch_get_main_queue(), block);
+    
+    // wait for all tiles to load
+    //
+    while ([self.trackedTiles count])
+        [NSThread sleepForTimeInterval:0.5];
+    
+    // clean up tile tracking
+    //
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
+    
+    // take snapshot
+    //
+    __block UIImage *snapshot;
+    
+    dispatch_sync(dispatch_get_main_queue(), ^(void)
+    {
+        snapshot = [self.mapView takeSnapshot];
+    });
+    
+    return snapshot;
 }
 
 - (void)failExportingWithError:(NSError *)error
