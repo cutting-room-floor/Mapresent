@@ -39,6 +39,7 @@
 @property (nonatomic, strong) IBOutlet UIButton *playFullScreenButton;
 @property (nonatomic, strong) IBOutlet UILabel *timeLabel;
 @property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
+@property (nonatomic, strong) IBOutletCollection() NSArray *viewsDisabledDuringPlayback;
 @property (nonatomic, strong) NSMutableArray *markers;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) AVAudioPlayer *player;
@@ -84,6 +85,7 @@
 @synthesize playFullScreenButton;
 @synthesize timeLabel;
 @synthesize fullScreenButton;
+@synthesize viewsDisabledDuringPlayback;
 @synthesize markers;
 @synthesize recorder;
 @synthesize player;
@@ -263,9 +265,14 @@
 {
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     
-    self.backButton.enabled           = ! self.backButton.enabled;
-    self.playFullScreenButton.enabled = ! self.playFullScreenButton.enabled;
-    
+    for (UIView *toggleView in self.viewsDisabledDuringPlayback)
+    {
+        if ([toggleView isKindOfClass:[UIControl class]])
+            ((UIControl *)toggleView).enabled = ! ((UIControl *)toggleView).enabled;
+        
+        toggleView.userInteractionEnabled = ! toggleView.userInteractionEnabled;
+    }
+        
     if ([self.markers count] && [[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
         for (DSMRTimelineMarker *zeroMarker in [self.markers select:^BOOL(id obj) { return ([[obj valueForKey:@"timeOffset"] floatValue] == 0); }])
             [self fireMarkerAtIndex:[self.markers indexOfObject:zeroMarker]];
