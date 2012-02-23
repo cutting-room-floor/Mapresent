@@ -45,14 +45,14 @@
 							<object class="IBUILabel" id="22862743">
 								<reference key="NSNextResponder" ref="178641545"/>
 								<int key="NSvFlags">268</int>
-								<string key="NSFrame">{{10, 449}, {200, 21}}</string>
+								<string key="NSFrame">{{8, 449}, {300, 21}}</string>
 								<reference key="NSSuperview" ref="178641545"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="101332526"/>
 								<string key="NSReuseIdentifierKey">_NS:345</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
 									<int key="NSColorSpace">1</int>
-									<bytes key="NSRGB">MSAxIDEgMC41AA</bytes>
+									<bytes key="NSRGB">MSAxIDEgMC4yNQA</bytes>
 								</object>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>

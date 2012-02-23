@@ -1006,7 +1006,7 @@
 
 - (void)mapViewRegionDidChange:(RMMapView *)mapView
 {
-    self.mapLabel.text = [NSString stringWithFormat:@"%f, %f", self.mapView.centerCoordinate.latitude, self.mapView.centerCoordinate.longitude];
+    self.mapLabel.text = [NSString stringWithFormat:@"%f, %f @ %f", self.mapView.centerCoordinate.latitude, self.mapView.centerCoordinate.longitude, self.mapView.zoom];
 }
 
 #pragma mark -
