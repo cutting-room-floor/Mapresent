@@ -39,6 +39,7 @@
 		DD9607D114D36FDE00FA2CBA /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9607CD14D36FDE00FA2CBA /* libTestFlight.a */; };
 		DD9607D514D371FC00FA2CBA /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD9607D414D371FC00FA2CBA /* Entitlements.plist */; };
 		DD98B6FE14D76C090092882F /* mapbox.geography-class.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */; };
+		DDA5DBC714F480AF00F5CA70 /* DSMRVideoExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA5DBC614F480AF00F5CA70 /* DSMRVideoExporter.m */; };
 		DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E59C14E5B463000F611E /* libBlocksKit.a */; };
 		DDC6E5A814E5B5F6000F611E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E5A714E5B5F6000F611E /* MessageUI.framework */; };
 		DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */; };
@@ -176,6 +177,8 @@
 		DD9607D014D36FDE00FA2CBA /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFlight.h; sourceTree = "<group>"; };
 		DD9607D414D371FC00FA2CBA /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = SOURCE_ROOT; };
 		DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mapbox.geography-class.plist"; sourceTree = "<group>"; };
+		DDA5DBC514F480AF00F5CA70 /* DSMRVideoExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRVideoExporter.h; sourceTree = "<group>"; };
+		DDA5DBC614F480AF00F5CA70 /* DSMRVideoExporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRVideoExporter.m; sourceTree = "<group>"; };
 		DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BlocksKit.xcodeproj; path = Externals/BlocksKit/BlocksKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		DDC6E5A714E5B5F6000F611E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DDC6E5AA14E5BA4E000F611E /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = Externals/MBProgressHUD/MBProgressHUD.h; sourceTree = SOURCE_ROOT; };
@@ -421,6 +424,8 @@
 		DDD948EE14EE30D90042C9E0 /* Video Export */ = {
 			isa = PBXGroup;
 			children = (
+				DDA5DBC514F480AF00F5CA70 /* DSMRVideoExporter.h */,
+				DDA5DBC614F480AF00F5CA70 /* DSMRVideoExporter.m */,
 				DD7779E114EB32D6002089D0 /* DSMRExportModalView.xib */,
 			);
 			name = "Video Export";
@@ -647,6 +652,7 @@
 				DDE382F614ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m in Sources */,
 				DDE382FA14EDB008001D5D45 /* DSMRDrawingSurfaceView.m in Sources */,
 				DDE3831914EDE34F001D5D45 /* DSMRTimelineMarkerView.m in Sources */,
+				DDA5DBC714F480AF00F5CA70 /* DSMRVideoExporter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

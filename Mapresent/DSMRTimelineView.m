@@ -32,7 +32,6 @@
 
 @synthesize delegate;
 @synthesize playing;
-@synthesize exporting;
 @synthesize scroller;
 @synthesize timeline;
 @synthesize playTimer;
@@ -64,20 +63,17 @@
 
 - (void)togglePlay
 {
-    if ([self.playTimer isValid])
+    if (self.playing)
     {
         [self.playTimer invalidate];
         
         self.playing = NO;
-        
-        if (self.isExporting)
-            self.exporting = NO;
     }
     else
     {
         self.playing = YES;
         
-        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 / (self.isExporting ? 8.0 : 64.0)) 
+        self.playTimer = [NSTimer scheduledTimerWithTimeInterval:(1.0 / 64.0)
                                                           target:self 
                                                         selector:@selector(firePlayTimer:) 
                                                         userInfo:nil 
@@ -93,7 +89,7 @@
     
     if (targetOffset.x > self.timeline.bounds.size.width - self.scroller.bounds.size.width)
     {
-        [self togglePlay];
+        [self togglePlay]; // auto-stop - FIXME: still needed with presentationDuration? 
     }
     else
     {
