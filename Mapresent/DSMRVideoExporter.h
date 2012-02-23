@@ -25,7 +25,7 @@
 @interface DSMRVideoExporter : NSObject
 
 @property (nonatomic, weak) id <DSMRVideoExporterDelegate>delegate;
-@property (nonatomic, readonly, strong) UIImage *exportSnapshot;
+@property (readonly, strong) UIImage *exportSnapshot;
 
 - (id)initWithMapView:(RMMapView *)mapView markers:(NSArray *)markers;
 - (void)exportToPath:(NSString *)exportPath;

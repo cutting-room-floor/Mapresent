@@ -25,11 +25,12 @@
 
 @interface DSMRVideoExporter ()
 
+@property (strong) UIImage *exportSnapshot;
 @property (nonatomic, assign, getter=isExporting) BOOL exporting;
-@property (nonatomic, assign) BOOL shouldCancel;
+@property (assign) BOOL shouldCancel;
 @property (nonatomic, strong) RMMapView *mapView;
 @property (nonatomic, strong) NSArray *markers;
-@property (nonatomic, strong) NSMutableArray *trackedTiles;
+@property (strong) NSMutableArray *trackedTiles;
 @property (nonatomic, strong) AVAssetExportSession *assetExportSession;
 
 - (void)failExportingWithError:(NSError *)error;
@@ -125,11 +126,11 @@
             //
             self.trackedTiles = [NSMutableArray array];
             
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileIn:)  name:RMTileRequested object:self.mapView.tileSource];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileOut:) name:RMTileRetrieved object:self.mapView.tileSource];
+
             dispatch_sync(dispatch_get_main_queue(), ^(void)
             {
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileIn:)  name:RMTileRequested object:self.mapView.tileSource];
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileOut:) name:RMTileRetrieved object:self.mapView.tileSource];
-
                 [self.delegate performSelector:@selector(resetMapView)]; // FIXME decouple
             });
 
@@ -138,21 +139,25 @@
             while ([self.trackedTiles count])
                 [NSThread sleepForTimeInterval:0.5];
             
-            // take snapshot & stop tracking tiles
+            // clean up tile tracking
+            //
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
+            [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
+            
+            if (self.shouldCancel)
+                return;
+
+            // take snapshot
             //
             __block UIImage *snapshot;
             
             dispatch_sync(dispatch_get_main_queue(), ^(void)
             {
                 snapshot = [self.mapView takeSnapshot];
-                        
-                [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
-                [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
             });
             
-            if (self.shouldCancel)
-                return;
-
+            self.exportSnapshot = snapshot;
+            
             while ( ! [writerInput isReadyForMoreMediaData])
                 [NSThread sleepForTimeInterval:0.5];
             
@@ -166,7 +171,7 @@
                 CFRelease(buffer);
             }
             
-            // iterate markers, rendering each to video
+            // iterate markers, rendering each to video - FIXME markers with offset 0.0 don't "append"
             //
             for (DSMRTimelineMarker *marker in self.markers)
             {
@@ -177,13 +182,6 @@
                 {
                     case DSMRTimelineMarkerTypeLocation:
                     {
-                        // setup tile tracking
-                        //
-                        self.trackedTiles = [NSMutableArray array];
-                        
-                        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileIn:)  name:RMTileRequested object:self.mapView.tileSource];
-                        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileOut:) name:RMTileRetrieved object:self.mapView.tileSource];
-                        
                         // setup frame stepping
                         //
                         float duration = 1.0; // this will vary in the future
@@ -203,6 +201,13 @@
                         //
                         for (float step = 1.0; step <= steps; step++)
                         {
+                            // setup tile tracking
+                            //
+                            self.trackedTiles = [NSMutableArray array];
+                            
+                            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileIn:)  name:RMTileRequested object:self.mapView.tileSource];
+                            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileOut:) name:RMTileRetrieved object:self.mapView.tileSource];
+                            
                             // adjust map position
                             //
                             dispatch_sync(dispatch_get_main_queue(), ^(void)
@@ -219,18 +224,25 @@
                             while ([self.trackedTiles count])
                                 [NSThread sleepForTimeInterval:0.5];
                             
-                            // take snapshot & stop tracking tiles
+                            // clean up tile tracking
+                            //
+                            [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
+                            [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
+
+                            if (self.shouldCancel)
+                                return;
+                            
+                            // take snapshot
                             //
                             __block UIImage *snapshot;
                             
                             dispatch_sync(dispatch_get_main_queue(), ^(void)
                             {
                                 snapshot = [self.mapView takeSnapshot];
-                                             
-                                [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRequested object:self.mapView.tileSource];
-                                [[NSNotificationCenter defaultCenter] removeObserver:self name:RMTileRetrieved object:self.mapView.tileSource];
                             });
 
+                            self.exportSnapshot = snapshot;
+                            
                             while ( ! [writerInput isReadyForMoreMediaData])
                                 [NSThread sleepForTimeInterval:0.5];
                             
@@ -472,15 +484,11 @@
 
 - (void)tileIn:(NSNotification *)notification
 {
-    NSLog(@"tileIn: %@", [notification object]);
-    
     [self.trackedTiles addObject:[notification object]];
 }
 
 - (void)tileOut:(NSNotification *)notification
 {
-    NSLog(@"tileOut: %@", [notification object]);
-    
     [self.trackedTiles removeObject:[notification object]];
 }
 
