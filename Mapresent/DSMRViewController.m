@@ -521,9 +521,9 @@
                          if (flag)
                          {
                              [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
-                                                         message:@"Your video exported successfully. Would you like to view it now?"
+                                                         message:@"Your video was exported successfully. You may view, email, or open it in other apps by tapping on the Share menu."
                                                cancelButtonTitle:nil
-                                               otherButtonTitles:[NSArray arrayWithObjects:@"Email", @"View", nil]
+                                               otherButtonTitles:[NSArray arrayWithObjects:@"Email Now", @"View Now", @"OK", nil]
                                                          handler:^(UIAlertView *alertView, NSInteger buttonIndex)
                               {
                                   if (buttonIndex == alertView.firstOtherButtonIndex)
