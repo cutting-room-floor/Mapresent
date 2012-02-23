@@ -33,7 +33,7 @@
 @property (nonatomic, strong) AVAssetExportSession *assetExportSession;
 
 - (void)failExportingWithError:(NSError *)error;
-- (CVPixelBufferRef)pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
+- (CVPixelBufferRef)createPixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
 - (void)tileIn:(NSNotification *)notification;
 - (void)tileOut:(NSNotification *)notification;
 
@@ -129,13 +129,10 @@
             {
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileIn:)  name:RMTileRequested object:self.mapView.tileSource];
                 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tileOut:) name:RMTileRetrieved object:self.mapView.tileSource];
-            });
 
-            dispatch_sync(dispatch_get_main_queue(), ^(void)
-            {
                 [self.delegate performSelector:@selector(resetMapView)]; // FIXME decouple
             });
-            
+
             // wait for all tiles to load
             //
             while ([self.trackedTiles count])
@@ -159,7 +156,7 @@
             while ( ! [writerInput isReadyForMoreMediaData])
                 [NSThread sleepForTimeInterval:0.5];
             
-            CVPixelBufferRef buffer = [self pixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+            CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
             
             if (buffer)
             {
@@ -237,7 +234,7 @@
                             while ( ! [writerInput isReadyForMoreMediaData])
                                 [NSThread sleepForTimeInterval:0.5];
                             
-                            CVPixelBufferRef buffer = [self pixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+                            CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
 
                             if (buffer)
                             {
@@ -438,7 +435,7 @@
         failBlock();
 }
 
-- (CVPixelBufferRef)pixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
+- (CVPixelBufferRef)createPixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
 {
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
                                 [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey, 
