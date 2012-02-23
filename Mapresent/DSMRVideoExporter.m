@@ -171,7 +171,7 @@
                 CFRelease(buffer);
             }
             
-            // iterate markers, rendering each to video - FIXME markers with offset 0.0 don't "append"
+            // iterate markers, rendering each to video
             //
             for (DSMRTimelineMarker *marker in self.markers)
             {
