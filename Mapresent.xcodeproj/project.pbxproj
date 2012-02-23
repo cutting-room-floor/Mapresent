@@ -55,6 +55,7 @@
 		DDE3D6F014EB1AFD00B71543 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6ED14EB1AFD00B71543 /* pause.png */; };
 		DDE3D6F114EB1AFD00B71543 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EE14EB1AFD00B71543 /* play.png */; };
 		DDE3D6F214EB1AFD00B71543 /* play_fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */; };
+		DDF8E05414F6CA9900ECFE01 /* routeme.plist in Resources */ = {isa = PBXBuildFile; fileRef = DDF8E05314F6CA9900ECFE01 /* routeme.plist */; };
 		DDFC945014F306E40094E791 /* TestFlight.txt in Resources */ = {isa = PBXBuildFile; fileRef = DDFC944F14F306E40094E791 /* TestFlight.txt */; };
 		DDFC94A314F30CD60094E791 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFC94A214F30CD60094E791 /* libz.dylib */; };
 /* End PBXBuildFile section */
@@ -198,6 +199,7 @@
 		DDE3D6ED14EB1AFD00B71543 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 		DDE3D6EE14EB1AFD00B71543 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_fullscreen.png; sourceTree = "<group>"; };
+		DDF8E05314F6CA9900ECFE01 /* routeme.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = routeme.plist; sourceTree = "<group>"; };
 		DDFC944F14F306E40094E791 /* TestFlight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestFlight.txt; sourceTree = SOURCE_ROOT; };
 		DDFC94A214F30CD60094E791 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -288,6 +290,7 @@
 				DD2B334C14CF75AE008DE8CB /* main.m */,
 				DD2B334E14CF75AE008DE8CB /* Mapresent-Prefix.pch */,
 				DD9607D414D371FC00FA2CBA /* Entitlements.plist */,
+				DDF8E05314F6CA9900ECFE01 /* routeme.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -629,6 +632,7 @@
 				DDE3833614EDFA66001D5D45 /* clear.png in Resources */,
 				DD353ADC14F07B5400BF89F4 /* testflight.png in Resources */,
 				DDFC945014F306E40094E791 /* TestFlight.txt in Resources */,
+				DDF8E05414F6CA9900ECFE01 /* routeme.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
