@@ -267,26 +267,28 @@
 
 - (IBAction)pressedPlay:(id)sender
 {
+    // prepare for audio playback
+    //
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
 
+    // reset map view when starting
+    //
     if ([self.timeLabel.text floatValue] == 0)
         [self resetMapView];
     
-    for (UIView *toggleView in self.viewsDisabledDuringPlayback)
-    {
-        if ([toggleView isKindOfClass:[UIControl class]])
-            ((UIControl *)toggleView).enabled = ! ((UIControl *)toggleView).enabled;
-        
-        toggleView.userInteractionEnabled = ! toggleView.userInteractionEnabled;
-    }
-        
+    // remove drawings
+    //
+    [[self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    // fire markers with zero offset
+    //
     if ([self.markers count] && [[[self.markers objectAtIndex:0] valueForKey:@"timeOffset"] floatValue] == 0 && [self.timeLabel.text floatValue] == 0)
         for (DSMRTimelineMarker *zeroMarker in [self.markers select:^BOOL(id obj) { return ([[obj valueForKey:@"timeOffset"] floatValue] == 0); }])
             [self fireMarkerAtIndex:[self.markers indexOfObject:zeroMarker]];
     
+    // toggle playback
+    //
     [self.timelineView togglePlay];
-        
-    [[self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
 - (IBAction)pressedFullScreen:(id)sender
@@ -434,7 +436,19 @@
 
 - (void)playToggled:(NSNotification *)notification
 {
+    // adjust play button state
+    //
     [self.playButton setImage:[UIImage imageNamed:([self.playButton.currentImage isEqual:[UIImage imageNamed:@"play.png"]] ? @"pause.png" : @"play.png")] forState:UIControlStateNormal];
+    
+    // enable/disable other appropriate buttons
+    //
+    for (UIView *toggleView in self.viewsDisabledDuringPlayback)
+    {
+        if ([toggleView isKindOfClass:[UIControl class]])
+            ((UIControl *)toggleView).enabled = ! self.timelineView.isPlaying;
+        
+        toggleView.userInteractionEnabled = ! self.timelineView.isPlaying;
+    }
 }
 
 - (void)playProgressed:(NSNotification *)notification
@@ -1037,6 +1051,12 @@
 
 #pragma mark -
 #pragma mark RMMapViewDelegate
+
+- (void)beforeMapMove:(RMMapView *)map
+{
+    if (self.timelineView.isPlaying)
+        [self.timelineView togglePlay];
+}
 
 - (void)mapViewRegionDidChange:(RMMapView *)mapView
 {
