@@ -176,7 +176,7 @@
     self.mapView.decelerationMode = RMMapDecelerationFast;
     self.mapView.zoom             = 1.396605; // FIXME - do this by SW/NE corners
     
-    [[self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [[self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
 - (BOOL)isFullScreen
@@ -249,7 +249,7 @@
 
 - (IBAction)pressedRewind:(id)sender
 {
-    [[self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [[self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     [self.timelineView rewindToBeginning];
     
@@ -286,7 +286,7 @@
     
     [self.timelineView togglePlay];
         
-    [[self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [[self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
 - (IBAction)pressedFullScreen:(id)sender
@@ -404,6 +404,7 @@
             drawing.image = marker.snapshot;
             
             drawing.alpha = 0.0;
+            drawing.tag = 11;
             
             [self.mapView addSubview:drawing];
             
@@ -413,7 +414,7 @@
         }
         case DSMRTimelineMarkerTypeDrawingClear:
         {
-            for (UIImageView *drawingView in [self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }])
+            for (UIImageView *drawingView in [self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }])
             {
                 [UIView animateWithDuration:0.25
                                  animations:^(void)

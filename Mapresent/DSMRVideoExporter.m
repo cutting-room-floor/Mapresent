@@ -297,6 +297,7 @@
                         UIImageView *drawing = [[UIImageView alloc] initWithFrame:self.mapView.bounds];
                         
                         drawing.image = marker.snapshot;
+                        drawing.tag = 11;
                         
                         dispatch_sync(dispatch_get_main_queue(), ^(void)
                         {
@@ -334,7 +335,7 @@
                         //
                         dispatch_sync(dispatch_get_main_queue(), ^(void)
                         {
-                            [[self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+                            [[self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
                         });
 
                         // reset composited drawings
