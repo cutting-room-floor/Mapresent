@@ -409,14 +409,15 @@
                    
                    // write marker audio data to temp file
                    //
-                   NSString *tempFile = [NSString stringWithFormat:@"%@/%@.dat", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]];
+                   NSString *tempFile = [NSString stringWithFormat:@"%@%@.caf", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]];
                    
                    [marker.recording writeToFile:tempFile atomically:YES];
-                   
+
                    // get audio asset
                    //
                    AVURLAsset *audioAsset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:tempFile] 
-                                                                options:nil];
+                                                                options:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] 
+                                                                                                    forKey:AVURLAssetPreferPreciseDurationAndTimingKey]];
                    
                    // get its audio track
                    //
@@ -427,7 +428,10 @@
                    [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration) 
                                                   ofTrack:audioAssetTrack 
                                                    atTime:CMTimeMake(marker.timeOffset * 1000, 1000) 
-                                                    error:nil];
+                                                    error:&error];
+                   
+                   if (error)
+                       [self failExportingWithError:error];
                    
                    // FIXME: clean up temp files
                }
@@ -456,7 +460,7 @@
                         dispatch_sync(dispatch_get_main_queue(), ^(void)
                         {
                             [[NSFileManager defaultManager] removeItemAtPath:exportPath error:nil];
-                            [[NSFileManager defaultManager] moveItemAtPath:videoOutputFile toPath:exportPath error:nil];
+                            [[NSFileManager defaultManager] moveItemAtPath:outputPath toPath:exportPath error:nil];
                         
                             [self.delegate videoExporterDidSucceedExporting:self];
                         });

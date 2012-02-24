@@ -700,7 +700,7 @@
         [[AVAudioSession sharedInstance] setActive:YES error:nil];
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
         
-        NSURL *recordURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@.dat", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]]];
+        NSURL *recordURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@.caf", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]]];
         
         NSDictionary *settings = [NSDictionary dictionaryWithObjectsAndKeys:
                                   [NSNumber numberWithFloat:16000.0],                 AVSampleRateKey,
