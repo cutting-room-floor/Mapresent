@@ -34,7 +34,7 @@
 @property (strong) NSMutableArray *trackedTiles;
 @property (nonatomic, strong) AVAssetExportSession *assetExportSession;
 
-- (UIImage *)imageByAddingOverlayImage:(UIImage *)overlayImage toBaseImage:(UIImage *)baseImage;
+- (UIImage *)imageByAddingOverlayImage:(UIImage *)overlayImage toBaseImage:(UIImage *)baseImage atAlpha:(CGFloat)alpha;
 - (UIImage *)fullyLoadedSnapshotForMapActions:(void (^)(void))block;
 - (void)failExportingWithError:(NSError *)error;
 - (CVPixelBufferRef)createPixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
@@ -201,7 +201,7 @@
                             
                             // add drawings atop
                             //
-                            snapshot = [self imageByAddingOverlayImage:compositedDrawings toBaseImage:snapshot];
+                            snapshot = [self imageByAddingOverlayImage:compositedDrawings toBaseImage:snapshot atAlpha:1.0];
                             
                             self.exportSnapshot = snapshot;
                             
@@ -247,7 +247,7 @@
 
                         // add drawings atop
                         //
-                        snapshot = [self imageByAddingOverlayImage:compositedDrawings toBaseImage:snapshot];
+                        snapshot = [self imageByAddingOverlayImage:compositedDrawings toBaseImage:snapshot atAlpha:1.0];
 
                         self.exportSnapshot = snapshot;
                         
@@ -272,7 +272,7 @@
                     {
                         // append composite of drawing atop last frame
                         //
-                        UIImage *snapshot = [self imageByAddingOverlayImage:marker.snapshot toBaseImage:self.exportSnapshot];
+                        UIImage *snapshot = [self imageByAddingOverlayImage:marker.snapshot toBaseImage:self.exportSnapshot atAlpha:1.0];
                         
                         if (self.shouldCancel)
                             return;
@@ -306,7 +306,7 @@
                         
                         // cumulatively draw atop previous drawings for future frames
                         //
-                        compositedDrawings = [self imageByAddingOverlayImage:marker.snapshot toBaseImage:compositedDrawings];
+                        compositedDrawings = [self imageByAddingOverlayImage:marker.snapshot toBaseImage:compositedDrawings atAlpha:1.0];
                         
                         break;
                     }
@@ -508,7 +508,7 @@
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 }
 
-- (UIImage *)imageByAddingOverlayImage:(UIImage *)overlayImage toBaseImage:(UIImage *)baseImage
+- (UIImage *)imageByAddingOverlayImage:(UIImage *)overlayImage toBaseImage:(UIImage *)baseImage atAlpha:(CGFloat)alpha
 {
     if ( ! overlayImage)
         return baseImage;
@@ -528,7 +528,7 @@
 
         [baseImage drawInRect:rect];
 
-        [overlayImage drawInRect:rect];
+        [overlayImage drawInRect:rect blendMode:kCGBlendModeNormal alpha:alpha];
 
         finalImage = UIGraphicsGetImageFromCurrentImageContext();
 

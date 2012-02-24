@@ -410,7 +410,7 @@
             
             [self.mapView addSubview:drawing];
             
-            [UIView animateWithDuration:0.25 animations:^(void) { drawing.alpha = 1.0; }];
+            [UIView animateWithDuration:0.3 animations:^(void) { drawing.alpha = 1.0; }];
             
             break;
         }
@@ -418,7 +418,7 @@
         {
             for (UIImageView *drawingView in [self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }])
             {
-                [UIView animateWithDuration:0.25
+                [UIView animateWithDuration:0.3
                                  animations:^(void)
                                  {
                                      drawingView.alpha = 0.0;
