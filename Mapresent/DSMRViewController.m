@@ -526,7 +526,7 @@
 
                          self.videoExporter.delegate = self;
 
-                         [self.videoExporter exportToPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"]];
+                         [self.videoExporter exportToPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.mp4"]];
                      }];
     
     self.fullScreenButton.hidden = YES;
@@ -603,7 +603,7 @@
 
 - (IBAction)pressedShare:(id)sender
 {
-    NSString *latestVideoPath = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
+    NSString *latestVideoPath = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.mp4"];
     
     CGRect attachRect = CGRectMake(696, 435, 1, 1);
     
@@ -641,7 +641,7 @@
 
 - (void)playLatestMovie
 {
-    NSURL *movieURL = [NSURL fileURLWithPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"]];
+    NSURL *movieURL = [NSURL fileURLWithPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.mp4"]];
     
     MPMoviePlayerViewController *moviePresenter = [[MPMoviePlayerViewController alloc] initWithContentURL:movieURL];
     
@@ -655,7 +655,7 @@
 
 - (void)emailLatestMovie
 {
-    NSString *movieFile = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.m4v"];
+    NSString *movieFile = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.mp4"];
 
     MFMailComposeViewController *mailer = [[MFMailComposeViewController alloc] init];
     

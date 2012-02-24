@@ -85,14 +85,14 @@
         {
             // start video writing session
             //
-            NSString *videoOutputFile = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export1.m4v"];
+            NSString *videoOutputFile = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export-video.mp4"];
 
             [[NSFileManager defaultManager] removeItemAtPath:videoOutputFile error:nil];
 
             NSError *error = nil;
             
             AVAssetWriter *videoWriter = [[AVAssetWriter alloc] initWithURL:[NSURL fileURLWithPath:videoOutputFile]
-                                                                   fileType:AVFileTypeQuickTimeMovie
+                                                                   fileType:AVFileTypeMPEG4
                                                                       error:&error];
 
             if (error)
@@ -391,9 +391,10 @@
             
             // iterate & add audio markers
             //
+            AVMutableCompositionTrack *compositionAudioTrack;
+
             for (DSMRTimelineMarker *marker in self.markers)
             {
-               AVMutableCompositionTrack *compositionAudioTrack;
                BOOL hasAudio;
                
                if (marker.markerType == DSMRTimelineMarkerTypeAudio)
@@ -443,12 +444,12 @@
             self.assetExportSession = [[AVAssetExportSession alloc] initWithAsset:composition 
                                                                        presetName:AVAssetExportPresetPassthrough];  
 
-            NSString *outputPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export2.m4v"];
+            NSString *combinationPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"export-combined.mp4"];
 
-            [[NSFileManager defaultManager] removeItemAtPath:outputPath error:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:combinationPath error:nil];
 
             self.assetExportSession.outputFileType = AVFileTypeMPEG4;
-            self.assetExportSession.outputURL = [NSURL fileURLWithPath:outputPath];
+            self.assetExportSession.outputURL = [NSURL fileURLWithPath:combinationPath];
 
             [self.assetExportSession exportAsynchronouslyWithCompletionHandler:^(void)
             {
@@ -461,7 +462,7 @@
                         dispatch_sync(dispatch_get_main_queue(), ^(void)
                         {
                             [[NSFileManager defaultManager] removeItemAtPath:exportPath error:nil];
-                            [[NSFileManager defaultManager] moveItemAtPath:outputPath toPath:exportPath error:nil];
+                            [[NSFileManager defaultManager] moveItemAtPath:combinationPath toPath:exportPath error:nil];
                         
                             [self.delegate videoExporterDidSucceedExporting:self];
                         });
