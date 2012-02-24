@@ -153,7 +153,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return interfaceOrientation == UIInterfaceOrientationLandscapeLeft; // FIXME this is because of UIGetScreenImage() crops
+    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
 
 - (void)dealloc

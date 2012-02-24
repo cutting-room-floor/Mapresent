@@ -12,7 +12,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    return interfaceOrientation == UIInterfaceOrientationLandscapeLeft; // FIXME see main VC
+    return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 }
 
 @end
