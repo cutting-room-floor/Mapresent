@@ -52,10 +52,21 @@
 
     self.mapView.tileSource = [[RMTileStreamSource alloc] initWithInfo:self.info];
 
-    self.mapView.centerCoordinate = CLLocationCoordinate2DMake([[[self.info objectForKey:@"center"] objectAtIndex:0] floatValue], 
-                                                               [[[self.info objectForKey:@"center"] objectAtIndex:1] floatValue]);
-    
-    self.mapView.zoom = [[[self.info objectForKey:@"center"] lastObject] floatValue];
+    if ([self.info objectForKey:@"center"])
+    {
+        // FIXME - workaround for https://github.com/developmentseed/tilestream-pro/issues/825
+        //
+        self.mapView.zoom = fmaxf([[[self.info objectForKey:@"center"] lastObject] floatValue], 3.0); 
+        
+        self.mapView.centerCoordinate = CLLocationCoordinate2DMake([[[self.info objectForKey:@"center"] objectAtIndex:0] floatValue], 
+                                                                   [[[self.info objectForKey:@"center"] objectAtIndex:1] floatValue]);
+    }
+    else
+    {
+        self.mapView.zoom = [self.mapView.tileSource minZoom];
+        
+        self.mapView.centerCoordinate = CLLocationCoordinate2DMake(0, 0);
+    }
     
     self.mapView.decelerationMode = RMMapDecelerationFast;
     
