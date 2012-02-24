@@ -129,6 +129,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:) name:DSMRTimelineViewPlayProgressed            object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveState:)      name:UIApplicationWillResignActiveNotification object:nil];
     
+    [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    
 #ifdef ADHOC
     // add beta tester feedback button
     //
@@ -371,15 +373,27 @@
         }
         case DSMRTimelineMarkerTypeAudio:
         {
-            self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
-            
-            [self.player play];
+            // do this async so we don't hold up the timeline
+            //
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
+            {
+                [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+
+                self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
+
+                [self.player play];
+            });
             
             break;
         }
         case DSMRTimelineMarkerTypeTheme:
         {
-            [self.mapView performSelector:@selector(setTileSource:) withObject:[[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo] afterDelay:0.0];
+            // do this async so we don't hold up the timeline
+            //
+            dispatch_async(dispatch_get_main_queue(), ^(void)
+            {
+                self.mapView.tileSource = [[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo];
+            });
             
             break;
         }
@@ -697,7 +711,6 @@
 {
     if ( ! self.recorder.recording)
     {
-        [[AVAudioSession sharedInstance] setActive:YES error:nil];
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryRecord error:nil];
         
         NSURL *recordURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@.caf", NSTemporaryDirectory(), [[NSProcessInfo processInfo] globallyUniqueString]]];
