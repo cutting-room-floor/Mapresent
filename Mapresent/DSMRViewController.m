@@ -576,21 +576,24 @@
                      {
                          if (flag)
                          {
-                             [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
-                                                         message:@"Your video was exported successfully. You may view, email, or open it in other apps by tapping on the Share menu."
-                                               cancelButtonTitle:nil
-                                               otherButtonTitles:[NSArray arrayWithObjects:@"Email Now", @"View Now", @"OK", nil]
-                                                         handler:^(UIAlertView *alertView, NSInteger buttonIndex)
-                              {
-                                  if (buttonIndex == alertView.firstOtherButtonIndex)
-                                  {
-                                      [self emailLatestMovie];
-                                  }
-                                  else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
-                                  {
-                                      [self playLatestMovie];
-                                  }
-                              }];
+                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
+                             {
+                                 [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
+                                                             message:@"Your video was exported successfully. You may view, email, or open it in other apps by tapping on the Share menu."
+                                                   cancelButtonTitle:nil
+                                                   otherButtonTitles:[NSArray arrayWithObjects:@"Email Now", @"View Now", @"OK", nil]
+                                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex)
+                                                             {
+                                                                 if (buttonIndex == alertView.firstOtherButtonIndex)
+                                                                 {
+                                                                     [self emailLatestMovie];
+                                                                 }
+                                                                 else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
+                                                                 {
+                                                                     [self playLatestMovie];
+                                                                 }
+                                                             }];
+                             });
                          }
                      }];
 }
