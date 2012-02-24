@@ -34,6 +34,7 @@
 @property (strong) NSMutableArray *trackedTiles;
 @property (nonatomic, strong) AVAssetExportSession *assetExportSession;
 
+- (UIImage *)imageByAddingOverlayImage:(UIImage *)overlayImage toBaseImage:(UIImage *)baseImage;
 - (UIImage *)fullyLoadedSnapshotForMapActions:(void (^)(void))block;
 - (void)failExportingWithError:(NSError *)error;
 - (CVPixelBufferRef)createPixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
@@ -149,6 +150,9 @@
                 CFRelease(buffer);
             }
             
+            UIImage *cleanMapFrame = self.exportSnapshot;
+            UIImage *compositedDrawings = nil;
+            
             // iterate markers, rendering each to video
             //
             for (DSMRTimelineMarker *marker in self.markers)
@@ -179,6 +183,8 @@
                         //
                         for (float step = 1.0; step <= steps; step++)
                         {
+                            // move map & get snapshot
+                            //
                             UIImage *snapshot = [self fullyLoadedSnapshotForMapActions:^(void)
                             {
                                 [self.mapView setCenterCoordinate:CLLocationCoordinate2DMake(self.mapView.centerCoordinate.latitude  + latStep, 
@@ -190,6 +196,12 @@
                             
                             if (self.shouldCancel)
                                 return;
+                            
+                            cleanMapFrame = snapshot;
+                            
+                            // add drawings atop
+                            //
+                            snapshot = [self imageByAddingOverlayImage:compositedDrawings toBaseImage:snapshot];
                             
                             self.exportSnapshot = snapshot;
                             
@@ -219,6 +231,8 @@
                     }
                     case DSMRTimelineMarkerTypeTheme:
                     {
+                        // change theme & get snapshot
+                        //
                         UIImage *snapshot = [self fullyLoadedSnapshotForMapActions:^(void)
                         {
                             [self.mapView removeAllCachedImages];
@@ -228,6 +242,12 @@
                         
                         if (self.shouldCancel)
                             return;
+
+                        cleanMapFrame = snapshot;
+
+                        // add drawings atop
+                        //
+                        snapshot = [self imageByAddingOverlayImage:compositedDrawings toBaseImage:snapshot];
 
                         self.exportSnapshot = snapshot;
                         
@@ -239,7 +259,7 @@
                         if (buffer)
                         {
                             // FIXME: need fancy transitions like fade here
-                            
+                            //
                             if( ! [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
                                 [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1010 userInfo:nil]];
                             
@@ -249,15 +269,86 @@
                         break;
                     }
                     case DSMRTimelineMarkerTypeDrawing:
-                    case DSMRTimelineMarkerTypeDrawingClear:
-                    default:
                     {
-                        NSLog(@"skipping unsupported marker of type %i for now", marker.markerType); // FIXME
+                        // append composite of drawing atop last frame
+                        //
+                        UIImage *snapshot = [self imageByAddingOverlayImage:marker.snapshot toBaseImage:self.exportSnapshot];
+                        
+                        if (self.shouldCancel)
+                            return;
+                        
+                        self.exportSnapshot = snapshot;
+                        
+                        while ( ! [writerInput isReadyForMoreMediaData])
+                            [NSThread sleepForTimeInterval:0.5];
+                        
+                        CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+                        
+                        if (buffer)
+                        {
+                            if( ! [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
+                                [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1011 userInfo:nil]];
+                            
+                            CFRelease(buffer);
+                        }
+
+                        // add image view for visual debugging purposes - FIXME
+                        //
+                        UIImageView *drawing = [[UIImageView alloc] initWithFrame:self.mapView.bounds];
+                        
+                        drawing.image = marker.snapshot;
+                        
+                        dispatch_sync(dispatch_get_main_queue(), ^(void)
+                        {
+                            [self.mapView addSubview:drawing];
+                        });
+                        
+                        // cumulatively draw atop previous drawings for future frames
+                        //
+                        compositedDrawings = [self imageByAddingOverlayImage:marker.snapshot toBaseImage:compositedDrawings];
                         
                         break;
                     }
+                    case DSMRTimelineMarkerTypeDrawingClear:
+                    {
+                        // append last clean map frame 
+                        //
+                        UIImage *snapshot = cleanMapFrame;
                         
-                    // FIXME - report progress to delegate throughout
+                        self.exportSnapshot = snapshot;
+                        
+                        while ( ! [writerInput isReadyForMoreMediaData])
+                            [NSThread sleepForTimeInterval:0.5];
+                        
+                        CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+                        
+                        if (buffer)
+                        {
+                            if( ! [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
+                                [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1011 userInfo:nil]];
+                            
+                            CFRelease(buffer);
+                        }
+                        
+                        // remove debug views - FIXME
+                        //
+                        dispatch_sync(dispatch_get_main_queue(), ^(void)
+                        {
+                            [[self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+                        });
+
+                        // reset composited drawings
+                        //
+                        compositedDrawings = nil;
+                        
+                        break;
+                    }
+                    default:
+                    {
+                        NSLog(@"skipping export of unsupported marker of type %i", marker.markerType);
+                        
+                        break;
+                    }
                 }
             }
         
@@ -410,6 +501,36 @@
 - (NSString *)documentsFolderPath // FIXME - dupe
 {
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+}
+
+- (UIImage *)imageByAddingOverlayImage:(UIImage *)overlayImage toBaseImage:(UIImage *)baseImage
+{
+    if ( ! overlayImage)
+        return baseImage;
+    
+    if ( ! baseImage)
+        return overlayImage;
+    
+    // do this on the main queue so we can use the UIKit convenience functions
+    //
+    __block UIImage *finalImage;
+    
+    CGRect rect = CGRectMake(0, 0, baseImage.size.width, baseImage.size.height);
+    
+    dispatch_sync(dispatch_get_main_queue(), ^(void)
+    {
+        UIGraphicsBeginImageContext(baseImage.size);
+
+        [baseImage drawInRect:rect];
+
+        [overlayImage drawInRect:rect];
+
+        finalImage = UIGraphicsGetImageFromCurrentImageContext();
+
+        UIGraphicsEndImageContext();
+    });
+
+    return finalImage;
 }
 
 - (UIImage *)fullyLoadedSnapshotForMapActions:(void (^)(void))block

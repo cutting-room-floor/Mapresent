@@ -173,6 +173,8 @@
                                                                                                             withExtension:@"mbtiles"]];
     self.mapView.decelerationMode = RMMapDecelerationFast;
     self.mapView.zoom             = 1.396605; // FIXME - do this by SW/NE corners
+    
+    [[self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
 - (BOOL)isFullScreen
