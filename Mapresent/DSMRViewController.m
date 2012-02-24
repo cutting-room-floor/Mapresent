@@ -332,72 +332,85 @@
 {
     DSMRTimelineMarker *marker = [self.markers objectAtIndex:index];
     
-    if (marker.markerType == DSMRTimelineMarkerTypeLocation)
+    switch (marker.markerType)
     {
-        float targetZoom               = marker.zoom;
-        float roundedTargetZoom        = roundf(targetZoom);
-        float targetScaleFactor        = log2f(targetZoom);
-        float roundedTargetScaleFactor = log2f(roundf(roundedTargetZoom));
-        float zoomRatio                = targetScaleFactor / roundedTargetScaleFactor;
-        float tilesPerSide             = powf(2.0, roundedTargetZoom);
-        float pixelsPerSide            = (float)[self.mapView.tileSource tileSideLength] * tilesPerSide;
-        float scaledPixelsPerSide      = roundf(pixelsPerSide * zoomRatio);
-        float targetMetersPerPixel     = self.mapView.projection.planetBounds.size.width / scaledPixelsPerSide;
-        
-        RMProjectedPoint projectedCenter = [self.mapView coordinateToProjectedPoint:marker.center];
-        
-        RMProjectedPoint bottomLeft = RMProjectedPointMake(projectedCenter.x - ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
-                                                           projectedCenter.y - ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
-        
-        RMProjectedPoint topRight   = RMProjectedPointMake(projectedCenter.x + ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
-                                                           projectedCenter.y + ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
-        
-        [UIView animateWithDuration:1.0
-                              delay:0.0
-                            options:UIViewAnimationCurveLinear | UIViewAnimationOptionBeginFromCurrentState
-                         animations:^(void)
-                         {
-                             [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:[self.mapView projectedPointToCoordinate:bottomLeft]
-                                                                          northEast:[self.mapView projectedPointToCoordinate:topRight]
-                                                                           animated:NO];
-                         }
-                         completion:nil];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeAudio)
-    {
-        self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
-        
-        [self.player play];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeTheme)
-    {
-        [self.mapView performSelector:@selector(setTileSource:) withObject:[[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo] afterDelay:0.0];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeDrawing)
-    {
-        UIImageView *drawing = [[UIImageView alloc] initWithFrame:self.mapView.bounds];
-        
-        drawing.image = marker.snapshot;
-        
-        drawing.alpha = 0.0;
-        
-        [self.mapView addSubview:drawing];
-        
-        [UIView animateWithDuration:0.25 animations:^(void) { drawing.alpha = 1.0; }];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeDrawingClear)
-    {
-        for (UIImageView *drawingView in [self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }])
+        case DSMRTimelineMarkerTypeLocation:
         {
-            [UIView animateWithDuration:0.25
+            float targetZoom               = marker.zoom;
+            float roundedTargetZoom        = roundf(targetZoom);
+            float targetScaleFactor        = log2f(targetZoom);
+            float roundedTargetScaleFactor = log2f(roundf(roundedTargetZoom));
+            float zoomRatio                = targetScaleFactor / roundedTargetScaleFactor;
+            float tilesPerSide             = powf(2.0, roundedTargetZoom);
+            float pixelsPerSide            = (float)[self.mapView.tileSource tileSideLength] * tilesPerSide;
+            float scaledPixelsPerSide      = roundf(pixelsPerSide * zoomRatio);
+            float targetMetersPerPixel     = self.mapView.projection.planetBounds.size.width / scaledPixelsPerSide;
+            
+            RMProjectedPoint projectedCenter = [self.mapView coordinateToProjectedPoint:marker.center];
+            
+            RMProjectedPoint bottomLeft = RMProjectedPointMake(projectedCenter.x - ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
+                                                               projectedCenter.y - ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
+            
+            RMProjectedPoint topRight   = RMProjectedPointMake(projectedCenter.x + ((self.mapView.bounds.size.width  * targetMetersPerPixel) / 2),
+                                                               projectedCenter.y + ((self.mapView.bounds.size.height * targetMetersPerPixel) / 2));
+            
+            [UIView animateWithDuration:1.0
+                                  delay:0.0
+                                options:UIViewAnimationCurveLinear | UIViewAnimationOptionBeginFromCurrentState
                              animations:^(void)
                              {
-                                 drawingView.alpha = 0.0;
+                                 [self.mapView zoomWithLatitudeLongitudeBoundsSouthWest:[self.mapView projectedPointToCoordinate:bottomLeft]
+                                                                              northEast:[self.mapView projectedPointToCoordinate:topRight]
+                                                                               animated:NO];
                              }
-                             completion:^(BOOL finished)
-                             {
-                                 [drawingView removeFromSuperview];
-                             }];
+                             completion:nil];
+            
+            break;
+        }
+        case DSMRTimelineMarkerTypeAudio:
+        {
+            self.player = [[AVAudioPlayer alloc] initWithData:marker.recording error:nil];
+            
+            [self.player play];
+            
+            break;
+        }
+        case DSMRTimelineMarkerTypeTheme:
+        {
+            [self.mapView performSelector:@selector(setTileSource:) withObject:[[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo] afterDelay:0.0];
+            
+            break;
+        }
+        case DSMRTimelineMarkerTypeDrawing:
+        {
+            UIImageView *drawing = [[UIImageView alloc] initWithFrame:self.mapView.bounds];
+            
+            drawing.image = marker.snapshot;
+            
+            drawing.alpha = 0.0;
+            
+            [self.mapView addSubview:drawing];
+            
+            [UIView animateWithDuration:0.25 animations:^(void) { drawing.alpha = 1.0; }];
+            
+            break;
+        }
+        case DSMRTimelineMarkerTypeDrawingClear:
+        {
+            for (UIImageView *drawingView in [self.mapView.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[UIImageView class]]; }])
+            {
+                [UIView animateWithDuration:0.25
+                                 animations:^(void)
+                                 {
+                                     drawingView.alpha = 0.0;
+                                 }
+                                 completion:^(BOOL finished)
+                                 {
+                                     [drawingView removeFromSuperview];
+                                 }];
+            }
+            
+            break;
         }
     }
 }
@@ -1123,7 +1136,9 @@
 }
 
 - (void)videoExporter:(DSMRVideoExporter *)videoExporter didProgressExporting:(CGFloat)completionValue
-{
+{    
+    // FIXME - report progress to delegate throughout
+    //
     NSLog(@"export progress: %f", completionValue);
 }
 
