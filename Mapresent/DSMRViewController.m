@@ -542,7 +542,7 @@
     
     [self cleanupExportWithSuccess:NO];
     
-    [TestFlight passCheckpoint:@"cancelled export"];
+    [TestFlight passCheckpoint:@"cancelled video export"];
 }
 
 - (void)cleanupExportWithSuccess:(BOOL)flag
@@ -1058,7 +1058,11 @@
 - (void)beforeMapMove:(RMMapView *)map
 {
     if (self.timelineView.isPlaying)
+    {
         [self.timelineView togglePlay];
+    
+        [TestFlight passCheckpoint:@"stopped playback by dragging map"];
+    }
 }
 
 - (void)mapViewRegionDidChange:(RMMapView *)mapView
@@ -1169,6 +1173,8 @@
 - (void)timelineView:(DSMRTimelineView *)timelineView markersChanged:(NSArray *)changedMarkers
 {
     [self refresh];
+    
+    [TestFlight passCheckpoint:@"drag-reordered markers in timeline"]; // FIXME
 }
 
 #pragma mark -
@@ -1177,6 +1183,8 @@
 - (void)videoExporterDidBeginExporting:(DSMRVideoExporter *)videoExporter
 {
     NSLog(@"export began");
+    
+    [TestFlight passCheckpoint:@"started video export"];
 }
 
 - (void)videoExporter:(DSMRVideoExporter *)videoExporter didProgressExporting:(CGFloat)completionValue
@@ -1191,6 +1199,8 @@
     NSLog(@"export failure: %@", error);
     
     [self cleanupExportWithSuccess:NO];
+    
+    [TestFlight passCheckpoint:@"failed video export"];
 }
 
 - (void)videoExporterDidSucceedExporting:(DSMRVideoExporter *)videoExporter
@@ -1199,15 +1209,15 @@
 
     [self cleanupExportWithSuccess:YES];
     
-//    UILocalNotification *notification = [[UILocalNotification alloc] init];
-//    
-//    notification.alertAction = @"Launch";
-//    notification.alertBody   = @"The video export has completed.";
-//    notification.soundName   = UILocalNotificationDefaultSoundName;
-//    
-//    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-//    
-//    [TestFlight passCheckpoint:@"completed video export"];
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    
+    notification.alertAction = @"Launch";
+    notification.alertBody   = @"The video export has completed.";
+    notification.soundName   = UILocalNotificationDefaultSoundName;
+    
+    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+    
+    [TestFlight passCheckpoint:@"completed video export"];
 
 }
 
