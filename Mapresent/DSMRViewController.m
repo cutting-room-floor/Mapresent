@@ -477,7 +477,7 @@
 
 - (void)beginExport
 {
-    [TestFlight passCheckpoint:@"began video export"];
+    [TestFlight passCheckpoint:@"began video export process"];
     
     [UIApplication sharedApplication].idleTimerDisabled = YES;
     
