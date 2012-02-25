@@ -39,14 +39,8 @@ This stuff is working, albeit roughly.
 
 Pipe dreams of future functionality & things that need to happen. 
 
- * Overall code cleanup. Fast & loose right now. 
  * Fix crash when zooming too far into maps with Alpstein. 
- * Fix lag UI stutter when beginning each audio clip during playback. 
  * Bookmark favorite [MapBox Hosting](http://tiles.mapbox.com/) themes for easier access. 
- * Improve theme switch transition performance. 
- * Replace use of private API `UIGetScreenImage()` with successive calls to Alpstein's `-[RMMapView takeSnapshot]`. This will require that we manually animate timing-curve-based transitions so as to be able to catch them in-progress for video frames. But this will also improve performance as we will be able to snap each frame as soon as it is ready. This will also remove the need for `NSTimer`-based export, which will allow running even when the device goes to sleep. 
- * Support both device landscape orientations. This is currently a problem because of the above crop method. 
- * System for tracking requests & completions for tile fetches. This will help speed up the above. 
  * Improve tile caching. No real reason to expire remote tiles unless the user wants to do so manually. 
  * Experiment with 3D transitions using [WhirlyGlobe MBTiles support](http://code.google.com/p/whirlyglobe/issues/detail?id=1). Will require use of local tiles. 
  * Allow for points, shapes, and other annotations to be added to the presentation screen. 
