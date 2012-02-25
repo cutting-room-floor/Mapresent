@@ -193,7 +193,7 @@
 {
     NSTimeInterval endBumperDuration = 5.0;
     
-    NSArray *sortedMarkers = [self.markers sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2)
+    [self.markers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
     {
         if ([[obj1 valueForKey:@"timeOffset"] doubleValue] > [[obj2 valueForKey:@"timeOffset"] doubleValue])
             return NSOrderedDescending;
@@ -203,7 +203,7 @@
         return NSOrderedSame;
     }];
 
-    DSMRTimelineMarker *lastMarker = [sortedMarkers lastObject];
+    DSMRTimelineMarker *lastMarker = [self.markers lastObject];
     
     switch (lastMarker.markerType)
     {
@@ -1153,17 +1153,22 @@
 #pragma mark -
 #pragma mark DSMRTimelineViewDelegate
 
-- (NSArray *)timelineMarkers
+- (NSArray *)markersForTimelineView:(DSMRTimelineView *)timelineView
 {
     return [NSArray arrayWithArray:self.markers];
 }
 
-- (void)timelineMarkerTapped:(DSMRTimelineMarker *)marker
+- (void)timelineView:(DSMRTimelineView *)timelineView markerTapped:(DSMRTimelineMarker *)tappedMarker
 {
     if ( ! self.timelineView.isPlaying)
-        [self fireMarkerAtIndex:[self.markers indexOfObject:marker]];
+        [self fireMarkerAtIndex:[self.markers indexOfObject:tappedMarker]];
     
     [TestFlight passCheckpoint:@"tapped timeline marker"];
+}
+
+- (void)timelineView:(DSMRTimelineView *)timelineView markersChanged:(NSArray *)changedMarkers
+{
+    [self refresh];
 }
 
 #pragma mark -

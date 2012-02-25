@@ -23,6 +23,8 @@
 @property (nonatomic, strong) UIScrollView *scroller;
 @property (nonatomic, strong) DSMRTimeLineViewTimeline *timeline;
 @property (nonatomic, strong) NSTimer *playTimer;
+@property (nonatomic, assign) CGFloat currentDraggingMarkerFrameOffset;
+@property (nonatomic, assign) CGFloat currentDraggingMarkerTouchOffset;
 
 @end
 
@@ -35,6 +37,8 @@
 @synthesize scroller;
 @synthesize timeline;
 @synthesize playTimer;
+@synthesize currentDraggingMarkerFrameOffset;
+@synthesize currentDraggingMarkerTouchOffset;
 
 - (id)initWithCoder:(NSCoder *)decoder
 {
@@ -103,21 +107,29 @@
 {
     [self.timeline.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     
-    for (DSMRTimelineMarker *marker in [self.delegate timelineMarkers])
+    for (DSMRTimelineMarker *marker in [self.delegate markersForTimelineView:self])
     {
         DSMRTimelineMarkerView *markerView = [[DSMRTimelineMarkerView alloc] initWithMarker:marker];
         
+        // add firing tap recognizer
+        //
         UITapGestureRecognizer *markerTap = [[UITapGestureRecognizer alloc] initWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location)
         {
             if (state == UIGestureRecognizerStateEnded)
             {
                 DSMRTimelineMarkerView *markerView = ((DSMRTimelineMarkerView *)((UIGestureRecognizer *)sender).view);
                 
-                [self.delegate timelineMarkerTapped:markerView.marker];
+                [self.delegate timelineView:self markerTapped:markerView.marker];
             }
         }];
         
         [markerView addGestureRecognizer:markerTap];
+        
+        // add drag/move recognizer
+        //
+        UILongPressGestureRecognizer *markerLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+        
+        [markerView addGestureRecognizer:markerLongPress];
         
         CGFloat placement;
         
@@ -155,6 +167,82 @@
 - (void)rewindToBeginning
 {
     [self.scroller setContentOffset:CGPointMake(0, 0) animated:YES];
+}
+
+#pragma mark -
+
+- (void)handleGesture:(UIGestureRecognizer *)gesture
+{
+    switch (gesture.state)
+    {
+        case UIGestureRecognizerStateBegan:
+        {
+            // pick up & enlarge
+            //
+            self.currentDraggingMarkerFrameOffset = gesture.view.frame.origin.x;
+            self.currentDraggingMarkerTouchOffset = [gesture locationInView:gesture.view].x;
+            
+            [UIView animateWithDuration:0.25
+                             animations:^(void)
+                             {
+                                 gesture.view.transform = CGAffineTransformMakeScale(1.5, 1.5);
+                             }];
+            
+            break;
+        }
+        case UIGestureRecognizerStateChanged:
+        {
+            // follow gesture
+            //
+            gesture.view.frame = CGRectMake(fmaxf([gesture locationInView:self.timeline].x - self.currentDraggingMarkerTouchOffset, 512.0),
+                                            gesture.view.frame.origin.y,
+                                            gesture.view.frame.size.width,
+                                            gesture.view.frame.size.height);
+            
+            break;
+        }
+        case UIGestureRecognizerStateEnded:
+        {
+            // set down, shrink, & adjust time offset
+            //
+            [UIView animateWithDuration:0.25
+                             animations:^(void)
+                             {
+                                 gesture.view.transform = CGAffineTransformIdentity;
+                             }
+                             completion:^(BOOL finished)
+                             {
+                                 DSMRTimelineMarker *marker = ((DSMRTimelineMarkerView *)gesture.view).marker;
+                                 
+                                 marker.timeOffset += (gesture.view.frame.origin.x - self.currentDraggingMarkerFrameOffset) / 64.0; // FIXME
+                                 
+                                 [self.delegate timelineView:self markersChanged:[NSArray arrayWithObject:((DSMRTimelineMarkerView *)gesture.view).marker]];
+                             }];
+            
+            break;
+        }
+        case UIGestureRecognizerStateCancelled:
+        default:
+        {
+            // revert to original position
+            //
+            [UIView animateWithDuration:0.5
+                                  delay:0.0
+                                options:UIViewAnimationCurveEaseOut
+                             animations:^(void)
+                             {
+                                 gesture.view.transform = CGAffineTransformIdentity;
+                                 
+                                 gesture.view.frame = CGRectMake(self.currentDraggingMarkerFrameOffset, 
+                                                                 gesture.view.frame.origin.y, 
+                                                                 gesture.view.frame.size.width,
+                                                                 gesture.view.frame.size.height);
+                             }
+                             completion:nil];
+            
+            break;
+        }
+    }
 }
 
 #pragma mark -

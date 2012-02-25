@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@class DSMRTimelineView;
 @class DSMRTimelineMarker;
 
 static NSString *DSMRTimelineViewPlayToggled     = @"DSMRTimelineViewPlayToggled";
@@ -17,8 +18,9 @@ static NSString *DSMRTimelineViewPlayProgressed  = @"DSMRTimelineViewPlayProgres
 
 @required
 
-- (NSArray *)timelineMarkers;
-- (void)timelineMarkerTapped:(DSMRTimelineMarker *)marker;
+- (NSArray *)markersForTimelineView:(DSMRTimelineView *)timelineView;
+- (void)timelineView:(DSMRTimelineView *)timelineView markerTapped:(DSMRTimelineMarker *)tappedMarker;
+- (void)timelineView:(DSMRTimelineView *)timelineView markersChanged:(NSArray *)changedMarkers;
 
 @end
 
