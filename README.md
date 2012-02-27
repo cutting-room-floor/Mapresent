@@ -34,6 +34,7 @@ This stuff is working, albeit roughly.
  * Nice-looking audio record interface. 
  * Drawing variable color & width lines on map and having them appear at points in the presentation.
  * Clearing all drawings from the map at points in the presentation. 
+ * Allow dragging of timeline items directly to rearrange. 
 
 ### Todo
 
@@ -47,6 +48,5 @@ Pipe dreams of future functionality & things that need to happen.
  * Allow for animated annotations to the map. 
  * Allow for drawings to be played back as drawn, not all at once. 
  * Allow embedding of audio, video, and photo media into presentation. 
- * Allow dragging of timeline items directly to rearrange. 
  * Palette UI for editing fine details of selected timeline item (duration, timing curve, volume, etc.)
  * Allow drawings to stick to the map during pans & zooms as geo vectors, not just drawings. 
