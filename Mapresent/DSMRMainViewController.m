@@ -103,7 +103,7 @@
 {
     [super viewDidLoad];
     
-    serialQueue = dispatch_queue_create("com.mapbox.mapresent", DISPATCH_QUEUE_SERIAL);
+    serialQueue = dispatch_queue_create("com.mapbox.mapresent.DSMRMainViewController.serial", DISPATCH_QUEUE_SERIAL);
 
     self.mapView.delegate = self;
     
@@ -193,15 +193,18 @@
 {
     NSTimeInterval endBumperDuration = 5.0;
     
-    [self.markers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+    @synchronized(self)
     {
-        if ([[obj1 valueForKey:@"timeOffset"] doubleValue] > [[obj2 valueForKey:@"timeOffset"] doubleValue])
-            return NSOrderedDescending;
-        if ([[obj1 valueForKey:@"timeOffset"] doubleValue] < [[obj2 valueForKey:@"timeOffset"] doubleValue])
-            return NSOrderedAscending;
-        
-        return NSOrderedSame;
-    }];
+        [self.markers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
+        {
+            if ([[obj1 valueForKey:@"timeOffset"] doubleValue] > [[obj2 valueForKey:@"timeOffset"] doubleValue])
+                return NSOrderedDescending;
+            if ([[obj1 valueForKey:@"timeOffset"] doubleValue] < [[obj2 valueForKey:@"timeOffset"] doubleValue])
+                return NSOrderedAscending;
+            
+            return NSOrderedSame;
+        }];
+    }
 
     DSMRTimelineMarker *lastMarker = [self.markers lastObject];
     
@@ -223,25 +226,26 @@
     
     [self.timelineView redrawMarkers];
     
-    // avoid an ever-growing lag by doing this async
-    //
-    dispatch_async(self.serialQueue, ^(void) { [self saveState:self]; });
+    [self saveState:self];
 }
 
 - (void)saveState:(id)sender
 {
-    @synchronized(self)
+    dispatch_async(self.serialQueue, ^(void)
     {
         NSMutableArray *savedMarkers = [NSMutableArray array];
         
-        for (DSMRTimelineMarker *marker in self.markers)
-            [savedMarkers addObject:[NSKeyedArchiver archivedDataWithRootObject:marker]];
+        @synchronized(self)
+        {
+            for (DSMRTimelineMarker *marker in self.markers)
+                [savedMarkers addObject:[NSKeyedArchiver archivedDataWithRootObject:marker]];
+        }
         
         NSString *saveFilePath = [[self documentsFolderPath] stringByAppendingPathComponent:@"Document.mapresent"];
         
         [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:saveFilePath
                                                                              atomically:YES];
-    }
+    });
 }
 
 #pragma mark -
@@ -661,7 +665,7 @@
 
 - (void)addMarker:(DSMRTimelineMarker *)marker refreshingInterface:(BOOL)shouldRefresh
 {
-    dispatch_sync(self.serialQueue, ^(void)
+    @synchronized(self)
     {
         if ([self.markers count])
         {
@@ -684,7 +688,7 @@
         {
             [self.markers addObject:marker];
         }
-    });
+    }
     
     if (shouldRefresh)
         [self refresh];
@@ -947,7 +951,7 @@
     
     [self addMarker:marker refreshingInterface:YES];
 
-    dispatch_async(self.serialQueue, ^(void)
+    dispatch_async(dispatch_get_main_queue(), ^(void)
     {
         marker.snapshot = picker.snapshot;
        
@@ -1114,7 +1118,10 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.markers removeObjectAtIndex:indexPath.row];
+    @synchronized(self)
+    {
+        [self.markers removeObjectAtIndex:indexPath.row];
+    }
     
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     
