@@ -40,6 +40,10 @@ This stuff is working, albeit roughly.
 
 Pipe dreams of future functionality & things that need to happen. 
 
+ * Revamp UI to lose inspector view, enlarge map view, and use direct manipulation of markers.
+ * Allow timeline to slide down to minimal mode. 
+ * Separate out "theme" as a more global option, with data overlays acting more like markes. 
+ * Have markers fire when dragging timeline past them. Possibly forward *and* reverse. 
  * Fix crash when zooming too far into maps with Alpstein. 
  * Bookmark favorite [MapBox Hosting](http://tiles.mapbox.com/) themes for easier access. 
  * Improve tile caching. No real reason to expire remote tiles unless the user wants to do so manually. 
