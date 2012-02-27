@@ -321,15 +321,24 @@
         {
             // big, labeled hatch
             //
-            [[NSString stringWithFormat:@"%i", (int)(i - 512.0) / 64] drawAtPoint:CGPointMake(i + 4.0, 65.0) withFont:[UIFont systemFontOfSize:[UIFont smallSystemFontSize]]];
+            if (i > 512.0)
+            {
+                NSString *labelText = [NSString stringWithFormat:@"%i", (int)(i - 512.0) / 64];
+                
+                UIFont *labelFont = [UIFont systemFontOfSize:[UIFont smallSystemFontSize]];
+                
+                CGSize textSize = [labelText sizeWithFont:labelFont];
+                
+                [labelText drawAtPoint:CGPointMake(i - (textSize.width / 2), 22.0) withFont:labelFont];
+            }    
 
-            y = 75.0;
+            y = 20.0;
         }
         else
         {
             // intermediate hatch
             //
-            y = 50.0;
+            y = 10.0;
         }
         
         CGContextMoveToPoint(c, i, 0.0);
