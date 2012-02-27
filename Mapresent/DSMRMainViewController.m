@@ -260,7 +260,7 @@
 {
     [self pressedFullScreen:self];
     
-    [self performSelector:@selector(pressedPlay:) withObject:self afterDelay:1.0];
+    [self performBlock:^(id sender) { [sender pressedPlay:sender]; } afterDelay:1.0];
     
     [TestFlight passCheckpoint:@"played fullscreen"];
 }
@@ -576,7 +576,7 @@
                      {
                          if (flag)
                          {
-                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(void)
+                             [self performBlock:^(id sender)
                              {
                                  [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
                                                              message:@"Your video was exported successfully. You may view, email, or open it in other apps by tapping on the Share menu."
@@ -586,14 +586,15 @@
                                                              {
                                                                  if (buttonIndex == alertView.firstOtherButtonIndex)
                                                                  {
-                                                                     [self emailLatestMovie];
+                                                                     [sender emailLatestMovie];
                                                                  }
                                                                  else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
                                                                  {
-                                                                     [self playLatestMovie];
+                                                                     [sender playLatestMovie];
                                                                  }
                                                              }];
-                             });
+                             }
+                             afterDelay:0.5];
                          }
                      }];
 }
@@ -1006,7 +1007,7 @@
     self.chosenThemeInfo = [self.themes objectAtIndex:index];
     
     if (finished)
-        [self performSelector:@selector(updateThemePages) withObject:nil afterDelay:0.0];
+        [self performBlock:^(id sender) { [sender updateThemePages]; } afterDelay:0.0];
     
     [TestFlight passCheckpoint:@"turned theme page"];
 }
