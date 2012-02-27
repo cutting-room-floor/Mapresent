@@ -13,8 +13,8 @@
 		DD2B334B14CF75AE008DE8CB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DD2B334914CF75AE008DE8CB /* InfoPlist.strings */; };
 		DD2B334D14CF75AE008DE8CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B334C14CF75AE008DE8CB /* main.m */; };
 		DD2B335114CF75AE008DE8CB /* DSMRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B335014CF75AE008DE8CB /* DSMRAppDelegate.m */; };
-		DD2B335414CF75AE008DE8CB /* DSMRViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B335314CF75AE008DE8CB /* DSMRViewController.m */; };
-		DD2B335714CF75AE008DE8CB /* DSMRViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */; };
+		DD2B335414CF75AE008DE8CB /* DSMRMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD2B335314CF75AE008DE8CB /* DSMRMainViewController.m */; };
+		DD2B335714CF75AE008DE8CB /* DSMRMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2B335514CF75AE008DE8CB /* DSMRMainViewController.xib */; };
 		DD2B373814CF7A4D008DE8CB /* libMapView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373114CF79ED008DE8CB /* libMapView.a */; };
 		DD2B373A14CF7AAB008DE8CB /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373914CF7AAB008DE8CB /* libsqlite3.dylib */; };
 		DD2B373C14CF7AC7008DE8CB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2B373B14CF7AC7008DE8CB /* QuartzCore.framework */; };
@@ -144,9 +144,9 @@
 		DD2B334E14CF75AE008DE8CB /* Mapresent-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mapresent-Prefix.pch"; sourceTree = "<group>"; };
 		DD2B334F14CF75AE008DE8CB /* DSMRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSMRAppDelegate.h; sourceTree = "<group>"; };
 		DD2B335014CF75AE008DE8CB /* DSMRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSMRAppDelegate.m; sourceTree = "<group>"; };
-		DD2B335214CF75AE008DE8CB /* DSMRViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSMRViewController.h; sourceTree = "<group>"; };
-		DD2B335314CF75AE008DE8CB /* DSMRViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSMRViewController.m; sourceTree = "<group>"; };
-		DD2B335614CF75AE008DE8CB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DSMRViewController.xib; sourceTree = "<group>"; };
+		DD2B335214CF75AE008DE8CB /* DSMRMainViewController.h */ = {isa = PBXFileReference; path = DSMRMainViewController.h; sourceTree = "<group>"; };
+		DD2B335314CF75AE008DE8CB /* DSMRMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSMRMainViewController.m; sourceTree = "<group>"; };
+		DD2B335614CF75AE008DE8CB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DSMRMainViewController.xib; sourceTree = "<group>"; };
 		DD2B372114CF79ED008DE8CB /* MapView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MapView.xcodeproj; path = "Externals/alpstein-route-me/MapView/MapView.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		DD2B373914CF7AAB008DE8CB /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DD2B373B14CF7AC7008DE8CB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -340,9 +340,9 @@
 			children = (
 				DD2B334F14CF75AE008DE8CB /* DSMRAppDelegate.h */,
 				DD2B335014CF75AE008DE8CB /* DSMRAppDelegate.m */,
-				DD2B335214CF75AE008DE8CB /* DSMRViewController.h */,
-				DD2B335314CF75AE008DE8CB /* DSMRViewController.m */,
-				DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */,
+				DD2B335214CF75AE008DE8CB /* DSMRMainViewController.h */,
+				DD2B335314CF75AE008DE8CB /* DSMRMainViewController.m */,
+				DD2B335514CF75AE008DE8CB /* DSMRMainViewController.xib */,
 				DDD948F214EE31580042C9E0 /* Resources */,
 			);
 			name = "Main UI";
@@ -612,7 +612,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD2B334B14CF75AE008DE8CB /* InfoPlist.strings in Resources */,
-				DD2B335714CF75AE008DE8CB /* DSMRViewController.xib in Resources */,
+				DD2B335714CF75AE008DE8CB /* DSMRMainViewController.xib in Resources */,
 				DD2B375914CF822C008DE8CB /* geography-class.mbtiles in Resources */,
 				DD9607D514D371FC00FA2CBA /* Entitlements.plist in Resources */,
 				DD98B6FE14D76C090092882F /* mapbox.geography-class.plist in Resources */,
@@ -645,7 +645,7 @@
 			files = (
 				DD2B334D14CF75AE008DE8CB /* main.m in Sources */,
 				DD2B335114CF75AE008DE8CB /* DSMRAppDelegate.m in Sources */,
-				DD2B335414CF75AE008DE8CB /* DSMRViewController.m in Sources */,
+				DD2B335414CF75AE008DE8CB /* DSMRMainViewController.m in Sources */,
 				DD2B375F14CF9156008DE8CB /* DSMRTimelineView.m in Sources */,
 				DD96078F14D32C2800FA2CBA /* UIImage-Extensions.m in Sources */,
 				DD9607C914D34CA900FA2CBA /* DSMRTimelineMarker.m in Sources */,
@@ -684,12 +684,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		DD2B335514CF75AE008DE8CB /* DSMRViewController.xib */ = {
+		DD2B335514CF75AE008DE8CB /* DSMRMainViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				DD2B335614CF75AE008DE8CB /* en */,
 			);
-			name = DSMRViewController.xib;
+			name = DSMRMainViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

@@ -35,7 +35,7 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUIView" id="766721923">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="178641545">
@@ -47,7 +47,6 @@
 								<int key="NSvFlags">268</int>
 								<string key="NSFrame">{{8, 449}, {300, 21}}</string>
 								<reference key="NSSuperview" ref="178641545"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="101332526"/>
 								<string key="NSReuseIdentifierKey">_NS:345</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
@@ -82,7 +81,6 @@
 								<int key="NSvFlags">289</int>
 								<string key="NSFrame">{{600, 10}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="178641545"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="22862743"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -119,7 +117,6 @@
 						</array>
 						<string key="NSFrameSize">{640, 480}</string>
 						<reference key="NSSuperview" ref="766721923"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="138749661"/>
 						<string key="NSReuseIdentifierKey">_NS:212</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="26122144">
@@ -137,7 +134,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{292, 14}, {72, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="71763495"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -160,7 +156,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{174, 430}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="145777068"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -185,7 +180,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{127, 430}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="694809190"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -210,7 +204,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{221, 430}, {37, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="671413658"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -235,7 +228,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 430}, {72, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="185569722"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -258,7 +250,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{201, 14}, {73, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="944136835"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -281,7 +272,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{110, 14}, {72, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="711335449"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -304,7 +294,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 14}, {72, 37}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="937289877"/>
 								<string key="NSReuseIdentifierKey">_NS:241</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -327,7 +316,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{245, 438}, {111, 21}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:345</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -354,7 +342,6 @@
 								<int key="NSvFlags">274</int>
 								<string key="NSFrame">{{20, 65}, {344, 352}}</string>
 								<reference key="NSSuperview" ref="850126027"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="454524340"/>
 								<string key="NSReuseIdentifierKey">_NS:408</string>
 								<reference key="IBUIBackgroundColor" ref="404848745"/>
@@ -371,7 +358,6 @@
 						</array>
 						<string key="NSFrame">{{640, 0}, {384, 480}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="434368851"/>
 						<string key="NSReuseIdentifierKey">_NS:212</string>
 						<reference key="IBUIBackgroundColor" ref="1035654623"/>
@@ -386,7 +372,6 @@
 								<int key="NSvFlags">269</int>
 								<string key="NSFrame">{{498, 0}, {28, 270}}</string>
 								<reference key="NSSuperview" ref="101332526"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="850126027"/>
 								<string key="NSReuseIdentifierKey">_NS:569</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -399,7 +384,6 @@
 						</array>
 						<string key="NSFrame">{{0, 478}, {1024, 270}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="73592213"/>
 						<string key="NSReuseIdentifierKey">_NS:212</string>
 						<reference key="IBUIBackgroundColor" ref="26122144"/>
@@ -407,8 +391,6 @@
 					</object>
 				</array>
 				<string key="NSFrame">{{0, 20}, {1024, 748}}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="178641545"/>
 				<reference key="IBUIBackgroundColor" ref="1035654623"/>
 				<object class="IBUISimulatedStatusBarMetrics" key="IBUISimulatedStatusBarMetrics">
@@ -820,7 +802,7 @@
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
-				<string key="-1.CustomClassName">DSMRViewController</string>
+				<string key="-1.CustomClassName">DSMRMainViewController</string>
 				<string key="-1.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="-2.CustomClassName">UIResponder</string>
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -858,110 +840,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/DSMRTimelineView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">DSMRViewController</string>
-					<string key="superclassName">UIViewController</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="pressedDraw:">id</string>
-						<string key="pressedFullScreen:">id</string>
-						<string key="pressedPlay:">id</string>
-						<string key="pressedPlayFullscreen:">id</string>
-						<string key="pressedRewind:">id</string>
-						<string key="pressedShare:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="pressedDraw:">
-							<string key="name">pressedDraw:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="pressedFullScreen:">
-							<string key="name">pressedFullScreen:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="pressedPlay:">
-							<string key="name">pressedPlay:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="pressedPlayFullscreen:">
-							<string key="name">pressedPlayFullscreen:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="pressedRewind:">
-							<string key="name">pressedRewind:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="pressedShare:">
-							<string key="name">pressedShare:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="backButton">UIButton</string>
-						<string key="fullScreenButton">UIButton</string>
-						<string key="inspectorView">UIView</string>
-						<string key="mapLabel">UILabel</string>
-						<string key="mapView">RMMapView</string>
-						<string key="markerTableView">UITableView</string>
-						<string key="playButton">UIButton</string>
-						<string key="playFullScreenButton">UIButton</string>
-						<string key="timeLabel">UILabel</string>
-						<string key="timelineView">DSMRTimelineView</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="backButton">
-							<string key="name">backButton</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="fullScreenButton">
-							<string key="name">fullScreenButton</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="inspectorView">
-							<string key="name">inspectorView</string>
-							<string key="candidateClassName">UIView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="mapLabel">
-							<string key="name">mapLabel</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="mapView">
-							<string key="name">mapView</string>
-							<string key="candidateClassName">RMMapView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="markerTableView">
-							<string key="name">markerTableView</string>
-							<string key="candidateClassName">UITableView</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="playButton">
-							<string key="name">playButton</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="playFullScreenButton">
-							<string key="name">playFullScreenButton</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="timeLabel">
-							<string key="name">timeLabel</string>
-							<string key="candidateClassName">UILabel</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="timelineView">
-							<string key="name">timelineView</string>
-							<string key="candidateClassName">DSMRTimelineView</string>
-						</object>
-					</dictionary>
-					<object class="NSMutableDictionary" key="toManyOutletInfosByName">
-						<string key="NS.key.0">viewsDisabledDuringPlayback</string>
-						<object class="IBToManyOutletInfo" key="NS.object.0">
-							<string key="name">viewsDisabledDuringPlayback</string>
-							<string key="candidateClassName">id</string>
-							<string key="collectionClassName">NSArray</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/DSMRViewController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

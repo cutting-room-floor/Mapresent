@@ -8,11 +8,11 @@
 
 #import "DSMRAppDelegate.h"
 
-#import "DSMRViewController.h"
+#import "DSMRMainViewController.h"
 
 @interface DSMRAppDelegate ()
 
-@property (nonatomic, strong) DSMRViewController *viewController;
+@property (nonatomic, strong) DSMRMainViewController *viewController;
 
 @end
 
@@ -27,7 +27,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    self.viewController = [[DSMRViewController alloc] initWithNibName:@"DSMRViewController" bundle:nil];
+    self.viewController = [[DSMRMainViewController alloc] initWithNibName:@"DSMRMainViewController" bundle:nil];
     
     self.window.rootViewController = self.viewController;
     

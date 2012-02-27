@@ -1,12 +1,12 @@
 //
-//  DSMRViewController.m
+//  DSMRMainViewController.m
 //  Mapresent
 //
 //  Created by Justin Miller on 1/24/12.
 //  Copyright (c) 2012 Development Seed. All rights reserved.
 //
 
-#import "DSMRViewController.h"
+#import "DSMRMainViewController.h"
 
 #import "DSMRTimelineMarker.h"
 #import "DSMRWrapperController.h"
@@ -27,7 +27,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <QuartzCore/QuartzCore.h>
 
-@interface DSMRViewController () 
+@interface DSMRMainViewController () 
 
 @property (nonatomic, strong) IBOutlet RMMapView *mapView;
 @property (nonatomic, strong) IBOutlet UILabel *mapLabel;
