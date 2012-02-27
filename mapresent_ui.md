@@ -19,9 +19,9 @@ Here is how I've been referring to things in code and in my own planning, just f
 
 ## Thoughts on the Existing Interface
 
- * It would be good to have a way to do simple play and pause when in fullscreen mode. Currently, dragging the map manaully during playback pauses the presentation so that the presenter can explore in more detail. Then, they should be able to pick up again where they left off without going back to the editing view. 
+ * It would be good to have a way to do simple play and pause when in fullscreen mode. Currently, dragging the map manually during playback pauses the presentation so that the presenter can explore in more detail. Then, they should be able to pick up again where they left off without going back to the editing view. 
  * We will probably want a multiple document load & save interface, perhaps like our other app, and allow export of video that doesn't overwrite the last export. 
- * Direct manipulation is key for thinks like markers and annotations on the map. The existing table in the inspector view is more for debugging purposes than usefulness (though you can delete markers there currently by swiping). See *Keynote* for an example of direct manipulation of presentation properties, rather than primary selection and secondary editing as on the desktop. Perhaps we could go widescreen and lose the inspector view allowing the top two-thirds to be the map and bottom one-third to be the timeline. 
+ * Direct manipulation is key for things like markers and annotations on the map. The existing table in the inspector view is more for debugging purposes than usefulness (though you can delete markers there currently by swiping). See *Keynote* for an example of direct manipulation of presentation properties, rather than primary selection and secondary editing as on the desktop. Perhaps we could go widescreen and lose the inspector view allowing the top two-thirds to be the map and bottom one-third to be the timeline. 
  * The timeline should be more continuous, rather than like a keyframe indicator. For example, the red map placement markers represent transitions, but the entire horizontal of the timeline is occupied by views of the map in a presentation. We need to indicate continuity here. 
 
 ### Audio
