@@ -47,7 +47,7 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    CGMutablePathRef latestPath = CGPathCreateMutable();
+    CGMutablePathRef latestPath = CGPathCreateMutable(); // FIXME release?
 
     CGPathMoveToPoint(latestPath, nil, [[touches anyObject] locationInView:self].x, [[touches anyObject] locationInView:self].y);
     

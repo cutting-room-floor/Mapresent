@@ -395,18 +395,14 @@
 
             for (DSMRTimelineMarker *marker in self.markers)
             {
-               BOOL hasAudio;
-               
                if (marker.markerType == DSMRTimelineMarkerTypeAudio)
                {
-                   if ( ! hasAudio)
+                   if ( ! compositionAudioTrack)
                    {
                        // create audio track on target composition
                        //
                        compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio 
                                                                         preferredTrackID:kCMPersistentTrackID_Invalid];
-                       
-                       hasAudio = YES;
                    }
                    
                    // write marker audio data to temp file
