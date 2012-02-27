@@ -65,7 +65,7 @@
 - (void)playLatestMovie;
 - (void)emailLatestMovie;
 - (void)beginExport;
-- (void)cleanupExportWithSuccess:(BOOL)flag;
+- (void)cleanupExportWithBlock:(BKBlock)block;
 - (void)pressedExportCancel:(id)sender;
 - (void)addMarker:(DSMRTimelineMarker *)marker refreshingInterface:(BOOL)shouldRefresh;
 
@@ -540,12 +540,12 @@
     self.fullScreenButton.hidden = NO;
     self.mapLabel.hidden = NO;
     
-    [self cleanupExportWithSuccess:NO];
+    [self cleanupExportWithBlock:nil];
     
     [TestFlight passCheckpoint:@"cancelled video export"];
 }
 
-- (void)cleanupExportWithSuccess:(BOOL)flag
+- (void)cleanupExportWithBlock:(BKBlock)block
 {
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     
@@ -574,28 +574,8 @@
                      }
                      completion:^(BOOL finished)
                      {
-                         if (flag)
-                         {
-                             [self performBlock:^(id sender)
-                             {
-                                 [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
-                                                             message:@"Your video was exported successfully. You may view, email, or open it in other apps by tapping on the Share menu."
-                                                   cancelButtonTitle:nil
-                                                   otherButtonTitles:[NSArray arrayWithObjects:@"Email Now", @"View Now", @"OK", nil]
-                                                             handler:^(UIAlertView *alertView, NSInteger buttonIndex)
-                                                             {
-                                                                 if (buttonIndex == alertView.firstOtherButtonIndex)
-                                                                 {
-                                                                     [sender emailLatestMovie];
-                                                                 }
-                                                                 else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
-                                                                 {
-                                                                     [sender playLatestMovie];
-                                                                 }
-                                                             }];
-                             }
-                             afterDelay:0.5];
-                         }
+                         if (block)
+                             block();
                      }];
 }
 
@@ -1199,7 +1179,14 @@
 {
     NSLog(@"export failure: %@", error);
     
-    [self cleanupExportWithSuccess:NO];
+    [self cleanupExportWithBlock:^(void)
+    {
+        [UIAlertView showAlertViewWithTitle:@"Video Export Failure"
+                                    message:@"There was a problem with the video export. Not much we can do about it right now."
+                          cancelButtonTitle:nil
+                          otherButtonTitles:[NSArray arrayWithObject:@"OK"]
+                                    handler:nil];
+    }];
     
     [TestFlight passCheckpoint:@"failed video export"];
 }
@@ -1208,18 +1195,34 @@
 {
     NSLog(@"export success");
 
-    [self cleanupExportWithSuccess:YES];
-    
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-    
-    notification.alertAction = @"Launch";
-    notification.alertBody   = @"The video export has completed.";
-    notification.soundName   = UILocalNotificationDefaultSoundName;
-    
-    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+    [self cleanupExportWithBlock:^(void)
+    {
+        UILocalNotification *notification = [[UILocalNotification alloc] init];
+        
+        notification.alertAction = @"Launch";
+        notification.alertBody   = @"The video export has completed.";
+        notification.soundName   = UILocalNotificationDefaultSoundName;
+        
+        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+
+        [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
+                                    message:@"Your video was exported successfully. You may view, email, or open it in other apps by tapping on the Share menu."
+                          cancelButtonTitle:nil
+                          otherButtonTitles:[NSArray arrayWithObjects:@"Email Now", @"View Now", @"OK", nil]
+                                    handler:^(UIAlertView *alertView, NSInteger buttonIndex)
+                                    {
+                                        if (buttonIndex == alertView.firstOtherButtonIndex)
+                                        {
+                                            [self emailLatestMovie];
+                                        }
+                                        else if (buttonIndex == alertView.firstOtherButtonIndex + 1)
+                                        {
+                                            [self playLatestMovie];
+                                        }
+                                    }];
+    }];
     
     [TestFlight passCheckpoint:@"completed video export"];
-
 }
 
 @end
