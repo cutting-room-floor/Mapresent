@@ -144,7 +144,7 @@
 		DD2B334E14CF75AE008DE8CB /* Mapresent-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mapresent-Prefix.pch"; sourceTree = "<group>"; };
 		DD2B334F14CF75AE008DE8CB /* DSMRAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSMRAppDelegate.h; sourceTree = "<group>"; };
 		DD2B335014CF75AE008DE8CB /* DSMRAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSMRAppDelegate.m; sourceTree = "<group>"; };
-		DD2B335214CF75AE008DE8CB /* DSMRMainViewController.h */ = {isa = PBXFileReference; path = DSMRMainViewController.h; sourceTree = "<group>"; };
+		DD2B335214CF75AE008DE8CB /* DSMRMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DSMRMainViewController.h; sourceTree = "<group>"; };
 		DD2B335314CF75AE008DE8CB /* DSMRMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DSMRMainViewController.m; sourceTree = "<group>"; };
 		DD2B335614CF75AE008DE8CB /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DSMRMainViewController.xib; sourceTree = "<group>"; };
 		DD2B372114CF79ED008DE8CB /* MapView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MapView.xcodeproj; path = "Externals/alpstein-route-me/MapView/MapView.xcodeproj"; sourceTree = SOURCE_ROOT; };

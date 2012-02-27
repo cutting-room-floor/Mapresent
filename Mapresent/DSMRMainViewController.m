@@ -73,7 +73,7 @@
 
 #pragma mark -
 
-@implementation DSMRViewController
+@implementation DSMRMainViewController
 
 @synthesize mapView;
 @synthesize mapLabel;
