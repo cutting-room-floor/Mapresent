@@ -747,7 +747,6 @@
 		DD2B335B14CF75AE008DE8CB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -771,7 +770,6 @@
 		DD2B335C14CF75AE008DE8CB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -820,7 +818,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
-				DEAD_CODE_STRIPPING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
