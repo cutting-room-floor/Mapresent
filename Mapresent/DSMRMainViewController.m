@@ -193,6 +193,8 @@
 {
     NSTimeInterval endBumperDuration = 5.0;
     
+    // synchronize changes to markers
+    //
     @synchronized(self)
     {
         [self.markers sortUsingComparator:^NSComparisonResult(id obj1, id obj2)
@@ -231,10 +233,14 @@
 
 - (void)saveState:(id)sender
 {
+    // background this in our serial queue since the encoding can take a while
+    // 
     dispatch_async(self.serialQueue, ^(void)
     {
         NSMutableArray *savedMarkers = [NSMutableArray array];
         
+        // synchronize here to properly capture current marker state
+        //
         @synchronized(self)
         {
             for (DSMRTimelineMarker *marker in self.markers)
@@ -665,6 +671,8 @@
 
 - (void)addMarker:(DSMRTimelineMarker *)marker refreshingInterface:(BOOL)shouldRefresh
 {
+    // synchronize additions to markers
+    //
     @synchronized(self)
     {
         if ([self.markers count])
