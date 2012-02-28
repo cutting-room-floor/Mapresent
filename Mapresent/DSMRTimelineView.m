@@ -137,23 +137,23 @@
         {
             case DSMRTimelineMarkerTypeLocation:
             {
-                placement = 85;
+                placement = 60;
                 break;
             }
             case DSMRTimelineMarkerTypeAudio:
             {
-                placement = 130;
+                placement = 105;
                 break;
             }
             case DSMRTimelineMarkerTypeTheme:
             {
-                placement = 175;
+                placement = 150;
                 break;
             }
             case DSMRTimelineMarkerTypeDrawing:
             case DSMRTimelineMarkerTypeDrawingClear:
             {
-                placement = 220;
+                placement = 195;
                 break;
             }
         }
@@ -274,9 +274,20 @@
     }
 }
 
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
+    CGFloat wholeSeconds    = (CGFloat)((int)targetContentOffset->x / 64);
+    CGFloat fraction        = (targetContentOffset->x - (wholeSeconds * 64.0)) / 64.0;
+    CGFloat roundedFraction = (CGFloat)(round(fraction / 0.25) * 0.25);
+    
+    CGFloat newContentOffsetX = (wholeSeconds * 64.0) + (roundedFraction * 64.0);
+    
+    *targetContentOffset = CGPointMake(newContentOffsetX, targetContentOffset->y);
+}
+
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:scroller.contentOffset.x]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DSMRTimelineViewPlayProgressed object:[NSNumber numberWithFloat:scrollView.contentOffset.x]];
 }
 
 @end
@@ -307,19 +318,15 @@
     CGContextSetStrokeColorWithColor(c, [[UIColor colorWithWhite:1.0 alpha:0.25] CGColor]);
     CGContextSetFillColorWithColor(c, [[UIColor colorWithWhite:1.0 alpha:0.25] CGColor]);
 
-    CGContextSetLineWidth(c, 2);
-
     int start = ((rect.origin.x == 0 && rect.size.width > 512.0) ? 512.0 : rect.origin.x);
     
-    for (float i = start; i < rect.size.width; i = i + 8.0)
+    for (float i = start; i < rect.size.width; i = i + 16.0)
     {
-        CGContextBeginPath(c);
-        
         float y;
         
         if (fmodf(i, 64.0) == 0.0)
         {
-            // big, labeled hatch
+            // tall, labeled hatch
             //
             if (i > 512.0)
             {
@@ -330,20 +337,38 @@
                 CGSize textSize = [labelText sizeWithFont:labelFont];
                 
                 [labelText drawAtPoint:CGPointMake(i - (textSize.width / 2), 22.0) withFont:labelFont];
-            }    
+            }
 
             y = 20.0;
         }
         else
         {
-            // intermediate hatch
+            // shorter, intermediate hatch
             //
             y = 10.0;
         }
         
-        CGContextMoveToPoint(c, i, 0.0);
-        CGContextAddLineToPoint(c, i, y);
+        CGContextBeginPath(c);
         
+        if (i == 512.0)
+        {
+            // first, unlabeled hatch
+            //
+            CGContextMoveToPoint(c, i + 1, 0.0);
+            CGContextAddLineToPoint(c, i + 1, y);
+        
+            CGContextSetLineWidth(c, 1);
+        }
+        else
+        {
+            // all other hatches
+            //
+            CGContextMoveToPoint(c, i, 0.0);
+            CGContextAddLineToPoint(c, i, y);
+
+            CGContextSetLineWidth(c, 2);
+        }
+
         CGContextStrokePath(c);
     }
 }

@@ -111,7 +111,7 @@
     
     [RMMapView class]; // avoid code stripping
     
-    timeLabel.text = @"0.000000";
+    timeLabel.text = @"0.00";
 
     markers = [NSMutableArray array];
 
@@ -263,7 +263,7 @@
 
     [self.timelineView rewindToBeginning];
     
-    self.timeLabel.text = @"0.000000";
+    self.timeLabel.text = @"0.00";
 }
 
 - (IBAction)pressedPlayFullscreen:(id)sender
@@ -463,7 +463,13 @@
 
 - (void)playProgressed:(NSNotification *)notification
 {
-    self.timeLabel.text = [NSString stringWithFormat:@"%f", [((NSNumber *)[notification object]) floatValue] / 64];
+    CGFloat offsetX = [((NSNumber *)[notification object]) floatValue];
+    
+    NSUInteger wholeSeconds = (int)offsetX / 64;
+    CGFloat fraction        = (offsetX - (wholeSeconds * 64.0)) / 64.0;
+    CGFloat roundedFraction = (CGFloat)(round(fraction / 0.25) * 0.25);
+    
+    self.timeLabel.text = [NSString stringWithFormat:@"%5.2f", wholeSeconds + roundedFraction];
     
     if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [self.timeLabel.text intValue] >= self.presentationDuration)
     {
