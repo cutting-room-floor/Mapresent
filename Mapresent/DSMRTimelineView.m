@@ -34,6 +34,7 @@
 
 @synthesize delegate;
 @synthesize playing;
+@synthesize markerPassthroughViews;
 @synthesize scroller;
 @synthesize timeline;
 @synthesize playTimer;
@@ -61,6 +62,13 @@
     }
     
     return self;
+}
+
+#pragma mark -
+
+- (NSArray *)markerPassthroughViews
+{
+    return [self.timeline.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[DSMRTimelineMarkerView class]]; }];
 }
 
 #pragma mark -
@@ -111,23 +119,33 @@
     {
         DSMRTimelineMarkerView *markerView = [[DSMRTimelineMarkerView alloc] initWithMarker:marker];
         
-        // add firing tap recognizer
+        // add tap recognizer
         //
         UITapGestureRecognizer *markerTap = [[UITapGestureRecognizer alloc] initWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location)
         {
             if (state == UIGestureRecognizerStateEnded)
-            {
-                DSMRTimelineMarkerView *markerView = ((DSMRTimelineMarkerView *)((UIGestureRecognizer *)sender).view);
-                
-                [self.delegate timelineView:self markerTapped:markerView.marker];
-            }
+                [self.delegate timelineView:self markerViewTapped:(DSMRTimelineMarkerView *)sender.view];
         }];
         
         [markerView addGestureRecognizer:markerTap];
         
+        // add double-tap recognizer
+        //
+        UITapGestureRecognizer *markerDoubleTap = [[UITapGestureRecognizer alloc] initWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location)
+        {
+            if (state == UIGestureRecognizerStateEnded)
+                [self.delegate timelineView:self markerViewDoubleTapped:(DSMRTimelineMarkerView *)sender.view];
+        }];
+        
+        markerDoubleTap.numberOfTapsRequired = 2;
+        
+        [markerView addGestureRecognizer:markerDoubleTap];
+        
+        [markerTap requireGestureRecognizerToFail:markerDoubleTap];
+
         // add drag/move recognizer
         //
-        UILongPressGestureRecognizer *markerLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+        UILongPressGestureRecognizer *markerLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleMarkerLongPress:)];
         
         [markerView addGestureRecognizer:markerLongPress];
         
@@ -171,7 +189,7 @@
 
 #pragma mark -
 
-- (void)handleGesture:(UIGestureRecognizer *)gesture
+- (void)handleMarkerLongPress:(UIGestureRecognizer *)gesture
 {
     switch (gesture.state)
     {

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class DSMRTimelineView;
-@class DSMRTimelineMarker;
+@class DSMRTimelineMarkerView;
 
 static NSString *DSMRTimelineViewPlayToggled     = @"DSMRTimelineViewPlayToggled";
 static NSString *DSMRTimelineViewPlayProgressed  = @"DSMRTimelineViewPlayProgressed";
@@ -19,7 +19,8 @@ static NSString *DSMRTimelineViewPlayProgressed  = @"DSMRTimelineViewPlayProgres
 @required
 
 - (NSArray *)markersForTimelineView:(DSMRTimelineView *)timelineView;
-- (void)timelineView:(DSMRTimelineView *)timelineView markerTapped:(DSMRTimelineMarker *)tappedMarker;
+- (void)timelineView:(DSMRTimelineView *)timelineView markerViewTapped:(DSMRTimelineMarkerView *)tappedMarkerView;
+- (void)timelineView:(DSMRTimelineView *)timelineView markerViewDoubleTapped:(DSMRTimelineMarkerView *)tappedMarkerView;
 - (void)timelineView:(DSMRTimelineView *)timelineView markersChanged:(NSArray *)changedMarkers;
 
 @end
@@ -30,6 +31,7 @@ static NSString *DSMRTimelineViewPlayProgressed  = @"DSMRTimelineViewPlayProgres
 
 @property (nonatomic, weak) id <DSMRTimelineViewDelegate>delegate;
 @property (nonatomic, readonly, assign, getter=isPlaying) BOOL playing;
+@property (nonatomic, readonly, strong) NSArray *markerPassthroughViews;
 
 - (void)togglePlay;
 - (void)redrawMarkers;

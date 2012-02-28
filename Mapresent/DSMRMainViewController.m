@@ -14,6 +14,7 @@
 #import "DSMRAudioRecorderView.h"
 #import "DSMRDrawingPaletteViewController.h"
 #import "DSMRDrawingSurfaceView.h"
+#import "DSMRTimelineMarkerView.h"
 
 #import "RMMapView.h"
 #import "RMMBTilesTileSource.h"
@@ -47,6 +48,7 @@
 @property (nonatomic, strong) NSDictionary *chosenThemeInfo;
 @property (nonatomic, strong) UIPageViewController *themePager;
 @property (nonatomic, strong) DSMRVideoExporter *videoExporter;
+@property (nonatomic, strong) UIPopoverController *inspectorPopover;
 @property (nonatomic, assign) dispatch_queue_t serialQueue;
 @property (nonatomic, assign) NSTimeInterval presentationDuration;
 @property (nonatomic, readonly, assign) BOOL isFullScreen;
@@ -94,6 +96,7 @@
 @synthesize chosenThemeInfo;
 @synthesize themePager;
 @synthesize videoExporter;
+@synthesize inspectorPopover;
 @synthesize serialQueue;
 @synthesize presentationDuration;
 
@@ -1175,12 +1178,35 @@
     return [NSArray arrayWithArray:self.markers];
 }
 
-- (void)timelineView:(DSMRTimelineView *)timelineView markerTapped:(DSMRTimelineMarker *)tappedMarker
+- (void)timelineView:(DSMRTimelineView *)timelineView markerViewTapped:(DSMRTimelineMarkerView *)tappedMarkerView
+{
+    if (self.inspectorPopover.isPopoverVisible)
+        [self.inspectorPopover dismissPopoverAnimated:NO];
+    
+    UIViewController *inspectorController = [[UIViewController alloc] init];
+    
+    inspectorController.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+    
+    inspectorController.view.backgroundColor = [UIColor lightGrayColor];
+    
+    self.inspectorPopover = [[UIPopoverController alloc] initWithContentViewController:inspectorController];
+    
+    self.inspectorPopover.popoverContentSize = inspectorController.view.bounds.size;
+    
+    self.inspectorPopover.passthroughViews = self.timelineView.markerPassthroughViews;
+    
+    [self.inspectorPopover presentPopoverFromRect:[self.view convertRect:tappedMarkerView.frame fromView:tappedMarkerView.superview]
+                                           inView:self.view 
+                         permittedArrowDirections:UIPopoverArrowDirectionAny 
+                                         animated:YES];
+}
+
+- (void)timelineView:(DSMRTimelineView *)timelineView markerViewDoubleTapped:(DSMRTimelineMarkerView *)tappedMarkerView
 {
     if ( ! self.timelineView.isPlaying)
-        [self fireMarkerAtIndex:[self.markers indexOfObject:tappedMarker]];
+        [self fireMarkerAtIndex:[self.markers indexOfObject:tappedMarkerView.marker]];
     
-    [TestFlight passCheckpoint:@"tapped timeline marker"];
+    [TestFlight passCheckpoint:@"double-tapped timeline marker"];
 }
 
 - (void)timelineView:(DSMRTimelineView *)timelineView markersChanged:(NSArray *)changedMarkers
