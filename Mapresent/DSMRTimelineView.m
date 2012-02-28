@@ -177,15 +177,29 @@
     {
         case UIGestureRecognizerStateBegan:
         {
-            // pick up & enlarge
+            // pick up & underlay shadow guide
             //
             self.currentDraggingMarkerFrameOffset = gesture.view.frame.origin.x;
             self.currentDraggingMarkerTouchOffset = [gesture locationInView:gesture.view].x;
             
+            UIView *shadowView = [[UIView alloc] initWithFrame:CGRectMake(gesture.view.frame.origin.x, 
+                                                                          self.bounds.origin.y, 
+                                                                          gesture.view.frame.size.width, 
+                                                                          self.bounds.size.height)];
+            
+            shadowView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+            shadowView.tag             = 30;
+            shadowView.alpha           = 0.0;
+            
+            [self.timeline bringSubviewToFront:gesture.view];
+            
+            [self.timeline insertSubview:shadowView belowSubview:gesture.view];
+            
             [UIView animateWithDuration:0.25
                              animations:^(void)
                              {
-                                 gesture.view.transform = CGAffineTransformMakeScale(1.5, 1.5);
+                                 gesture.view.alpha -= 0.25;
+                                 shadowView.alpha    = 0.25;
                              }];
             
             break;
@@ -194,27 +208,46 @@
         {
             // follow gesture
             //
-            gesture.view.frame = CGRectMake(fmaxf([gesture locationInView:self.timeline].x - self.currentDraggingMarkerTouchOffset, 512.0),
+            CGFloat clippedOffset   = fmaxf([gesture locationInView:self.timeline].x - self.currentDraggingMarkerTouchOffset, 512.0);
+            CGFloat wholeSeconds    = (CGFloat)((int)clippedOffset / 64);
+            CGFloat fraction        = (clippedOffset - (wholeSeconds * 64.0)) / 64.0;
+            CGFloat roundedFraction = (CGFloat)(round(fraction / 0.25) * 0.25);
+            
+            CGFloat newContentOffsetX = (wholeSeconds * 64.0) + (roundedFraction * 64.0);
+            
+            gesture.view.frame = CGRectMake(newContentOffsetX,
                                             gesture.view.frame.origin.y,
                                             gesture.view.frame.size.width,
                                             gesture.view.frame.size.height);
+            
+            UIView *shadowView = [self.timeline viewWithTag:30];
+            
+            shadowView.frame = CGRectMake(gesture.view.frame.origin.x, 
+                                          self.bounds.origin.y, 
+                                          shadowView.bounds.size.width,
+                                          self.bounds.size.height);
             
             break;
         }
         case UIGestureRecognizerStateEnded:
         {
-            // set down, shrink, & adjust time offset
+            UIView *shadowView = [self.timeline viewWithTag:30];
+            
+            // set down, remove shadow guide & adjust time offset
             //
             [UIView animateWithDuration:0.25
                              animations:^(void)
                              {
-                                 gesture.view.transform = CGAffineTransformIdentity;
+                                 gesture.view.alpha += 0.25;
+                                 shadowView.alpha    = 0.0;
                              }
                              completion:^(BOOL finished)
                              {
+                                 [shadowView removeFromSuperview];
+                                 
                                  DSMRTimelineMarker *marker = ((DSMRTimelineMarkerView *)gesture.view).marker;
                                  
-                                 marker.timeOffset += (gesture.view.frame.origin.x - self.currentDraggingMarkerFrameOffset) / 64.0; // FIXME
+                                 marker.timeOffset += (gesture.view.frame.origin.x - self.currentDraggingMarkerFrameOffset) / 64.0;
                                  
                                  [self.delegate timelineView:self markersChanged:[NSArray arrayWithObject:((DSMRTimelineMarkerView *)gesture.view).marker]];
                              }];
@@ -224,6 +257,8 @@
         case UIGestureRecognizerStateCancelled:
         default:
         {
+            UIView *shadowView = [self.timeline viewWithTag:30];
+            
             // revert to original position
             //
             [UIView animateWithDuration:0.5
@@ -231,14 +266,17 @@
                                 options:UIViewAnimationCurveEaseOut
                              animations:^(void)
                              {
-                                 gesture.view.transform = CGAffineTransformIdentity;
-                                 
                                  gesture.view.frame = CGRectMake(self.currentDraggingMarkerFrameOffset, 
                                                                  gesture.view.frame.origin.y, 
                                                                  gesture.view.frame.size.width,
                                                                  gesture.view.frame.size.height);
+                                 
+                                 shadowView.alpha = 0.0;
                              }
-                             completion:nil];
+                             completion:^(BOOL finished)
+                             {
+                                 [shadowView removeFromSuperview];
+                             }];
             
             break;
         }
