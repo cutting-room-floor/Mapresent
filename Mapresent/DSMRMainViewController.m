@@ -62,6 +62,7 @@
 - (NSString *)documentsFolderPath;
 - (void)refresh;
 - (void)saveState:(id)sender;
+- (void)appWillBackground:(NSNotification *)notification;
 - (void)playLatestMovie;
 - (void)emailLatestMovie;
 - (void)beginExport;
@@ -125,9 +126,9 @@
     
     [self refresh];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playToggled:)    name:DSMRTimelineViewPlayToggled               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:) name:DSMRTimelineViewPlayProgressed            object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(saveState:)      name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playToggled:)       name:DSMRTimelineViewPlayToggled               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playProgressed:)    name:DSMRTimelineViewPlayProgressed            object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillBackground:) name:UIApplicationWillResignActiveNotification object:nil];
     
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
@@ -252,6 +253,16 @@
         [[NSDictionary dictionaryWithObject:savedMarkers forKey:@"markers"] writeToFile:saveFilePath
                                                                              atomically:YES];
     });
+}
+
+- (void)appWillBackground:(NSNotification *)notification
+{
+    // don't allow export to proceed in background - FIXME better detector needed
+    //
+    if ([UIApplication sharedApplication].idleTimerDisabled)
+        [self pressedExportCancel:self];
+    
+    [self saveState:self];
 }
 
 #pragma mark -
@@ -1218,14 +1229,6 @@
 
     [self cleanupExportWithBlock:^(void)
     {
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        
-        notification.alertAction = @"Launch";
-        notification.alertBody   = @"The video export has completed.";
-        notification.soundName   = UILocalNotificationDefaultSoundName;
-        
-        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-
         [UIAlertView showAlertViewWithTitle:@"Video Export Complete"
                                     message:@"Your video was exported successfully. You may view, email, or open it in other apps by tapping on the Share menu."
                           cancelButtonTitle:nil
