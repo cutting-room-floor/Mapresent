@@ -328,6 +328,7 @@
 				DD2B334E14CF75AE008DE8CB /* Mapresent-Prefix.pch */,
 				DD9607D414D371FC00FA2CBA /* Entitlements.plist */,
 				DDF8E05314F6CA9900ECFE01 /* routeme.plist */,
+				DDFC944F14F306E40094E791 /* TestFlight.txt */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -540,7 +541,6 @@
 				DD7779DD14EB2D54002089D0 /* back.png */,
 				DDE3D6E814EAE6E000B71543 /* fullscreen.png */,
 				DD353ADB14F07B5400BF89F4 /* testflight.png */,
-				DDFC944F14F306E40094E791 /* TestFlight.txt */,
 				DDBEDB8A14FD67D10023C9F8 /* draw.png */,
 				DDBEDB8B14FD67D10023C9F8 /* theme.png */,
 				DDBEDB8C14FD67D10023C9F8 /* audio.png */,
