@@ -333,18 +333,18 @@
     
     if (self.isFullScreen)
     {
-        timelineTranslation  = -self.timelineView.bounds.size.height + 50.0;
+        timelineTranslation  = -self.timelineView.bounds.size.height + 10.0;
         newMapSize           = CGSizeMake(1024.0, 480.0);
     }
     else
     {
-        timelineTranslation  = self.timelineView.bounds.size.height - 50.0;
+        timelineTranslation  = self.timelineView.bounds.size.height - 10.0;
         newMapSize           = self.view.bounds.size;
     }
     
     CLLocationCoordinate2D mapCenter = self.mapView.centerCoordinate;
     
-    [UIView animateWithDuration:0.5
+    [UIView animateWithDuration:0.25
                           delay:0.0
                         options:UIViewAnimationCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState
                      animations:^(void)
@@ -353,7 +353,7 @@
  
                          self.timelineView.center  = CGPointMake(self.timelineView.center.x, self.timelineView.center.y + timelineTranslation);
  
-                         self.timelineView.alpha = (self.timelineView.alpha < 1.0 ? 1.0 : 0.25);
+                         self.timelineView.alpha = (self.timelineView.alpha < 1.0 ? 1.0 : 0.05);
                          
                          self.mapView.centerCoordinate = mapCenter;
                      }
@@ -1099,6 +1099,11 @@
 - (NSArray *)markersForTimelineView:(DSMRTimelineView *)timelineView
 {
     return [NSArray arrayWithArray:self.markers];
+}
+
+- (void)timelineViewToggledMinimize:(DSMRTimelineView *)timelineView
+{
+    [self pressedFullScreen:self];
 }
 
 - (void)timelineView:(DSMRTimelineView *)timelineView markerViewTapped:(DSMRTimelineMarkerView *)tappedMarkerView

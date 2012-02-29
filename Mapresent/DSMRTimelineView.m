@@ -55,6 +55,18 @@
         
         timeline = [[DSMRTimeLineViewTimeline alloc] initWithFrame:CGRectMake(0, 0, [self bounds].size.width * 3, [self bounds].size.height)];
         
+        UISwipeGestureRecognizer *downSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+        
+        downSwipe.direction = UISwipeGestureRecognizerDirectionDown;
+        
+        [timeline addGestureRecognizer:downSwipe];
+        
+        UISwipeGestureRecognizer *upSwipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+        
+        upSwipe.direction = UISwipeGestureRecognizerDirectionUp;
+        
+        [timeline addGestureRecognizer:upSwipe];
+
         [scroller addSubview:timeline];
 
         scroller.contentSize = timeline.frame.size;
@@ -69,6 +81,14 @@
 - (NSArray *)markerPassthroughViews
 {
     return [self.timeline.subviews select:^BOOL(id obj) { return [obj isKindOfClass:[DSMRTimelineMarkerView class]]; }];
+}
+
+#pragma mark -
+
+- (void)handleSwipe:(UIGestureRecognizer *)gesture
+{
+    if (gesture.state == UIGestureRecognizerStateRecognized)
+        [self.delegate timelineViewToggledMinimize:self];
 }
 
 #pragma mark -

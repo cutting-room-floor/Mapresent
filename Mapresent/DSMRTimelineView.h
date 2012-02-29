@@ -19,6 +19,7 @@ static NSString *DSMRTimelineViewPlayProgressed  = @"DSMRTimelineViewPlayProgres
 @required
 
 - (NSArray *)markersForTimelineView:(DSMRTimelineView *)timelineView;
+- (void)timelineViewToggledMinimize:(DSMRTimelineView *)timelineView;
 - (void)timelineView:(DSMRTimelineView *)timelineView markerViewTapped:(DSMRTimelineMarkerView *)tappedMarkerView;
 - (void)timelineView:(DSMRTimelineView *)timelineView markerViewDoubleTapped:(DSMRTimelineMarkerView *)tappedMarkerView;
 - (void)timelineView:(DSMRTimelineView *)timelineView markersChanged:(NSArray *)changedMarkers;
