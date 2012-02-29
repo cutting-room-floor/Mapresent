@@ -35,13 +35,13 @@ This stuff is working, albeit roughly.
  * Drawing variable color & width lines on map and having them appear at points in the presentation.
  * Clearing all drawings from the map at points in the presentation. 
  * Allow dragging of timeline items directly to rearrange. 
+ * Revamp UI to lose inspector view, enlarge map view, and use direct manipulation of markers.
+ * Allow timeline to slide down to minimal mode. 
 
 ### Todo
 
 Pipe dreams of future functionality & things that need to happen. 
 
- * Revamp UI to lose inspector view, enlarge map view, and use direct manipulation of markers.
- * Allow timeline to slide down to minimal mode. 
  * Separate out "theme" as a more global option, with data overlays acting more like markers. 
  * Have markers fire when dragging timeline past them. Possibly forward *and* reverse. 
  * Fix crash when zooming too far into maps with Alpstein. 
