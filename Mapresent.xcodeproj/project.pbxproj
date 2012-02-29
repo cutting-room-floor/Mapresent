@@ -26,6 +26,16 @@
 		DD4312F914D8AACA00697249 /* DSMRThemePickerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD4312F714D8AACA00697249 /* DSMRThemePickerController.xib */; };
 		DD4312FC14D8B1C500697249 /* DSMRWrapperController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */; };
 		DD43131314D8D26800697249 /* needle.png in Resources */ = {isa = PBXBuildFile; fileRef = DD43131214D8D26800697249 /* needle.png */; };
+		DD62F65414FDA5F400EF0141 /* bg-menuitem-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F64614FDA5F400EF0141 /* bg-menuitem-highlighted.png */; };
+		DD62F65514FDA5F400EF0141 /* bg-menuitem-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F64714FDA5F400EF0141 /* bg-menuitem-highlighted@2x.png */; };
+		DD62F65614FDA5F400EF0141 /* bg-menuitem.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F64814FDA5F400EF0141 /* bg-menuitem.png */; };
+		DD62F65714FDA5F400EF0141 /* bg-menuitem@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F64914FDA5F400EF0141 /* bg-menuitem@2x.png */; };
+		DD62F65814FDA5F400EF0141 /* icon-plus-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F64A14FDA5F400EF0141 /* icon-plus-highlighted.png */; };
+		DD62F65914FDA5F400EF0141 /* icon-plus-highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F64B14FDA5F400EF0141 /* icon-plus-highlighted@2x.png */; };
+		DD62F65A14FDA5F400EF0141 /* icon-plus.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F64C14FDA5F400EF0141 /* icon-plus.png */; };
+		DD62F65B14FDA5F400EF0141 /* icon-plus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F64D14FDA5F400EF0141 /* icon-plus@2x.png */; };
+		DD62F66214FDA63400EF0141 /* bg-addbutton-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F65E14FDA63400EF0141 /* bg-addbutton-highlighted.png */; };
+		DD62F66414FDA63400EF0141 /* bg-addbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = DD62F66014FDA63400EF0141 /* bg-addbutton.png */; };
 		DD7779DE14EB2D54002089D0 /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = DD7779DD14EB2D54002089D0 /* back.png */; };
 		DD7779E214EB32D6002089D0 /* DSMRExportModalView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD7779E114EB32D6002089D0 /* DSMRExportModalView.xib */; };
 		DD777A6014EC976A002089D0 /* DSMRAudioRecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD777A5F14EC976A002089D0 /* DSMRAudioRecorderView.xib */; };
@@ -40,6 +50,14 @@
 		DD9607D514D371FC00FA2CBA /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD9607D414D371FC00FA2CBA /* Entitlements.plist */; };
 		DD98B6FE14D76C090092882F /* mapbox.geography-class.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */; };
 		DDA5DBC714F480AF00F5CA70 /* DSMRVideoExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = DDA5DBC614F480AF00F5CA70 /* DSMRVideoExporter.m */; };
+		DDBEDB6A14FD62330023C9F8 /* QuadCurveMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = DDBEDB6714FD62330023C9F8 /* QuadCurveMenu.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DDBEDB6B14FD62330023C9F8 /* QuadCurveMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = DDBEDB6914FD62330023C9F8 /* QuadCurveMenuItem.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		DDBEDB8E14FD67D10023C9F8 /* draw.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBEDB8A14FD67D10023C9F8 /* draw.png */; };
+		DDBEDB8F14FD67D10023C9F8 /* theme.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBEDB8B14FD67D10023C9F8 /* theme.png */; };
+		DDBEDB9014FD67D10023C9F8 /* audio.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBEDB8C14FD67D10023C9F8 /* audio.png */; };
+		DDBEDB9114FD67D10023C9F8 /* point.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBEDB8D14FD67D10023C9F8 /* point.png */; };
+		DDBEDB9514FD6B020023C9F8 /* DSMRTimelineInspectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDBEDB9314FD6B020023C9F8 /* DSMRTimelineInspectorViewController.m */; };
+		DDBEDB9614FD6B020023C9F8 /* DSMRTimelineInspectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDBEDB9414FD6B020023C9F8 /* DSMRTimelineInspectorViewController.xib */; };
 		DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E59C14E5B463000F611E /* libBlocksKit.a */; };
 		DDC6E5A814E5B5F6000F611E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E5A714E5B5F6000F611E /* MessageUI.framework */; };
 		DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */; };
@@ -54,7 +72,6 @@
 		DDE3D6E914EAE6E000B71543 /* fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6E814EAE6E000B71543 /* fullscreen.png */; };
 		DDE3D6F014EB1AFD00B71543 /* pause.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6ED14EB1AFD00B71543 /* pause.png */; };
 		DDE3D6F114EB1AFD00B71543 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EE14EB1AFD00B71543 /* play.png */; };
-		DDE3D6F214EB1AFD00B71543 /* play_fullscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */; };
 		DDF8E05414F6CA9900ECFE01 /* routeme.plist in Resources */ = {isa = PBXBuildFile; fileRef = DDF8E05314F6CA9900ECFE01 /* routeme.plist */; };
 		DDFC945014F306E40094E791 /* TestFlight.txt in Resources */ = {isa = PBXBuildFile; fileRef = DDFC944F14F306E40094E791 /* TestFlight.txt */; };
 		DDFC94A314F30CD60094E791 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDFC94A214F30CD60094E791 /* libz.dylib */; };
@@ -161,6 +178,16 @@
 		DD4312FA14D8B1C500697249 /* DSMRWrapperController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRWrapperController.h; sourceTree = "<group>"; };
 		DD4312FB14D8B1C500697249 /* DSMRWrapperController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRWrapperController.m; sourceTree = "<group>"; };
 		DD43131214D8D26800697249 /* needle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = needle.png; sourceTree = "<group>"; };
+		DD62F64614FDA5F400EF0141 /* bg-menuitem-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-menuitem-highlighted.png"; sourceTree = "<group>"; };
+		DD62F64714FDA5F400EF0141 /* bg-menuitem-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-menuitem-highlighted@2x.png"; sourceTree = "<group>"; };
+		DD62F64814FDA5F400EF0141 /* bg-menuitem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-menuitem.png"; sourceTree = "<group>"; };
+		DD62F64914FDA5F400EF0141 /* bg-menuitem@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-menuitem@2x.png"; sourceTree = "<group>"; };
+		DD62F64A14FDA5F400EF0141 /* icon-plus-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-plus-highlighted.png"; sourceTree = "<group>"; };
+		DD62F64B14FDA5F400EF0141 /* icon-plus-highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-plus-highlighted@2x.png"; sourceTree = "<group>"; };
+		DD62F64C14FDA5F400EF0141 /* icon-plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-plus.png"; sourceTree = "<group>"; };
+		DD62F64D14FDA5F400EF0141 /* icon-plus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-plus@2x.png"; sourceTree = "<group>"; };
+		DD62F65E14FDA63400EF0141 /* bg-addbutton-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-addbutton-highlighted.png"; sourceTree = "<group>"; };
+		DD62F66014FDA63400EF0141 /* bg-addbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bg-addbutton.png"; sourceTree = "<group>"; };
 		DD7779DD14EB2D54002089D0 /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = back.png; sourceTree = "<group>"; };
 		DD7779E114EB32D6002089D0 /* DSMRExportModalView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRExportModalView.xib; sourceTree = "<group>"; };
 		DD777A5F14EC976A002089D0 /* DSMRAudioRecorderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRAudioRecorderView.xib; sourceTree = "<group>"; };
@@ -180,6 +207,17 @@
 		DD98B6FD14D76C090092882F /* mapbox.geography-class.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "mapbox.geography-class.plist"; sourceTree = "<group>"; };
 		DDA5DBC514F480AF00F5CA70 /* DSMRVideoExporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRVideoExporter.h; sourceTree = "<group>"; };
 		DDA5DBC614F480AF00F5CA70 /* DSMRVideoExporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRVideoExporter.m; sourceTree = "<group>"; };
+		DDBEDB6614FD62330023C9F8 /* QuadCurveMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuadCurveMenu.h; path = Externals/QuadCurveMenu/AwesomeMenu/QuadCurveMenu/QuadCurveMenu.h; sourceTree = SOURCE_ROOT; };
+		DDBEDB6714FD62330023C9F8 /* QuadCurveMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuadCurveMenu.m; path = Externals/QuadCurveMenu/AwesomeMenu/QuadCurveMenu/QuadCurveMenu.m; sourceTree = SOURCE_ROOT; };
+		DDBEDB6814FD62330023C9F8 /* QuadCurveMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuadCurveMenuItem.h; path = Externals/QuadCurveMenu/AwesomeMenu/QuadCurveMenu/QuadCurveMenuItem.h; sourceTree = SOURCE_ROOT; };
+		DDBEDB6914FD62330023C9F8 /* QuadCurveMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuadCurveMenuItem.m; path = Externals/QuadCurveMenu/AwesomeMenu/QuadCurveMenu/QuadCurveMenuItem.m; sourceTree = SOURCE_ROOT; };
+		DDBEDB8A14FD67D10023C9F8 /* draw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = draw.png; sourceTree = "<group>"; };
+		DDBEDB8B14FD67D10023C9F8 /* theme.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = theme.png; sourceTree = "<group>"; };
+		DDBEDB8C14FD67D10023C9F8 /* audio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = audio.png; sourceTree = "<group>"; };
+		DDBEDB8D14FD67D10023C9F8 /* point.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = point.png; sourceTree = "<group>"; };
+		DDBEDB9214FD6B020023C9F8 /* DSMRTimelineInspectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineInspectorViewController.h; sourceTree = "<group>"; };
+		DDBEDB9314FD6B020023C9F8 /* DSMRTimelineInspectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineInspectorViewController.m; sourceTree = "<group>"; };
+		DDBEDB9414FD6B020023C9F8 /* DSMRTimelineInspectorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRTimelineInspectorViewController.xib; sourceTree = "<group>"; };
 		DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BlocksKit.xcodeproj; path = Externals/BlocksKit/BlocksKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		DDC6E5A714E5B5F6000F611E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DDC6E5AA14E5BA4E000F611E /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = Externals/MBProgressHUD/MBProgressHUD.h; sourceTree = SOURCE_ROOT; };
@@ -198,7 +236,6 @@
 		DDE3D6E814EAE6E000B71543 /* fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fullscreen.png; sourceTree = "<group>"; };
 		DDE3D6ED14EB1AFD00B71543 /* pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause.png; sourceTree = "<group>"; };
 		DDE3D6EE14EB1AFD00B71543 /* play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
-		DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_fullscreen.png; sourceTree = "<group>"; };
 		DDF8E05314F6CA9900ECFE01 /* routeme.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = routeme.plist; sourceTree = "<group>"; };
 		DDFC944F14F306E40094E791 /* TestFlight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TestFlight.txt; sourceTree = SOURCE_ROOT; };
 		DDFC94A214F30CD60094E791 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -301,6 +338,7 @@
 				DD2B373514CF79F2008DE8CB /* Alpstein Route-Me */,
 				DDC6E5A314E5B467000F611E /* BlocksKit */,
 				DDC6E5A914E5BA2E000F611E /* MBProgressHUD */,
+				DDBEDB6C14FD62380023C9F8 /* QuadCurveMenu */,
 				DD9607CC14D36FDE00FA2CBA /* TestFlight SDK */,
 				DD96079014D32C2D00FA2CBA /* UIImage-Extensions */,
 			);
@@ -334,6 +372,22 @@
 			name = Resources;
 			path = Mapresent;
 			sourceTree = "<group>";
+		};
+		DD62F64114FDA5F400EF0141 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				DD62F64614FDA5F400EF0141 /* bg-menuitem-highlighted.png */,
+				DD62F64714FDA5F400EF0141 /* bg-menuitem-highlighted@2x.png */,
+				DD62F64814FDA5F400EF0141 /* bg-menuitem.png */,
+				DD62F64914FDA5F400EF0141 /* bg-menuitem@2x.png */,
+				DD62F64A14FDA5F400EF0141 /* icon-plus-highlighted.png */,
+				DD62F64B14FDA5F400EF0141 /* icon-plus-highlighted@2x.png */,
+				DD62F64C14FDA5F400EF0141 /* icon-plus.png */,
+				DD62F64D14FDA5F400EF0141 /* icon-plus@2x.png */,
+			);
+			name = Images;
+			path = Externals/QuadCurveMenu/AwesomeMenu/Images;
+			sourceTree = SOURCE_ROOT;
 		};
 		DD7779DF14EB3280002089D0 /* Main UI */ = {
 			isa = PBXGroup;
@@ -380,6 +434,18 @@
 			path = "Externals/TestFlight SDK";
 			sourceTree = SOURCE_ROOT;
 		};
+		DDBEDB6C14FD62380023C9F8 /* QuadCurveMenu */ = {
+			isa = PBXGroup;
+			children = (
+				DDBEDB6614FD62330023C9F8 /* QuadCurveMenu.h */,
+				DDBEDB6714FD62330023C9F8 /* QuadCurveMenu.m */,
+				DDBEDB6814FD62330023C9F8 /* QuadCurveMenuItem.h */,
+				DDBEDB6914FD62330023C9F8 /* QuadCurveMenuItem.m */,
+				DD62F64114FDA5F400EF0141 /* Images */,
+			);
+			name = QuadCurveMenu;
+			sourceTree = "<group>";
+		};
 		DDC6E58B14E5B463000F611E /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -419,6 +485,9 @@
 				DD9607C814D34CA900FA2CBA /* DSMRTimelineMarker.m */,
 				DDE3831714EDE34F001D5D45 /* DSMRTimelineMarkerView.h */,
 				DDE3831814EDE34F001D5D45 /* DSMRTimelineMarkerView.m */,
+				DDBEDB9214FD6B020023C9F8 /* DSMRTimelineInspectorViewController.h */,
+				DDBEDB9314FD6B020023C9F8 /* DSMRTimelineInspectorViewController.m */,
+				DDBEDB9414FD6B020023C9F8 /* DSMRTimelineInspectorViewController.xib */,
 				DDD948F014EE312E0042C9E0 /* Resources */,
 			);
 			name = "Timeline & Markers";
@@ -468,11 +537,16 @@
 			children = (
 				DDE3D6ED14EB1AFD00B71543 /* pause.png */,
 				DDE3D6EE14EB1AFD00B71543 /* play.png */,
-				DDE3D6EF14EB1AFD00B71543 /* play_fullscreen.png */,
 				DD7779DD14EB2D54002089D0 /* back.png */,
 				DDE3D6E814EAE6E000B71543 /* fullscreen.png */,
 				DD353ADB14F07B5400BF89F4 /* testflight.png */,
 				DDFC944F14F306E40094E791 /* TestFlight.txt */,
+				DDBEDB8A14FD67D10023C9F8 /* draw.png */,
+				DDBEDB8B14FD67D10023C9F8 /* theme.png */,
+				DDBEDB8C14FD67D10023C9F8 /* audio.png */,
+				DDBEDB8D14FD67D10023C9F8 /* point.png */,
+				DD62F66014FDA63400EF0141 /* bg-addbutton.png */,
+				DD62F65E14FDA63400EF0141 /* bg-addbutton-highlighted.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -623,7 +697,6 @@
 				DDE3D6E914EAE6E000B71543 /* fullscreen.png in Resources */,
 				DDE3D6F014EB1AFD00B71543 /* pause.png in Resources */,
 				DDE3D6F114EB1AFD00B71543 /* play.png in Resources */,
-				DDE3D6F214EB1AFD00B71543 /* play_fullscreen.png in Resources */,
 				DD7779DE14EB2D54002089D0 /* back.png in Resources */,
 				DD7779E214EB32D6002089D0 /* DSMRExportModalView.xib in Resources */,
 				DD777A6014EC976A002089D0 /* DSMRAudioRecorderView.xib in Resources */,
@@ -633,6 +706,21 @@
 				DD353ADC14F07B5400BF89F4 /* testflight.png in Resources */,
 				DDFC945014F306E40094E791 /* TestFlight.txt in Resources */,
 				DDF8E05414F6CA9900ECFE01 /* routeme.plist in Resources */,
+				DDBEDB8E14FD67D10023C9F8 /* draw.png in Resources */,
+				DDBEDB8F14FD67D10023C9F8 /* theme.png in Resources */,
+				DDBEDB9014FD67D10023C9F8 /* audio.png in Resources */,
+				DDBEDB9114FD67D10023C9F8 /* point.png in Resources */,
+				DDBEDB9614FD6B020023C9F8 /* DSMRTimelineInspectorViewController.xib in Resources */,
+				DD62F65414FDA5F400EF0141 /* bg-menuitem-highlighted.png in Resources */,
+				DD62F65514FDA5F400EF0141 /* bg-menuitem-highlighted@2x.png in Resources */,
+				DD62F65614FDA5F400EF0141 /* bg-menuitem.png in Resources */,
+				DD62F65714FDA5F400EF0141 /* bg-menuitem@2x.png in Resources */,
+				DD62F65814FDA5F400EF0141 /* icon-plus-highlighted.png in Resources */,
+				DD62F65914FDA5F400EF0141 /* icon-plus-highlighted@2x.png in Resources */,
+				DD62F65A14FDA5F400EF0141 /* icon-plus.png in Resources */,
+				DD62F65B14FDA5F400EF0141 /* icon-plus@2x.png in Resources */,
+				DD62F66214FDA63400EF0141 /* bg-addbutton-highlighted.png in Resources */,
+				DD62F66414FDA63400EF0141 /* bg-addbutton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -657,6 +745,9 @@
 				DDE382FA14EDB008001D5D45 /* DSMRDrawingSurfaceView.m in Sources */,
 				DDE3831914EDE34F001D5D45 /* DSMRTimelineMarkerView.m in Sources */,
 				DDA5DBC714F480AF00F5CA70 /* DSMRVideoExporter.m in Sources */,
+				DDBEDB6A14FD62330023C9F8 /* QuadCurveMenu.m in Sources */,
+				DDBEDB6B14FD62330023C9F8 /* QuadCurveMenuItem.m in Sources */,
+				DDBEDB9514FD6B020023C9F8 /* DSMRTimelineInspectorViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -763,6 +854,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = "-Wno-arc-performSelector-leaks";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -786,6 +878,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = "-Wno-arc-performSelector-leaks";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -834,6 +927,7 @@
 					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = "-Wno-arc-performSelector-leaks";
 				WRAPPER_EXTENSION = app;
 			};
 			name = "Ad Hoc";

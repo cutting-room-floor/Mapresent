@@ -34,12 +34,10 @@
 @property (nonatomic, strong) IBOutlet UILabel *mapLabel;
 @property (nonatomic, strong) IBOutlet UIView *inspectorView;
 @property (nonatomic, strong) IBOutlet DSMRTimelineView *timelineView;
-@property (nonatomic, strong) IBOutlet UITableView *markerTableView;
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
 @property (nonatomic, strong) IBOutlet UIButton *backButton;
-@property (nonatomic, strong) IBOutlet UIButton *playFullScreenButton;
-@property (nonatomic, strong) IBOutlet UILabel *timeLabel;
 @property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
+@property (nonatomic, strong) IBOutlet UILabel *timeLabel;
 @property (nonatomic, strong) IBOutletCollection() NSArray *viewsDisabledDuringPlayback;
 @property (nonatomic, strong) NSMutableArray *markers;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
@@ -55,7 +53,6 @@
 
 - (void)resetMapView;
 - (IBAction)pressedPlay:(id)sender;
-- (IBAction)pressedPlayFullscreen:(id)sender;
 - (IBAction)pressedShare:(id)sender;
 - (IBAction)pressedFullScreen:(id)sender;
 - (IBAction)pressedRewind:(id)sender;
@@ -82,12 +79,10 @@
 @synthesize mapLabel;
 @synthesize inspectorView;
 @synthesize timelineView;
-@synthesize markerTableView;
 @synthesize playButton;
 @synthesize backButton;
-@synthesize playFullScreenButton;
-@synthesize timeLabel;
 @synthesize fullScreenButton;
+@synthesize timeLabel;
 @synthesize viewsDisabledDuringPlayback;
 @synthesize markers;
 @synthesize recorder;
@@ -135,6 +130,31 @@
     
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     
+    UIImage *menuItemImage        = [UIImage imageNamed:@"bg-menuitem.png"];
+    UIImage *menuItemImagePressed = [UIImage imageNamed:@"bg-menuitem-highlighted.png"];
+    
+    NSArray *images  = [NSArray arrayWithObjects:@"point", @"audio", @"theme", @"draw", nil];
+    
+    NSMutableArray *menuItems = [NSMutableArray array];
+    
+    for (NSString *image in images)
+        [menuItems addObject:[[QuadCurveMenuItem alloc] initWithImage:menuItemImage
+                                                     highlightedImage:menuItemImagePressed
+                                                         ContentImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.png", image]]
+                                              highlightedContentImage:nil]];
+    
+    QuadCurveMenu *menu = [[QuadCurveMenu alloc] initWithFrame:CGRectMake(0, 0, 60, 60) menus:menuItems];
+
+    menu.menuWholeAngle = M_PI / 2;
+    menu.rotateAngle = M_PI / 2;
+    menu.startPoint = CGPointMake(30, 30);
+    
+    menu.delegate = self;
+    
+    [self.view addSubview:menu];
+    
+    ((UIView *)[menu valueForKey:@"_addButton"]).center = menu.startPoint; // FIXME well this is awful
+    
 #ifdef ADHOC
     // add beta tester feedback button
     //
@@ -178,14 +198,16 @@
     self.mapView.tileSource       = [[RMMBTilesTileSource alloc] initWithTileSetURL:[[NSBundle mainBundle] URLForResource:@"geography-class" 
                                                                                                             withExtension:@"mbtiles"]];
     self.mapView.decelerationMode = RMMapDecelerationFast;
-    self.mapView.zoom             = 1.396605; // FIXME - do this by SW/NE corners
+    self.mapView.zoom             = 2.0;
+    
+    self.mapView.centerCoordinate = CLLocationCoordinate2DMake(30, 0);
     
     [[self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
 - (BOOL)isFullScreen
 {
-    return (self.mapView.bounds.size.width == self.view.bounds.size.width);
+    return (self.mapView.bounds.size.height == self.view.bounds.size.height);
 }
 
 - (NSString *)documentsFolderPath
@@ -227,8 +249,6 @@
             break;
         }
     }
-    
-    [self.markerTableView reloadData];
     
     [self.timelineView redrawMarkers];
     
@@ -280,15 +300,6 @@
     self.timeLabel.text = @"0.00";
 }
 
-- (IBAction)pressedPlayFullscreen:(id)sender
-{
-    [self pressedFullScreen:self];
-    
-    [self performBlock:^(id sender) { [sender pressedPlay:sender]; } afterDelay:1.0];
-    
-    [TestFlight passCheckpoint:@"played fullscreen"];
-}
-
 - (IBAction)pressedPlay:(id)sender
 {
     // prepare for audio playback
@@ -317,37 +328,33 @@
 
 - (IBAction)pressedFullScreen:(id)sender
 {
-    CGFloat inspectorTranslation;
     CGFloat timelineTranslation;
     CGSize  newMapSize;
     
     if (self.isFullScreen)
     {
-        inspectorTranslation = -self.inspectorView.bounds.size.width;
-        timelineTranslation  = -self.timelineView.bounds.size.height;
-        newMapSize           = CGSizeMake(640.0, 480.0);
+        timelineTranslation  = -self.timelineView.bounds.size.height + 50.0;
+        newMapSize           = CGSizeMake(1024.0, 480.0);
     }
     else
     {
-        inspectorTranslation = self.inspectorView.bounds.size.width;
-        timelineTranslation  = self.timelineView.bounds.size.height;
+        timelineTranslation  = self.timelineView.bounds.size.height - 50.0;
         newMapSize           = self.view.bounds.size;
     }
     
     CLLocationCoordinate2D mapCenter = self.mapView.centerCoordinate;
     
-    [UIView animateWithDuration:0.25
+    [UIView animateWithDuration:0.5
                           delay:0.0
-                        options:UIViewAnimationCurveEaseInOut
+                        options:UIViewAnimationCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState
                      animations:^(void)
                      {
                          self.mapView.frame = CGRectMake(self.mapView.frame.origin.x, self.mapView.frame.origin.y, newMapSize.width, newMapSize.height);
  
-                         self.fullScreenButton.transform = CGAffineTransformRotate(self.fullScreenButton.transform, M_PI);
- 
-                         self.inspectorView.center = CGPointMake(self.inspectorView.center.x + inspectorTranslation, self.inspectorView.center.y);
                          self.timelineView.center  = CGPointMake(self.timelineView.center.x, self.timelineView.center.y + timelineTranslation);
  
+                         self.timelineView.alpha = (self.timelineView.alpha < 1.0 ? 1.0 : 0.25);
+                         
                          self.mapView.centerCoordinate = mapCenter;
                      }
                      completion:nil];
@@ -489,9 +496,6 @@
     {
         [self pressedPlay:self];
         
-        if (self.isFullScreen)
-            [self pressedFullScreen:self];
-        
         [TestFlight passCheckpoint:@"played presentation to completion"];
     }
     else if ([self.playButton.currentImage isEqual:[UIImage imageNamed:@"pause.png"]] && [[self.markers valueForKeyPath:@"timeOffset"] containsObject:[NSNumber numberWithDouble:[self.timeLabel.text doubleValue]]])
@@ -559,7 +563,6 @@
                          [self.videoExporter exportToPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.mp4"]];
                      }];
     
-    self.fullScreenButton.hidden = YES;
     self.mapLabel.hidden = YES;
 }
 
@@ -567,7 +570,6 @@
 {
     [self.videoExporter cancelExport];
     
-    self.fullScreenButton.hidden = NO;
     self.mapLabel.hidden = NO;
     
     [self cleanupExportWithBlock:nil];
@@ -614,9 +616,9 @@
 
 - (IBAction)pressedShare:(id)sender
 {
-    NSString *latestVideoPath = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.mp4"];
+    CGRect buttonRect = [self.view convertRect:((UIView *)sender).frame fromView:((UIView *)sender).superview];
     
-    CGRect attachRect = CGRectMake(696, 435, 1, 1);
+    NSString *latestVideoPath = [[self documentsFolderPath] stringByAppendingPathComponent:@"export.mp4"];
     
     UIActionSheet *actionSheet = [UIActionSheet actionSheetWithTitle:nil];
     
@@ -631,7 +633,7 @@
         {
             UIDocumentInteractionController *docOpener = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:latestVideoPath]];
         
-            if ( ! [docOpener presentOpenInMenuFromRect:attachRect inView:self.view animated:YES])
+            if ( ! [docOpener presentOpenInMenuFromRect:buttonRect inView:self.view animated:YES])
             {
                 UIAlertView *alert = [UIAlertView alertViewWithTitle:@"No Compatible Apps" 
                                                              message:@"You don't have any apps installed that are able to open external videos."];
@@ -645,7 +647,7 @@
         }];
     }
     
-    [actionSheet showFromRect:attachRect inView:self.view animated:YES];
+    [actionSheet showFromRect:buttonRect inView:self.view animated:YES];
     
     [TestFlight passCheckpoint:@"opened share menu"];
 }
@@ -1092,85 +1094,6 @@
 }
 
 #pragma mark -
-#pragma mark UITableViewDataSource
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [self.markers count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *DSMRViewControllerMarkerIdentifier = @"DSMRViewControllerMarkerIdentifier";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:DSMRViewControllerMarkerIdentifier];
-    
-    if ( ! cell)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:DSMRViewControllerMarkerIdentifier];
-    
-    DSMRTimelineMarker *marker = [self.markers objectAtIndex:indexPath.row];
-
-    if (marker.markerType == DSMRTimelineMarkerTypeLocation)
-    {
-        cell.textLabel.text = [NSString stringWithFormat:@"Map @ %fs", marker.timeOffset];
-
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ (%f, %f)", marker.sourceName, marker.center.latitude, marker.center.longitude];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeAudio)
-    {
-        cell.textLabel.text = [NSString stringWithFormat:@"Audio @ %fs", marker.timeOffset];
-
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%f seconds", marker.duration];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeTheme)
-    {
-        cell.textLabel.text = [NSString stringWithFormat:@"Theme @ %fs", marker.timeOffset];
-        
-        cell.detailTextLabel.text = [marker.tileSourceInfo objectForKey:@"name"];
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeDrawing)
-    {
-        cell.textLabel.text = [NSString stringWithFormat:@"Drawing @ %fs", marker.timeOffset];
-        
-        cell.detailTextLabel.text = nil;
-    }
-    else if (marker.markerType == DSMRTimelineMarkerTypeDrawingClear)
-    {
-        cell.textLabel.text = [NSString stringWithFormat:@"Clear Drawings @ %fs", marker.timeOffset];
-        
-        cell.detailTextLabel.text = nil;
-    }
-    
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    @synchronized(self)
-    {
-        [self.markers removeObjectAtIndex:indexPath.row];
-    }
-    
-    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    
-    [self refresh];
-    
-    [TestFlight passCheckpoint:@"deleted timeline marker"];
-}
-
-#pragma mark -
-#pragma mark UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    [self fireMarkerAtIndex:indexPath.row];
-    
-    [TestFlight passCheckpoint:@"tapped palette table marker"];
-}
-
-#pragma mark -
 #pragma mark DSMRTimelineViewDelegate
 
 - (NSArray *)markersForTimelineView:(DSMRTimelineView *)timelineView
@@ -1183,15 +1106,13 @@
     if (self.inspectorPopover.isPopoverVisible)
         [self.inspectorPopover dismissPopoverAnimated:NO];
     
-    UIViewController *inspectorController = [[UIViewController alloc] init];
+    DSMRTimelineInspectorViewController *inspectorViewController = [[DSMRTimelineInspectorViewController alloc] initWithMarker:tappedMarkerView.marker];
     
-    inspectorController.view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+    inspectorViewController.delegate = self;
     
-    inspectorController.view.backgroundColor = [UIColor lightGrayColor];
+    self.inspectorPopover = [[UIPopoverController alloc] initWithContentViewController:inspectorViewController];
     
-    self.inspectorPopover = [[UIPopoverController alloc] initWithContentViewController:inspectorController];
-    
-    self.inspectorPopover.popoverContentSize = inspectorController.view.bounds.size;
+    self.inspectorPopover.popoverContentSize = inspectorViewController.view.bounds.size;
     
     self.inspectorPopover.passthroughViews = self.timelineView.markerPassthroughViews;
     
@@ -1273,6 +1194,35 @@
     }];
     
     [TestFlight passCheckpoint:@"completed video export"];
+}
+
+#pragma mark -
+#pragma mark QuadCurveMenuDelegate
+
+- (void)quadCurveMenu:(QuadCurveMenu *)menu didSelectIndex:(NSInteger)idx
+{
+    NSArray *actions = [NSArray arrayWithObjects:@"Place", @"Audio", @"Theme", @"Draw", nil];
+    
+    SEL action = NSSelectorFromString([NSString stringWithFormat:@"pressed%@:", [actions objectAtIndex:idx]]);
+    
+    [self performSelector:action withObject:menu];
+}
+
+#pragma mark -
+#pragma mark DSMRTimelineInspectorDelegate
+
+- (void)timelineInspector:(DSMRTimelineInspectorViewController *)timelineInspector wantsToDeleteMarker:(DSMRTimelineMarker *)marker
+{
+    [self.inspectorPopover dismissPopoverAnimated:YES];
+    
+    @synchronized(self)
+    {
+        [self.markers removeObjectAtIndex:[self.markers indexOfObject:marker]];
+    }
+    
+    [self refresh];
+    
+    [TestFlight passCheckpoint:@"deleted timeline marker"];
 }
 
 @end

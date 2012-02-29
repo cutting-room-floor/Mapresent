@@ -10,19 +10,22 @@
 
 #import "DSMRTimelineView.h"
 #import "DSMRVideoExporter.h"
+#import "DSMRTimelineInspectorViewController.h"
 
 #import "RMMapViewDelegate.h"
+
+#import "QuadCurveMenu.h"
 
 #import <MessageUI/MessageUI.h>
 
 @interface DSMRMainViewController : UIViewController <RMMapViewDelegate, 
-                                                      UITableViewDataSource, 
-                                                      UITableViewDelegate, 
                                                       DSMRTimelineViewDelegate, 
                                                       UIPageViewControllerDataSource, 
                                                       UIPageViewControllerDelegate, 
                                                       MFMailComposeViewControllerDelegate, 
                                                       UIPopoverControllerDelegate, 
-                                                      DSMRVideoExporterDelegate>
+                                                      DSMRVideoExporterDelegate,
+                                                      QuadCurveMenuDelegate,
+                                                      DSMRTimelineInspectorDelegate>
 
 @end

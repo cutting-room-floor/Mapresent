@@ -7,3 +7,6 @@
 [submodule "Externals/MBProgressHUD"]
 	path = Externals/MBProgressHUD
 	url = https://github.com/matej/MBProgressHUD.git
+[submodule "Externals/QuadCurveMenu"]
+	path = Externals/QuadCurveMenu
+	url = https://github.com/levey/QuadCurveMenu.git
