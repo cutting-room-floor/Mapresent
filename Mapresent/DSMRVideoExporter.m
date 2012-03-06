@@ -20,9 +20,9 @@
 
 #define DSMRVideoExporterErrorDomain @"DSMRVideoExporterErrorDomain"
 
-#define DSMRVideoExporterVideoWidth  640.0f
-#define DSMRVideoExporterVideoHeight 480.0f
-#define DSMRVideoExporterFrameRate    30.0f
+#define DSMRVideoExporterVideoWidth  1024.0f
+#define DSMRVideoExporterVideoHeight  768.0f
+#define DSMRVideoExporterFrameRate     30.0f
 
 @interface DSMRVideoExporter ()
 
@@ -33,11 +33,12 @@
 @property (nonatomic, strong) NSArray *markers;
 @property (strong) NSMutableArray *trackedTiles;
 @property (nonatomic, strong) AVAssetExportSession *assetExportSession;
+@property (nonatomic, assign) CVPixelBufferRef pixelBuffer;
 
 - (UIImage *)imageByAddingOverlayImage:(UIImage *)overlayImage toBaseImage:(UIImage *)baseImage atAlpha:(CGFloat)alpha;
 - (UIImage *)fullyLoadedSnapshotForMapActions:(void (^)(void))block;
 - (void)failExportingWithError:(NSError *)error;
-- (CVPixelBufferRef)createPixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size;
+- (void)updatePixelBufferWithCGImage:(CGImageRef)image size:(CGSize)size;
 - (void)tileIn:(NSNotification *)notification;
 - (void)tileOut:(NSNotification *)notification;
 
@@ -55,6 +56,7 @@
 @synthesize markers=_markers;
 @synthesize trackedTiles;
 @synthesize assetExportSession;
+@synthesize pixelBuffer;
 
 - (id)initWithMapView:(RMMapView *)mapView markers:(NSArray *)markers
 {
@@ -64,10 +66,14 @@
     {
         _mapView = mapView;
         _markers = markers;
+
+        pixelBuffer = nil;
     }
     
     return self;
 }
+
+#pragma mark -
 
 - (void)exportToPath:(NSString *)exportPath
 {
@@ -140,15 +146,10 @@
             while ( ! [writerInput isReadyForMoreMediaData])
                 [NSThread sleepForTimeInterval:0.5];
             
-            CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+            [self updatePixelBufferWithCGImage:[snapshot CGImage] size:videoSize];
             
-            if (buffer)
-            {
-                if ( ! [adaptor appendPixelBuffer:buffer withPresentationTime:kCMTimeZero])
-                    [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1001 userInfo:nil]];
-
-                CFRelease(buffer);
-            }
+            if ( ! [adaptor appendPixelBuffer:self.pixelBuffer withPresentationTime:kCMTimeZero])
+                [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1001 userInfo:nil]];
             
             UIImage *cleanMapFrame = self.exportSnapshot;
             UIImage *compositedDrawings = nil;
@@ -208,17 +209,12 @@
                             while ( ! [writerInput isReadyForMoreMediaData])
                                 [NSThread sleepForTimeInterval:0.5];
                             
-                            CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+                            [self updatePixelBufferWithCGImage:[snapshot CGImage] size:videoSize];
 
-                            if (buffer)
-                            {
-                                CMTime frameTime = CMTimeAdd(CMTimeMake(marker.timeOffset * 1000, 1000), CMTimeMake(step, DSMRVideoExporterFrameRate));
-                                
-                                if( ! [adaptor appendPixelBuffer:buffer withPresentationTime:frameTime])
-                                    [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1002 userInfo:nil]];
-                                    
-                                CFRelease(buffer);
-                            }
+                            CMTime frameTime = CMTimeAdd(CMTimeMake(marker.timeOffset * 1000, 1000), CMTimeMake(step, DSMRVideoExporterFrameRate));
+                            
+                            if( ! [adaptor appendPixelBuffer:self.pixelBuffer withPresentationTime:frameTime])
+                                [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1002 userInfo:nil]];
                         }
 
                         break;
@@ -254,17 +250,12 @@
                         while ( ! [writerInput isReadyForMoreMediaData])
                             [NSThread sleepForTimeInterval:0.5];
                         
-                        CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+                        [self updatePixelBufferWithCGImage:[snapshot CGImage] size:videoSize];
                         
-                        if (buffer)
-                        {
-                            // FIXME: need fancy transitions like fade here
-                            //
-                            if( ! [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
-                                [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1010 userInfo:nil]];
-                            
-                            CFRelease(buffer);
-                        }
+                        // FIXME: need fancy transitions like fade here
+                        //
+                        if( ! [adaptor appendPixelBuffer:self.pixelBuffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
+                            [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1010 userInfo:nil]];
                         
                         break;
                     }
@@ -282,15 +273,10 @@
                         while ( ! [writerInput isReadyForMoreMediaData])
                             [NSThread sleepForTimeInterval:0.5];
                         
-                        CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+                        [self updatePixelBufferWithCGImage:[snapshot CGImage] size:videoSize];
                         
-                        if (buffer)
-                        {
-                            if( ! [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
+                            if( ! [adaptor appendPixelBuffer:self.pixelBuffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
                                 [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1011 userInfo:nil]];
-                            
-                            CFRelease(buffer);
-                        }
 
                         // add image view for visual debugging purposes - FIXME
                         //
@@ -321,15 +307,10 @@
                         while ( ! [writerInput isReadyForMoreMediaData])
                             [NSThread sleepForTimeInterval:0.5];
                         
-                        CVPixelBufferRef buffer = [self createPixelBufferFromCGImage:[snapshot CGImage] size:videoSize];
+                        [self updatePixelBufferWithCGImage:[snapshot CGImage] size:videoSize];
                         
-                        if (buffer)
-                        {
-                            if( ! [adaptor appendPixelBuffer:buffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
-                                [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1011 userInfo:nil]];
-                            
-                            CFRelease(buffer);
-                        }
+                        if( ! [adaptor appendPixelBuffer:self.pixelBuffer withPresentationTime:CMTimeMake(marker.timeOffset * 1000, 1000)])
+                            [self failExportingWithError:[NSError errorWithDomain:DSMRVideoExporterErrorDomain code:1011 userInfo:nil]];
                         
                         // remove debug views - FIXME
                         //
@@ -496,6 +477,12 @@
         [self.assetExportSession cancelExport];
     
     self.shouldCancel = YES;
+    
+    if (self.pixelBuffer)
+    {
+        CFRelease(self.pixelBuffer);
+        self.pixelBuffer = nil;
+    }
 }
 
 #pragma mark -
@@ -588,20 +575,25 @@
         failBlock();
 }
 
-- (CVPixelBufferRef)createPixelBufferFromCGImage:(CGImageRef)image size:(CGSize)size
+- (void)updatePixelBufferWithCGImage:(CGImageRef)image size:(CGSize)size
 {
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-                                [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey, 
-                                [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, 
-                                nil];
-    
-    CVPixelBufferRef pixelBuffer = nil;
-    
-    CVPixelBufferCreate(kCFAllocatorDefault, size.width, size.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef)options, &pixelBuffer);
-    
-    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    if ( ! self.pixelBuffer)
+    {        
+        NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey, 
+                                    [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, 
+                                    nil];
+        
+        CVPixelBufferRef buffer = nil;
+        
+        CVPixelBufferCreate(kCFAllocatorDefault, size.width, size.height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef)options, &buffer);
+        
+        self.pixelBuffer = buffer;
+    }
+        
+    CVPixelBufferLockBaseAddress(self.pixelBuffer, 0);
 
-    void *pixelData = CVPixelBufferGetBaseAddress(pixelBuffer);
+    void *pixelData = CVPixelBufferGetBaseAddress(self.pixelBuffer);
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 
@@ -609,7 +601,7 @@
                                                  size.width, 
                                                  size.height, 
                                                  8, 
-                                                 CVPixelBufferGetBytesPerRow(pixelBuffer), 
+                                                 CVPixelBufferGetBytesPerRow(self.pixelBuffer), 
                                                  colorSpace, 
                                                  kCGImageAlphaPremultipliedFirst);
     
@@ -618,9 +610,7 @@
     CGColorSpaceRelease(colorSpace);
     CGContextRelease(context);
     
-    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-    
-    return pixelBuffer;
+    CVPixelBufferUnlockBaseAddress(self.pixelBuffer, 0);
 }
 
 - (void)tileIn:(NSNotification *)notification

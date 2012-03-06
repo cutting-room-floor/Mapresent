@@ -32,13 +32,14 @@
 
 @property (nonatomic, strong) IBOutlet RMMapView *mapView;
 @property (nonatomic, strong) IBOutlet UILabel *mapLabel;
-@property (nonatomic, strong) IBOutlet UIView *inspectorView;
+@property (nonatomic, strong) IBOutlet UIView *playbackView;
 @property (nonatomic, strong) IBOutlet DSMRTimelineView *timelineView;
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
 @property (nonatomic, strong) IBOutlet UIButton *backButton;
 @property (nonatomic, strong) IBOutlet UIButton *fullScreenButton;
 @property (nonatomic, strong) IBOutlet UILabel *timeLabel;
 @property (nonatomic, strong) IBOutletCollection() NSArray *viewsDisabledDuringPlayback;
+@property (nonatomic, strong) QuadCurveMenu *toolMenu;
 @property (nonatomic, strong) NSMutableArray *markers;
 @property (nonatomic, strong) AVAudioRecorder *recorder;
 @property (nonatomic, strong) AVAudioPlayer *player;
@@ -56,7 +57,6 @@
 - (IBAction)pressedShare:(id)sender;
 - (IBAction)pressedFullScreen:(id)sender;
 - (IBAction)pressedRewind:(id)sender;
-- (IBAction)pressedDraw:(id)sender;
 - (void)fireMarkerAtIndex:(NSInteger)index;
 - (NSString *)documentsFolderPath;
 - (void)refresh;
@@ -77,13 +77,14 @@
 
 @synthesize mapView;
 @synthesize mapLabel;
-@synthesize inspectorView;
+@synthesize playbackView;
 @synthesize timelineView;
 @synthesize playButton;
 @synthesize backButton;
 @synthesize fullScreenButton;
 @synthesize timeLabel;
 @synthesize viewsDisabledDuringPlayback;
+@synthesize toolMenu;
 @synthesize markers;
 @synthesize recorder;
 @synthesize player;
@@ -143,17 +144,17 @@
                                                          ContentImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@.png", image]]
                                               highlightedContentImage:nil]];
     
-    QuadCurveMenu *menu = [[QuadCurveMenu alloc] initWithFrame:CGRectMake(0, 0, 60, 60) menus:menuItems];
+    toolMenu = [[QuadCurveMenu alloc] initWithFrame:CGRectMake(0, 0, 60, 60) menus:menuItems];
 
-    menu.menuWholeAngle = M_PI / 2;
-    menu.rotateAngle = M_PI / 2;
-    menu.startPoint = CGPointMake(30, 30);
+    toolMenu.menuWholeAngle = M_PI / 2;
+    toolMenu.rotateAngle = M_PI / 2;
+    toolMenu.startPoint = CGPointMake(30, 30);
     
-    menu.delegate = self;
+    toolMenu.delegate = self;
     
-    [self.view addSubview:menu];
+    [self.view addSubview:toolMenu];
     
-    ((UIView *)[menu valueForKey:@"_addButton"]).center = menu.startPoint; // FIXME well this is awful
+    ((UIView *)[toolMenu valueForKey:@"_addButton"]).center = toolMenu.startPoint; // FIXME well this is awful
     
 #ifdef ADHOC
     // add beta tester feedback button
@@ -293,7 +294,7 @@
 
 - (IBAction)pressedRewind:(id)sender
 {
-    [[self.mapView.subviews select:^BOOL(id obj) { return [obj tag] == 11; }] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    [self resetMapView];
 
     [self.timelineView rewindToBeginning];
     
@@ -531,29 +532,37 @@
     
     [self.view addSubview:exportModal];
     
+    if ( ! self.isFullScreen)
+        [self pressedFullScreen:self];
+
     [UIView animateWithDuration:0.75
                      animations:^(void)
                      {
                          exportModal.alpha = 1.0;
                          
-                         self.inspectorView.frame = CGRectMake(self.inspectorView.frame.origin.x + self.inspectorView.frame.size.width, 
-                                                               self.inspectorView.frame.origin.y, 
-                                                               self.inspectorView.frame.size.width, 
-                                                               self.inspectorView.frame.size.height);
+                         // move playback view right
+                         //
+                         self.playbackView.frame = CGRectMake(self.playbackView.frame.origin.x + self.playbackView.frame.size.width, 
+                                                              self.playbackView.frame.origin.y, 
+                                                              self.playbackView.frame.size.width, 
+                                                              self.playbackView.frame.size.height);
                          
-                         self.timelineView.frame = CGRectMake(self.timelineView.frame.origin.x, 
-                                                              self.timelineView.frame.origin.y + self.timelineView.frame.size.height, 
-                                                              self.timelineView.frame.size.width, 
-                                                              self.timelineView.frame.size.height);
+                         // move tool menu left
+                         //
+                         self.toolMenu.frame = CGRectMake(self.toolMenu.frame.origin.x - self.toolMenu.frame.size.width,
+                                                          self.toolMenu.frame.origin.y, 
+                                                          self.toolMenu.frame.size.width, 
+                                                          self.toolMenu.frame.size.height);
                          
-                         self.mapView.frame = CGRectMake((self.view.bounds.size.width - self.mapView.bounds.size.width) / 2.0, 
-                                                         self.mapView.frame.origin.y, 
-                                                         self.mapView.frame.size.width, 
-                                                         self.mapView.frame.size.height);
+                         // size up to full video size & hide status bar
+                         //
+                         self.view.frame = CGRectMake(0, 0, 768, 1024);
+
+                         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
                      }
                      completion:^(BOOL finished)
                      {
-                         UIView *shieldView = [[UIView alloc] initWithFrame:self.mapView.frame];
+                         UIView *shieldView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.mapView.bounds.size.width, self.mapView.bounds.size.height - exportModal.bounds.size.height)];
                          
                          shieldView.backgroundColor = [UIColor clearColor];
                          
@@ -594,23 +603,34 @@
                      {                         
                          [self resetMapView];
                          
-                         self.inspectorView.frame = CGRectMake(self.inspectorView.frame.origin.x - self.inspectorView.frame.size.width, 
-                                                               self.inspectorView.frame.origin.y, 
-                                                               self.inspectorView.frame.size.width, 
-                                                               self.inspectorView.frame.size.height);
+                         // move playback view left
+                         //
+                         self.playbackView.frame = CGRectMake(self.playbackView.frame.origin.x - self.playbackView.frame.size.width, 
+                                                              self.playbackView.frame.origin.y, 
+                                                              self.playbackView.frame.size.width, 
+                                                              self.playbackView.frame.size.height);
                          
-                         self.timelineView.frame = CGRectMake(self.timelineView.frame.origin.x, 
-                                                              self.timelineView.frame.origin.y - self.timelineView.frame.size.height, 
-                                                              self.timelineView.frame.size.width, 
-                                                              self.timelineView.frame.size.height);
+                         // move tool menu right
+                         //
+                         self.toolMenu.frame = CGRectMake(self.toolMenu.frame.origin.x + self.toolMenu.frame.size.width,
+                                                          self.toolMenu.frame.origin.y, 
+                                                          self.toolMenu.frame.size.width, 
+                                                          self.toolMenu.frame.size.height);
+                         
+                         // bring back status bar
+                         //
+                         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 
-                         self.mapView.frame = CGRectMake(self.view.bounds.origin.x, 
-                                                         self.mapView.frame.origin.y, 
-                                                         self.mapView.frame.size.width, 
-                                                         self.mapView.frame.size.height);
+                         self.view.frame = CGRectMake([UIApplication sharedApplication].statusBarFrame.size.width, 
+                                                      0,
+                                                      768 - [UIApplication sharedApplication].statusBarFrame.size.width,
+                                                      1024);
                      }
                      completion:^(BOOL finished)
                      {
+                         if (self.isFullScreen)
+                             [self pressedFullScreen:self];
+                         
                          if (block)
                              block();
                      }];
@@ -938,9 +958,9 @@
     
     drawingPopover.delegate = self;
     
-    [drawingPopover presentPopoverFromRect:[self.view convertRect:[(UIView *)sender frame] fromView:self.inspectorView] 
+    [drawingPopover presentPopoverFromRect:CGRectMake(0, 0, 30, 30) 
                                     inView:self.view 
-                  permittedArrowDirections:UIPopoverArrowDirectionUp 
+                  permittedArrowDirections:UIPopoverArrowDirectionAny 
                                   animated:YES];
     
     drawingView.delegate = drawingPalette;
