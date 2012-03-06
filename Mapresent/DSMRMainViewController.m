@@ -1168,6 +1168,8 @@
 {
     NSLog(@"export failure: %@", error);
     
+    [self.videoExporter cancelExport];
+
     [self cleanupExportWithBlock:^(void)
     {
         [UIAlertView showAlertViewWithTitle:@"Video Export Failure"
