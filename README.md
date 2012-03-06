@@ -54,3 +54,4 @@ Pipe dreams of future functionality & things that need to happen.
  * Allow embedding of audio, video, and photo media into presentation. 
  * Palette UI for editing fine details of selected timeline item (duration, timing curve, volume, etc.)
  * Allow drawings to stick to the map during pans & zooms as geo vectors, not just drawings. 
+ * Possibly export HD video (at least in size; quality is already there). 
