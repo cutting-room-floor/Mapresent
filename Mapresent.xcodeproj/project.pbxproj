@@ -58,9 +58,9 @@
 		DDBEDB9114FD67D10023C9F8 /* point.png in Resources */ = {isa = PBXBuildFile; fileRef = DDBEDB8D14FD67D10023C9F8 /* point.png */; };
 		DDBEDB9514FD6B020023C9F8 /* DSMRTimelineInspectorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDBEDB9314FD6B020023C9F8 /* DSMRTimelineInspectorViewController.m */; };
 		DDBEDB9614FD6B020023C9F8 /* DSMRTimelineInspectorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDBEDB9414FD6B020023C9F8 /* DSMRTimelineInspectorViewController.xib */; };
-		DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E59C14E5B463000F611E /* libBlocksKit.a */; };
 		DDC6E5A814E5B5F6000F611E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC6E5A714E5B5F6000F611E /* MessageUI.framework */; };
 		DDC6E5AC14E5BA4E000F611E /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */; };
+		DDDAD26615069283004DDB59 /* libBlocksKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDAD26515069283004DDB59 /* libBlocksKit.a */; };
 		DDE382F614ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE382F414ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m */; };
 		DDE382F714ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */; };
 		DDE382FA14EDB008001D5D45 /* DSMRDrawingSurfaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = DDE382F914EDB008001D5D45 /* DSMRDrawingSurfaceView.m */; };
@@ -98,55 +98,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = B8C974130E8A19B2007D16AD;
 			remoteInfo = MapView;
-		};
-		DDC6E59714E5B463000F611E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6CC40A2A1447B58600E47595;
-			remoteInfo = "iOS Framework";
-		};
-		DDC6E59914E5B463000F611E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6CC40A751447BB1400E47595;
-			remoteInfo = "OS X Framework";
-		};
-		DDC6E59B14E5B463000F611E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6C3DBF8D1382F1BA00E6C9AA;
-			remoteInfo = "iOS Library";
-		};
-		DDC6E59D14E5B463000F611E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6CC08FCE1385555D00DDEABB;
-			remoteInfo = "OS X Library";
-		};
-		DDC6E59F14E5B463000F611E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 6CC0900913855CAE00DDEABB;
-			remoteInfo = "Chameleon Library";
-		};
-		DDC6E5A114E5B463000F611E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 60FF000713C023CB004A1394;
-			remoteInfo = "iOS Tests";
-		};
-		DDC6E5A414E5B481000F611E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 6C3DBF8C1382F1BA00E6C9AA;
-			remoteInfo = "iOS Library";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -218,10 +169,41 @@
 		DDBEDB9214FD6B020023C9F8 /* DSMRTimelineInspectorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRTimelineInspectorViewController.h; sourceTree = "<group>"; };
 		DDBEDB9314FD6B020023C9F8 /* DSMRTimelineInspectorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRTimelineInspectorViewController.m; sourceTree = "<group>"; };
 		DDBEDB9414FD6B020023C9F8 /* DSMRTimelineInspectorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRTimelineInspectorViewController.xib; sourceTree = "<group>"; };
-		DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BlocksKit.xcodeproj; path = Externals/BlocksKit/BlocksKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		DDC6E5A714E5B5F6000F611E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		DDC6E5AA14E5BA4E000F611E /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = Externals/MBProgressHUD/MBProgressHUD.h; sourceTree = SOURCE_ROOT; };
 		DDC6E5AB14E5BA4E000F611E /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = Externals/MBProgressHUD/MBProgressHUD.m; sourceTree = SOURCE_ROOT; };
+		DDDAD24615069283004DDB59 /* A2BlockDelegate+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "A2BlockDelegate+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD24715069283004DDB59 /* A2BlockDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = A2BlockDelegate.h; sourceTree = "<group>"; };
+		DDDAD24815069283004DDB59 /* A2DynamicDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = A2DynamicDelegate.h; sourceTree = "<group>"; };
+		DDDAD24915069283004DDB59 /* BKGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKGlobals.h; sourceTree = "<group>"; };
+		DDDAD24A15069283004DDB59 /* BKMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKMacros.h; sourceTree = "<group>"; };
+		DDDAD24B15069283004DDB59 /* BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlocksKit.h; sourceTree = "<group>"; };
+		DDDAD24C15069283004DDB59 /* MFMailComposeViewController+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMailComposeViewController+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD24D15069283004DDB59 /* MFMessageComposeViewController+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MFMessageComposeViewController+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD24E15069283004DDB59 /* NSArray+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD24F15069283004DDB59 /* NSCache+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSCache+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25015069283004DDB59 /* NSDictionary+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25115069283004DDB59 /* NSIndexSet+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexSet+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25215069283004DDB59 /* NSInvocation+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25315069283004DDB59 /* NSMutableArray+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25415069283004DDB59 /* NSMutableDictionary+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25515069283004DDB59 /* NSMutableIndexSet+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableIndexSet+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25615069283004DDB59 /* NSMutableSet+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableSet+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25715069283004DDB59 /* NSObject+AssociatedObjects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+AssociatedObjects.h"; sourceTree = "<group>"; };
+		DDDAD25815069283004DDB59 /* NSObject+BlockObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+BlockObservation.h"; sourceTree = "<group>"; };
+		DDDAD25915069283004DDB59 /* NSObject+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25A15069283004DDB59 /* NSSet+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSet+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25B15069283004DDB59 /* NSTimer+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25C15069283004DDB59 /* NSURLConnection+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25D15069283004DDB59 /* UIActionSheet+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25E15069283004DDB59 /* UIAlertView+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD25F15069283004DDB59 /* UIBarButtonItem+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD26015069283004DDB59 /* UIControl+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD26115069283004DDB59 /* UIGestureRecognizer+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIGestureRecognizer+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD26215069283004DDB59 /* UIPopoverController+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIPopoverController+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD26315069283004DDB59 /* UIView+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD26415069283004DDB59 /* UIWebView+BlocksKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+BlocksKit.h"; sourceTree = "<group>"; };
+		DDDAD26515069283004DDB59 /* libBlocksKit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBlocksKit.a; path = Externals/BlocksKit/libBlocksKit.a; sourceTree = SOURCE_ROOT; };
 		DDE382F314ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DSMRDrawingPaletteViewController.h; sourceTree = "<group>"; };
 		DDE382F414ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DSMRDrawingPaletteViewController.m; sourceTree = "<group>"; };
 		DDE382F514ED9DE9001D5D45 /* DSMRDrawingPaletteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DSMRDrawingPaletteViewController.xib; sourceTree = "<group>"; };
@@ -256,7 +238,7 @@
 				DDC6E5A814E5B5F6000F611E /* MessageUI.framework in Frameworks */,
 				DD2B373C14CF7AC7008DE8CB /* QuartzCore.framework in Frameworks */,
 				DD2B334114CF75AE008DE8CB /* UIKit.framework in Frameworks */,
-				DDC6E5A614E5B496000F611E /* libBlocksKit.a in Frameworks */,
+				DDDAD26615069283004DDB59 /* libBlocksKit.a in Frameworks */,
 				DD2B373814CF7A4D008DE8CB /* libMapView.a in Frameworks */,
 				DD2B373A14CF7AAB008DE8CB /* libsqlite3.dylib in Frameworks */,
 				DD9607D114D36FDE00FA2CBA /* libTestFlight.a in Frameworks */,
@@ -447,23 +429,11 @@
 			name = QuadCurveMenu;
 			sourceTree = "<group>";
 		};
-		DDC6E58B14E5B463000F611E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DDC6E59814E5B463000F611E /* BlocksKit.framework */,
-				DDC6E59A14E5B463000F611E /* BlocksKit.framework */,
-				DDC6E59C14E5B463000F611E /* libBlocksKit.a */,
-				DDC6E59E14E5B463000F611E /* BlocksKit.dylib */,
-				DDC6E5A014E5B463000F611E /* BlocksKit_Chameleon.dylib */,
-				DDC6E5A214E5B463000F611E /* iOS Tests.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		DDC6E5A314E5B467000F611E /* BlocksKit */ = {
 			isa = PBXGroup;
 			children = (
-				DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */,
+				DDDAD24415069283004DDB59 /* Header */,
+				DDDAD26515069283004DDB59 /* libBlocksKit.a */,
 			);
 			name = BlocksKit;
 			sourceTree = "<group>";
@@ -551,6 +521,53 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		DDDAD24415069283004DDB59 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				DDDAD24515069283004DDB59 /* BlocksKit */,
+			);
+			name = Header;
+			path = Externals/BlocksKit/Header;
+			sourceTree = SOURCE_ROOT;
+		};
+		DDDAD24515069283004DDB59 /* BlocksKit */ = {
+			isa = PBXGroup;
+			children = (
+				DDDAD24615069283004DDB59 /* A2BlockDelegate+BlocksKit.h */,
+				DDDAD24715069283004DDB59 /* A2BlockDelegate.h */,
+				DDDAD24815069283004DDB59 /* A2DynamicDelegate.h */,
+				DDDAD24915069283004DDB59 /* BKGlobals.h */,
+				DDDAD24A15069283004DDB59 /* BKMacros.h */,
+				DDDAD24B15069283004DDB59 /* BlocksKit.h */,
+				DDDAD24C15069283004DDB59 /* MFMailComposeViewController+BlocksKit.h */,
+				DDDAD24D15069283004DDB59 /* MFMessageComposeViewController+BlocksKit.h */,
+				DDDAD24E15069283004DDB59 /* NSArray+BlocksKit.h */,
+				DDDAD24F15069283004DDB59 /* NSCache+BlocksKit.h */,
+				DDDAD25015069283004DDB59 /* NSDictionary+BlocksKit.h */,
+				DDDAD25115069283004DDB59 /* NSIndexSet+BlocksKit.h */,
+				DDDAD25215069283004DDB59 /* NSInvocation+BlocksKit.h */,
+				DDDAD25315069283004DDB59 /* NSMutableArray+BlocksKit.h */,
+				DDDAD25415069283004DDB59 /* NSMutableDictionary+BlocksKit.h */,
+				DDDAD25515069283004DDB59 /* NSMutableIndexSet+BlocksKit.h */,
+				DDDAD25615069283004DDB59 /* NSMutableSet+BlocksKit.h */,
+				DDDAD25715069283004DDB59 /* NSObject+AssociatedObjects.h */,
+				DDDAD25815069283004DDB59 /* NSObject+BlockObservation.h */,
+				DDDAD25915069283004DDB59 /* NSObject+BlocksKit.h */,
+				DDDAD25A15069283004DDB59 /* NSSet+BlocksKit.h */,
+				DDDAD25B15069283004DDB59 /* NSTimer+BlocksKit.h */,
+				DDDAD25C15069283004DDB59 /* NSURLConnection+BlocksKit.h */,
+				DDDAD25D15069283004DDB59 /* UIActionSheet+BlocksKit.h */,
+				DDDAD25E15069283004DDB59 /* UIAlertView+BlocksKit.h */,
+				DDDAD25F15069283004DDB59 /* UIBarButtonItem+BlocksKit.h */,
+				DDDAD26015069283004DDB59 /* UIControl+BlocksKit.h */,
+				DDDAD26115069283004DDB59 /* UIGestureRecognizer+BlocksKit.h */,
+				DDDAD26215069283004DDB59 /* UIPopoverController+BlocksKit.h */,
+				DDDAD26315069283004DDB59 /* UIView+BlocksKit.h */,
+				DDDAD26415069283004DDB59 /* UIWebView+BlocksKit.h */,
+			);
+			path = BlocksKit;
+			sourceTree = "<group>";
+		};
 		DDE382FB14EDB015001D5D45 /* Drawing */ = {
 			isa = PBXGroup;
 			children = (
@@ -577,7 +594,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				DDC6E5A514E5B481000F611E /* PBXTargetDependency */,
 				DD2B373714CF7A08008DE8CB /* PBXTargetDependency */,
 			);
 			name = Mapresent;
@@ -606,10 +622,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = DDC6E58B14E5B463000F611E /* Products */;
-					ProjectRef = DDC6E58A14E5B463000F611E /* BlocksKit.xcodeproj */;
-				},
-				{
 					ProductGroup = DD2B372214CF79ED008DE8CB /* Products */;
 					ProjectRef = DD2B372114CF79ED008DE8CB /* MapView.xcodeproj */;
 				},
@@ -634,48 +646,6 @@
 			fileType = wrapper.application;
 			path = "RM Unit Tests.app";
 			remoteRef = DD2B373214CF79ED008DE8CB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DDC6E59814E5B463000F611E /* BlocksKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = BlocksKit.framework;
-			remoteRef = DDC6E59714E5B463000F611E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DDC6E59A14E5B463000F611E /* BlocksKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = BlocksKit.framework;
-			remoteRef = DDC6E59914E5B463000F611E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DDC6E59C14E5B463000F611E /* libBlocksKit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libBlocksKit.a;
-			remoteRef = DDC6E59B14E5B463000F611E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DDC6E59E14E5B463000F611E /* BlocksKit.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = BlocksKit.dylib;
-			remoteRef = DDC6E59D14E5B463000F611E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DDC6E5A014E5B463000F611E /* BlocksKit_Chameleon.dylib */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = BlocksKit_Chameleon.dylib;
-			remoteRef = DDC6E59F14E5B463000F611E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		DDC6E5A214E5B463000F611E /* iOS Tests.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "iOS Tests.app";
-			remoteRef = DDC6E5A114E5B463000F611E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -759,11 +729,6 @@
 			name = MapView;
 			targetProxy = DD2B373614CF7A08008DE8CB /* PBXContainerItemProxy */;
 		};
-		DDC6E5A514E5B481000F611E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "iOS Library";
-			targetProxy = DDC6E5A414E5B481000F611E /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -841,13 +806,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Externals/BlocksKit\"/**",
+					"\"$(SRCROOT)/Externals/BlocksKit/Header\"/**",
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
 				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Externals/TestFlight SDK\"",
+					"\"$(SRCROOT)/Externals/BlocksKit\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -865,13 +831,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Externals/BlocksKit\"/**",
+					"\"$(SRCROOT)/Externals/BlocksKit/Header\"/**",
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
 				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Externals/TestFlight SDK\"",
+					"\"$(SRCROOT)/Externals/BlocksKit\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -914,13 +881,14 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Externals/BlocksKit\"/**",
+					"\"$(SRCROOT)/Externals/BlocksKit/Header\"/**",
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
 				);
 				INFOPLIST_FILE = "Mapresent/Mapresent-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Externals/TestFlight SDK\"",
+					"\"$(SRCROOT)/Externals/BlocksKit\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
