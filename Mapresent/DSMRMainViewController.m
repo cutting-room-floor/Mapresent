@@ -305,6 +305,11 @@
     // prepare for audio playback
     //
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    
+    // stop any audio in progress
+    //
+    if (self.player.isPlaying)
+        [self.player stop];
 
     // reset map view when starting
     //
