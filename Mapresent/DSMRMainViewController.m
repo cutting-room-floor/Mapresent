@@ -107,6 +107,8 @@
 
     self.mapView.delegate = self;
     
+    self.mapView.adjustTilesForRetinaDisplay = YES;
+    
     [self resetMapView];
     
     [RMMapView class]; // avoid code stripping
