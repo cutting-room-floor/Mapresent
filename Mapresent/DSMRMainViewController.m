@@ -529,6 +529,10 @@
     
     [cancelButton addTarget:self action:@selector(pressedExportCancel:) forControlEvents:UIControlEventTouchUpInside];
     
+    UIImageView *exportSnapshotView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    
+    [self.view addSubview:exportSnapshotView];
+    
     exportModal.frame = self.timelineView.frame;
     exportModal.alpha = 0.0;
     
@@ -572,10 +576,17 @@
                          
                          [self resetMapView];
                          
+                         self.mapView.hidden = YES;
+                         
                          self.videoExporter = [[DSMRVideoExporter alloc] initWithMapView:self.mapView markers:self.markers];
 
                          self.videoExporter.delegate = self;
 
+                         [self.videoExporter addObserverForKeyPath:@"exportSnapshot" task:^(id obj, NSDictionary *change)
+                         {
+                             dispatch_async(dispatch_get_main_queue(), ^(void) { exportSnapshotView.image = ((DSMRVideoExporter *)obj).exportSnapshot; });
+                         }];
+                          
                          [self.videoExporter exportToPath:[[self documentsFolderPath] stringByAppendingPathComponent:@"export.mp4"]];
                      }];
     
@@ -597,8 +608,13 @@
 {
     [UIApplication sharedApplication].idleTimerDisabled = NO;
     
+    [self.videoExporter removeAllBlockObservers];
+    
     [[self.view.subviews lastObject] removeFromSuperview]; // shield view
     [[self.view.subviews lastObject] removeFromSuperview]; // export view
+    [[self.view.subviews lastObject] removeFromSuperview]; // snapshot view
+    
+    self.mapView.hidden = NO;
     
     [UIView animateWithDuration:0.25
                      animations:^(void)
