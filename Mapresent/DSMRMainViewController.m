@@ -109,7 +109,7 @@
     
     self.mapView.adjustTilesForRetinaDisplay = YES;
     
-    [self resetMapView];
+    [self performBlock:^(id sender) { [sender resetMapView]; } afterDelay:0.0]; // post-retina updates
     
     [RMMapView class]; // avoid code stripping
     
