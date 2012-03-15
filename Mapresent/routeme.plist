@@ -9,6 +9,8 @@
 			<string>db-cache</string>
 			<key>useCachesDirectory</key>
 			<true/>
+			<key>capacity</key>
+			<integer>0</integer>
 		</dict>
 	</array>
 </dict>
