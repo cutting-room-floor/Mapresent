@@ -805,6 +805,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Externals/BlocksKit/Header\"/**",
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
@@ -830,6 +831,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Externals/BlocksKit/Header\"/**",
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
@@ -880,6 +882,7 @@
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Mapresent/Mapresent-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Externals/BlocksKit/Header\"/**",
 					"\"$(SRCROOT)/Externals/alpstein-route-me/MapView/Map\"/**",
