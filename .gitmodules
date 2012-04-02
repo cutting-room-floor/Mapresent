@@ -1,6 +1,6 @@
 [submodule "Externals/alpstein-route-me"]
 	path = Externals/alpstein-route-me
-	url = https://github.com/Alpstein/route-me.git
+	url = https://github.com/mapbox/alpstein-route-me.git
 [submodule "Externals/MBProgressHUD"]
 	path = Externals/MBProgressHUD
 	url = https://github.com/matej/MBProgressHUD.git
