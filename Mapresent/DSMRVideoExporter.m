@@ -12,7 +12,7 @@
 
 #import "RMMapView.h"
 #import "RMTileSource.h"
-#import "RMTileStreamSource.h"
+#import "RMMapBoxSource.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
@@ -233,7 +233,7 @@
                         {
                             [self.mapView removeAllCachedImages];
                             
-                            self.mapView.tileSource = [[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo];
+                            self.mapView.tileSource = [[RMMapBoxSource alloc] initWithInfo:marker.tileSourceInfo];
                         }];
                         
                         if (self.shouldCancel)

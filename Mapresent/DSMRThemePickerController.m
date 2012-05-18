@@ -9,7 +9,7 @@
 #import "DSMRThemePickerController.h"
 
 #import "RMMapView.h"
-#import "RMTileStreamSource.h"
+#import "RMMapBoxSource.h"
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -50,7 +50,7 @@
     self.label.text     = [self.info objectForKey:@"name"];
     self.pageLabel.text = [self.info objectForKey:@"pageNumber"];
 
-    self.mapView.tileSource = [[RMTileStreamSource alloc] initWithInfo:self.info];
+    self.mapView.tileSource = [[RMMapBoxSource alloc] initWithInfo:self.info];
 
     if ([self.info objectForKey:@"center"])
     {

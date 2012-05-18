@@ -1,9 +1,9 @@
-[submodule "Externals/alpstein-route-me"]
-	path = Externals/alpstein-route-me
-	url = https://github.com/mapbox/alpstein-route-me.git
 [submodule "Externals/MBProgressHUD"]
 	path = Externals/MBProgressHUD
 	url = https://github.com/matej/MBProgressHUD.git
 [submodule "Externals/QuadCurveMenu"]
 	path = Externals/QuadCurveMenu
 	url = https://github.com/levey/QuadCurveMenu.git
+[submodule "Externals/MapBox-iOS-SDK"]
+	path = Externals/MapBox-iOS-SDK
+	url = git://github.com/mapbox/mapbox-ios-sdk.git

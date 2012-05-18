@@ -17,8 +17,8 @@
 #import "DSMRTimelineMarkerView.h"
 
 #import "RMMapView.h"
-#import "RMMBTilesTileSource.h"
-#import "RMTileStreamSource.h"
+#import "RMMBTilesSource.h"
+#import "RMMapBoxSource.h"
 
 #import "MBProgressHUD.h"
 
@@ -198,8 +198,8 @@
 - (void)resetMapView
 {
     self.mapView.backgroundColor  = [UIColor blackColor];
-    self.mapView.tileSource       = [[RMMBTilesTileSource alloc] initWithTileSetURL:[[NSBundle mainBundle] URLForResource:@"geography-class" 
-                                                                                                            withExtension:@"mbtiles"]];
+    self.mapView.tileSource       = [[RMMBTilesSource alloc] initWithTileSetURL:[[NSBundle mainBundle] URLForResource:@"geography-class" 
+                                                                                                        withExtension:@"mbtiles"]];
     self.mapView.decelerationMode = RMMapDecelerationFast;
     self.mapView.zoom             = 2.0;
     
@@ -433,7 +433,7 @@
             //
             dispatch_async(dispatch_get_main_queue(), ^(void)
             {
-                self.mapView.tileSource = [[RMTileStreamSource alloc] initWithInfo:marker.tileSourceInfo];
+                self.mapView.tileSource = [[RMMapBoxSource alloc] initWithInfo:marker.tileSourceInfo];
             });
             
             break;
@@ -871,7 +871,7 @@
                                    
                                    for (NSMutableDictionary *tileset in [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:nil])
                                    {
-                                       RMTileStreamSource *source = [[RMTileStreamSource alloc] initWithInfo:tileset];
+                                       RMMapBoxSource *source = [[RMMapBoxSource alloc] initWithInfo:tileset];
                                        
                                        if ([source coversFullWorld])
                                        {
